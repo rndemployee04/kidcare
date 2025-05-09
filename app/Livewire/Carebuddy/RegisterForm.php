@@ -36,7 +36,7 @@ class RegisterForm extends Component
     public function mount()
     {
         if (!Auth::user()?->isCareBuddy()) {
-            return redirect()->route('carebuddy.dashboard');
+            return redirect()->route('home');
         }
         // Load draft if exists
         $carebuddy = \App\Models\CareBuddy::where('user_id', Auth::id())->first();

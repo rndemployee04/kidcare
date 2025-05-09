@@ -54,7 +54,7 @@ class RegisterForm extends Component
     public function mount()
     {
         if (!Auth::user()?->isParent()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('home');
         }
 
         // Load draft if exists
@@ -182,7 +182,7 @@ class RegisterForm extends Component
         $user->registration_complete = true;
         $user->save();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('parent.application.status');
     }
 
     public function render()

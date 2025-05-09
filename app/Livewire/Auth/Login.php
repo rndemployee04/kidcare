@@ -29,31 +29,41 @@ class Login extends Component
     public function login(): void
     {
         $this->validate();
-
         $this->ensureIsNotRateLimited();
-
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey());
-
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
         }
-
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
-
-        $user = Auth::user();
-$route = ($user && $user->role === 'carebuddy') ? 'carebuddy.dashboard' : 'dashboard';
-$this->redirectIntended(default: route($route, absolute: false), navigate: true);
+        $user = Auth::user()->fresh();
+        if ($user && $user->role === 'admin') {
+            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+        } elseif ($user && $user->role === 'carebuddy') {
+            if ($user->verification_status === 'approved') {
+                $this->redirectIntended(default: route('carebuddy.dashboard', absolute: false), navigate: true);
+            } else {
+                $this->redirectIntended(default: route('carebuddy.application.status', absolute: false), navigate: true);
+            }
+        } else {
+            if ($user->verification_status === 'approved') {
+                $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+            } else {
+                $this->redirectIntended(default: route('parent.application.status', absolute: false), navigate: true);
+            }
+        }
     }
+
+
 
     /**
      * Ensure the authentication request is not rate limited.
      */
     protected function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -74,6 +84,6 @@ $this->redirectIntended(default: route($route, absolute: false), navigate: true)
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }

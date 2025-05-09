@@ -7,21 +7,16 @@ use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Carebuddy\RegisterForm as CareBuddyRegisterForm;
 use App\Livewire\Parent\RegisterForm as ParentRegisterForm;
-
+use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Parent\Dashboard as ParentDashboard;
+use App\Livewire\Carebuddy\Dashboard as CarebuddyDashboard;
 
 Route::middleware(['auth', 'parent.registration.complete', 'parent.verified'])->group(function () {
-    Route::get('dashboard', function () {
-        if (!auth()->user()->isParent()) {
-            abort(403);
-        }
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', ParentDashboard::class)->name('dashboard');
 });
 
 Route::middleware(['auth', 'carebuddy.registration.complete', 'carebuddy.verified'])->group(function () {
-    Route::get('/carebuddy/dashboard', function () {
-        return view('carebuddy.dashboard');
-    })->name('carebuddy.dashboard');
+    Route::get('/carebuddy/dashboard', CarebuddyDashboard::class)->name('carebuddy.dashboard');
 });
 
 // Parent application status page
@@ -67,5 +62,11 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/', [LandingPageController::class, 'index'])->name('home');
 
+
+// Admin dashboard route
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', AdminDashboard::class)
+        ->name('admin.dashboard');
+});
 
 require __DIR__ . '/auth.php';
