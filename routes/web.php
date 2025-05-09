@@ -20,7 +20,7 @@ Route::middleware(['auth', 'parent.registration.complete', 'parent.verified'])->
 
 Route::middleware(['auth', 'carebuddy.registration.complete', 'carebuddy.verified'])->group(function () {
     Route::get('/carebuddy/dashboard', function () {
-        return view('livewire.carebuddy.dashboard');
+        return view('carebuddy.dashboard');
     })->name('carebuddy.dashboard');
 });
 
@@ -31,7 +31,7 @@ Route::get('/parent/application-status', function () {
 
 // Carebuddy application status page
 Route::get('/carebuddy/application-status', function () {
-    return view('livewire.carebuddy.application-status');
+    return view('carebuddy.application-status');
 })->name('carebuddy.application.status');
 
 // Parent registration incomplete page
@@ -41,7 +41,7 @@ Route::get('/parent/registration-incomplete', function () {
 
 // Carebuddy registration incomplete page
 Route::get('/carebuddy/registration-incomplete', function () {
-    return view('livewire.carebuddy.registration-incomplete');
+    return view('carebuddy.registration-incomplete');
 })->name('carebuddy.registration.incomplete');
 
 // Placeholder for parent resume registration
@@ -51,7 +51,7 @@ Route::get('/parent/resume-registration', function () {
 
 // Placeholder for carebuddy resume registration
 Route::get('/carebuddy/resume-registration', function () {
-    return view('livewire.carebuddy.resume-registration');
+    return view('carebuddy.resume-registration');
 })->name('carebuddy.resume.registration');
 
 Route::middleware(['auth'])->group(function () {

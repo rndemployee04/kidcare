@@ -49,44 +49,54 @@
     <form wire:submit.prevent="submit" class="space-y-8">
         {{-- Personal Info --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach ([['phone', 'Phone'], ['dob', 'Date of Birth']] as [$field, $label])
-                <div>
-                    <label for="{{ $field }}" class="block mb-1 text-sm font-medium">{{ $label }}</label>
-                    <input type="{{ $field === 'dob' ? 'date' : 'text' }}" wire:model.defer="{{ $field }}"
-                        id="{{ $field }}"
-                        class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" />
-                    <p class="text-xs text-slate-500 mt-1">
-                        @if ($field === 'phone')
-                            Enter your mobile number for contact and verification.
-                        @elseif ($field === 'dob')
-                            Your date of birth helps us verify your eligibility.
-                        @endif
-                    </p>
-                    @error($field)
-                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-            @endforeach
             <div>
-                <label for="gender" class="block mb-1 text-sm font-medium">Gender</label>
-                <select id="gender" wire:model.defer="gender"
+                <label for="phone" class="block mb-1 text-sm font-medium">Phone <span
+                        class="text-red-500">*</span></label>
+                <input type="text" wire:model.defer="phone" id="phone"
+                    class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                <p class="text-xs text-slate-500 mt-1">
+                    Enter your mobile number for contact and verification.
+                </p>
+                @error('phone')
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            <div>
+                <label for="dob" class="block mb-1 text-sm font-medium">Date of Birth <span
+                        class="text-red-500">*</span></label>
+                <input type="date" wire:model.defer="dob" id="dob"
+                    class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                <p class="text-xs text-slate-500 mt-1">
+                    Your date of birth helps us verify your eligibility.
+                </p>
+                @error('dob')
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            <div>
+                <label for="gender" class="block mb-1 text-sm font-medium">Gender <span
+                        class="text-red-500">*</span></label>
+                <select wire:model.defer="gender" id="gender"
                     class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="others">Others</option>
                 </select>
-                <p class="text-xs text-slate-500 mt-1">Select your gender for demographic purposes.</p>
+                <p class="text-xs text-slate-500 mt-1">
+                    Select your gender for demographic purposes.
+                </p>
                 @error('gender')
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
             <div>
                 <label for="profile_photo" class="block mb-1 text-sm font-medium">Profile Photo</label>
-                <input type="file" wire:model="profile_photo"
-                    class="w-full file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md" />
-                <p class="text-xs text-slate-500 mt-1">Upload a recent photo for your profile. Max size: 2MB. JPG/PNG
-                    only.</p>
+                <input type="file" wire:model="profile_photo" id="profile_photo"
+                    class="w-full file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                <p class="text-xs text-slate-500 mt-1">
+                    Upload a recent photo for your profile. Max size: 2MB. JPG/PNG only.
+                </p>
                 @error('profile_photo')
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
@@ -109,8 +119,6 @@
                 <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
             @enderror
         </div>
-
-        {{-- Category-dependent documents --}}
 
         {{-- Category-dependent documents --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -190,44 +198,33 @@
             </div>
         </div>
 
-        {{-- Personal Info --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <label for="phone" class="block mb-1 text-sm font-medium">Phone <span
-                        class="text-red-500">*</span></label>
-                <input type="text" wire:model.defer="phone" id="phone" class="form-input w-full">
-                @error('phone')
-                    <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
-                @enderror
-            </div>
-            <div>
-                <label for="dob" class="block mb-1 text-sm font-medium">Date of Birth <span
-                        class="text-red-500">*</span></label>
-                <input type="date" wire:model.defer="dob" id="dob" class="form-input w-full">
-                @error('dob')
-                    <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
-                @enderror
-            </div>
-            <div>
-                <label for="gender" class="block mb-1 text-sm font-medium">Gender <span
-                        class="text-red-500">*</span></label>
-                <select wire:model.defer="gender" id="gender" class="form-select w-full">
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="others">Others</option>
-                </select>
-                @error('gender')
-                    <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
-                @enderror
-            </div>
-            <div>
-                <label for="profile_photo" class="block mb-1 text-sm font-medium">Profile Photo</label>
-                <input type="file" wire:model="profile_photo" id="profile_photo" class="form-input w-full">
-                @error('profile_photo')
-                    <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
-                @enderror
-            </div>
+        <div>
+            <label for="dob" class="block mb-1 text-sm font-medium">Date of Birth <span
+                    class="text-red-500">*</span></label>
+            <input type="date" wire:model.defer="dob" id="dob" class="form-input w-full">
+            @error('dob')
+                <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
+            @enderror
+        </div>
+        <div>
+            <label for="gender" class="block mb-1 text-sm font-medium">Gender <span
+                    class="text-red-500">*</span></label>
+            <select wire:model.defer="gender" id="gender" class="form-select w-full">
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="others">Others</option>
+            </select>
+            @error('gender')
+                <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
+            @enderror
+        </div>
+        <div>
+            <label for="profile_photo" class="block mb-1 text-sm font-medium">Profile Photo</label>
+            <input type="file" wire:model="profile_photo" id="profile_photo" class="form-input w-full">
+            @error('profile_photo')
+                <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
+            @enderror
         </div>
 
         {{-- Address Info --}}
@@ -358,17 +355,16 @@
             </button>
         </div>
     </form>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        window.addEventListener('draft-saved', function() {
-            Swal.fire({
-                icon: 'success',
-                title: 'Draft Saved',
-                text: 'Your progress has been saved! You can resume later.',
-                timer: 2500,
-                showConfirmButton: false
-            });
-        });
-    </script>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    window.addEventListener('draft-saved', function() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Draft Saved',
+            text: 'Your progress has been saved! You can resume later.',
+            timer: 2500,
+            showConfirmButton: false
+        });
+    });
 </script>

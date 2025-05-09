@@ -28,20 +28,20 @@
 
             <div class="flex border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden w-full max-w-md">
                 <button type="button" wire:click="$set('role', 'parent')"
-                    class="w-1/2 px-4 py-3 text-sm font-semibold transition-all duration-150 focus:outline-none
-                            {{ $role === 'parent'
-                                ? 'bg-primary text-white shadow-inner'
-                                : 'bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700' }}">
-                    👨‍👧 {{ __('Parent') }}
-                </button>
+    class="w-1/2 px-4 py-3 text-sm font-semibold transition-all duration-150 focus:outline-none cursor-pointer
+        {{ $role === 'parent'
+            ? 'bg-primary text-white shadow-inner border-2 border-primary ring-2 ring-primary dark:bg-primary dark:text-white dark:border-primary dark:ring-primary'
+            : 'bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-transparent' }}">
+    👨‍👧 {{ __('Parent') }}
+</button>
 
                 <button type="button" wire:click="$set('role', 'carebuddy')"
-                    class="w-1/2 px-4 py-3 text-sm font-semibold transition-all duration-150 focus:outline-none border-l border-zinc-300 dark:border-zinc-700
-                            {{ $role === 'carebuddy'
-                                ? 'bg-primary text-white shadow-inner'
-                                : 'bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700' }}">
-                    🧑‍⚕️ {{ __('CareBuddy') }}
-                </button>
+    class="w-1/2 px-4 py-3 text-sm font-semibold transition-all duration-150 focus:outline-none border-l border-zinc-300 dark:border-zinc-700 cursor-pointer
+        {{ $role === 'carebuddy'
+            ? 'bg-primary text-white shadow-inner border-2 border-primary ring-2 ring-primary dark:bg-primary dark:text-white dark:border-primary dark:ring-primary'
+            : 'bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-transparent' }}">
+    🧑‍⚕️ {{ __('CareBuddy') }}
+</button>
             </div>
         </div>
 

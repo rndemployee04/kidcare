@@ -12,7 +12,6 @@ class CareBuddy extends Model
     protected $fillable = [
         'user_id',
         'category',
-        'document_path',
         'id_proof_path',
         'selfie_path',
         'dob',

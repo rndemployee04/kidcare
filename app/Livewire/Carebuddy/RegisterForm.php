@@ -173,7 +173,7 @@ class RegisterForm extends Component
 
     public function render()
     {
-        return view('livewire.carebuddy.register-form');
+        return view('carebuddy.register-form');
     }
 }
 
