@@ -16,13 +16,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         // Seed a default admin user
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('admin123'), // Change after first login for security
-            'role' => 'admin',
-            'verification_status' => 'approved',
-        ]);
+        $this->call(AdminUserSeeder::class);
 
         // Optionally, keep the test user
         User::factory()->create([
