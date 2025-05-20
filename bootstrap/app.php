@@ -15,8 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'parent.registration.complete' => \App\Http\Middleware\EnsureParentRegistrationComplete::class,
             'parent.verified' => \App\Http\Middleware\EnsureParentVerified::class,
-            'carebuddy.verified' => \App\Http\Middleware\EnsureCarebuddyVerified::class,
             'carebuddy.registration.complete' => \App\Http\Middleware\EnsureCarebuddyRegistrationComplete::class,
+            'carebuddy.verified' => \App\Http\Middleware\EnsureCarebuddyVerified::class,
+            'carebuddy.role' => \App\Http\Middleware\EnsureCarebuddyRole::class,
+            'admin.verified' => \App\Http\Middleware\EnsureAdminVerified::class,
+            'role.redirect' => \App\Http\Middleware\CheckRoleAndRedirect::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

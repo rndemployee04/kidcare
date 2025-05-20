@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class AdminController extends Controller
+{
+    // Controller uses middleware via the routes.php file
+    // No need for constructor middleware definition here
+
+    public function dashboard()
+    {
+        // Ensure only admin users can access
+        if (!Auth::user() || !Auth::user()->isAdmin()) {
+            abort(403, 'Unauthorized');
+        }
+        
+        $pendingUsers = User::where('verification_status', 'pending')->get();
+        $approvedUsers = User::where('verification_status', 'approved')->get();
+        $rejectedUsers = User::where('verification_status', 'rejected')->get();
+        
+        return view('admin.dashboard', [
+            'pendingUsers' => $pendingUsers,
+            'approvedUsers' => $approvedUsers,
+            'rejectedUsers' => $rejectedUsers
+        ]);
+    }
+    
+    public function approveUser($id)
+    {
+        // Ensure only admin users can access
+        if (!Auth::user() || !Auth::user()->isAdmin()) {
+            abort(403, 'Unauthorized');
+        }
+        
+        $user = User::findOrFail($id);
+        $user->verification_status = 'approved';
+        $user->save();
+        
+        return back()->with('success', 'User approved successfully.');
+    }
+
+    public function rejectUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->verification_status = 'rejected';
+        $user->save();
+        
+        return back()->with('error', 'User rejected.');
+    }
+}

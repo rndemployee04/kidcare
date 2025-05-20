@@ -1,4 +1,4 @@
-<x-carebuddy.layouts.carebuddy>
+<div>
     <div class="px-4 py-5 sm:px-6">
         <h3 class="text-lg font-medium leading-6 text-gray-900">Welcome, {{ $user->name }}</h3>
         <p class="mt-1 max-w-2xl text-sm text-gray-500">Here's an overview of your carebuddy activities.</p>
@@ -59,7 +59,7 @@
                     @endif
                     
                     <div class="mt-6">
-                        <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Edit Profile
                         </a>
                     </div>
@@ -83,4 +83,4 @@
             </div>
         </div>
     </div>
-</x-carebuddy.layouts.carebuddy>
+</div>

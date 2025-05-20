@@ -35,7 +35,11 @@ class Register extends Component
         event(new Registered($user));
         Auth::login($user);
 
-        // After registration, go to the individual registration form, not dashboard
+        // After registration, mark registration as incomplete
+        $user->registration_complete = false;
+        $user->save();
+        
+        // Redirect to the appropriate registration form
         $route = $user->role === 'carebuddy' ? 'carebuddy.register' : 'parent.register';
         $this->redirect(route($route), navigate: true);
     }

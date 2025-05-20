@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Carebuddy;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-
 class Dashboard extends Component
 {
     public function mount()
@@ -12,8 +12,15 @@ class Dashboard extends Component
             return redirect()->route('home');
         }
     }
+    
     public function render()
     {
-        return view('carebuddy.dashboard');
+        $user = Auth::user();
+        $carebuddy = $user->careBuddy;
+        
+        return view('livewire.carebuddy.dashboard', [
+            'user' => $user,
+            'carebuddy' => $carebuddy
+        ]);
     }
 }

@@ -13,7 +13,10 @@ class EnsureParentRegistrationComplete
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
-        if ($user && $user->isParent() && !$user->registration_complete) {
+        if (!$user || $user->role !== 'parent') {
+            abort(403, 'Unauthorized. Only parent users allowed.');
+        }
+        if (!$user->registration_complete) {
             return redirect()->route('parent.registration.incomplete');
         }
         return $next($request);

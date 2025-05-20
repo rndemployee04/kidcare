@@ -11,7 +11,10 @@ class EnsureCarebuddyRegistrationComplete
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
-        if ($user && $user->role === 'carebuddy' && !$user->registration_complete) {
+        if (!$user || $user->role !== 'carebuddy') {
+            abort(403, 'Unauthorized. Only carebuddy users allowed.');
+        }
+        if (!$user->registration_complete) {
             return redirect()->route('carebuddy.registration.incomplete');
         }
         return $next($request);

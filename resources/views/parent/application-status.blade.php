@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="flex flex-col md:flex-row gap-4 w-full max-w-md mx-auto justify-center items-center">
-                    <a href="{{ route('dashboard') }}"
+                    <a href="{{ route('parent.dashboard') }}"
                         class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold shadow-sm transition text-center cursor-pointer flex items-center justify-center">
                         <i class="fas fa-tachometer-alt mr-2"></i>Go to Dashboard
                     </a>

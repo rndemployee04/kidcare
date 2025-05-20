@@ -29,13 +29,7 @@
                 @if (Route::has('login'))
                     @auth
                         @php $user = Auth::user(); @endphp
-@if ($user && $user->role === 'carebuddy')
-    <a href="{{ route('carebuddy.dashboard') }}"
-        class="text-gray-700 hover:text-blue-600">Dashboard</a>
-@else
-    <a href="{{ route('dashboard') }}"
-        class="text-gray-700 hover:text-blue-600">Dashboard</a>
-@endif
+<a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-blue-600">Dashboard</a>
                     @else
                         <a href="{{ route('login') }}"
                             class="text-gray-700 hover:text-blue-600">Login</a>
