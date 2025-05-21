@@ -11,8 +11,8 @@
 </head>
 
 <body class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-white">
-    <div class="min-h-screen flex flex-col items-center justify-start py-12 px-6">
-        <div class="w-full max-w-4xl">
+    <div class="min-h-screen flex flex-col items-center justify-start py-12 px-6 bg-gradient-to-r from-[#fff6eb] to-[#ebfffe] ">
+        <div class="w-full max-w-4xl ">
             {{ $slot }}
         </div>
     </div>

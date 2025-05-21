@@ -1,5 +1,7 @@
-<x-layouts.app.sidebar :title="$title ?? null">
-    <flux:main>
+<div class="flex min-h-screen">
+    <x-layouts.app.sidebar :title="$title ?? null" />
+    <main class="flex-1">
         {{ $slot }}
-    </flux:main>
-</x-layouts.app.sidebar>
+    </main>
+</div>
+@fluxScripts

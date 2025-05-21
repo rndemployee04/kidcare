@@ -5,8 +5,6 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
-#[Layout('layouts.app')]
 class Dashboard extends Component
 {
     public $pendingUsers;
@@ -50,6 +48,10 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('admin.dashboard');
+        return view('livewire.admin.dashboard', [
+            'pendingUsers' => $this->pendingUsers,
+            'approvedUsers' => $this->approvedUsers,
+            'rejectedUsers' => $this->rejectedUsers,
+        ])->layout('admin.layouts.admin');
     }
 }

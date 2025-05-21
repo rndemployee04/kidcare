@@ -11,12 +11,33 @@ use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Parent\Dashboard as ParentDashboard;
 use App\Livewire\Carebuddy\Dashboard as CarebuddyDashboard;
 
-Route::middleware(['auth', 'parent.registration.complete', 'parent.verified'])->group(function () {
-    Route::get('dashboard', ParentDashboard::class)->name('dashboard');
+// Parent dashboard and routes
+Route::prefix('parent')->middleware(['auth', 'parent.verified'])->group(function () {
+    Route::get('/dashboard', 'App\Http\Controllers\ParentController@dashboard')->name('parent.dashboard');
+    // Add other parent-specific routes here
 });
 
-Route::middleware(['auth', 'carebuddy.registration.complete', 'carebuddy.verified'])->group(function () {
-    Route::get('/carebuddy/dashboard', CarebuddyDashboard::class)->name('carebuddy.dashboard');
+// Carebuddy dashboard and routes
+Route::prefix('carebuddy')->middleware(['auth', 'carebuddy.registration.complete', 'carebuddy.verified'])->group(function () {
+    Route::get('/dashboard', 'App\Http\Controllers\CarebuddyController@dashboard')->name('carebuddy.dashboard');
+    // Add other carebuddy-specific routes here
+});
+
+// Admin dashboard and routes
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/dashboard', 'App\Http\Controllers\AdminController@dashboard')->name('admin.dashboard');
+    Route::get('/approve/{id}', 'App\Http\Controllers\AdminController@approveUser')->name('admin.approve');
+    Route::get('/reject/{id}', 'App\Http\Controllers\AdminController@rejectUser')->name('admin.reject');
+    // Add other admin-specific routes here
+});
+
+// Root route handler - redirects to appropriate dashboard based on role
+Route::middleware(['auth', 'role.redirect'])->group(function () {
+    Route::get('/dashboard', function () {
+        // This route will be intercepted by the role.redirect middleware
+        // and redirected to the appropriate dashboard based on role and verification status
+        return redirect()->route('home');
+    })->name('dashboard');
 });
 
 // Parent application status page
@@ -49,6 +70,36 @@ Route::get('/carebuddy/resume-registration', function () {
     return view('carebuddy.resume-registration');
 })->name('carebuddy.resume.registration');
 
+// MVP static routes for parent carebuddy recommendations and booking flow
+use App\Models\CareBuddy;
+
+Route::get('/parent/carebuddy/{id}', function ($id) {
+    $carebuddy = CareBuddy::with('user')->find($id);
+    if (!$carebuddy || !$carebuddy->user) {
+        abort(404, 'Carebuddy not found');
+    }
+    return view('parent.carebuddy-profile', [
+        'name' => $carebuddy->user->name,
+        'location' => $carebuddy->city ?? 'N/A',
+        'radius' => $carebuddy->service_radius ? $carebuddy->service_radius . ' km' : 'N/A',
+        'age' => $carebuddy->child_age_limit ?? 'N/A',
+        'availability' => $carebuddy->availability ?? 'N/A',
+        'bio' => $carebuddy->bio ?? '',
+        'profile_photo' => $carebuddy->profile_photo ?? null,
+        'carebuddy_id' => $carebuddy->id,
+    ]);
+})->name('parent.carebuddy.profile');
+
+Route::get('/parent/book/{id}', function ($id) {
+    // For MVP, always redirect to payment page
+    return view('parent.payment');
+})->name('parent.book.slot');
+
+Route::post('/parent/payment/success', function () {
+    // For MVP, just show a success message
+    return '<div style="text-align:center;margin-top:50px;"><h2>Payment Successful!</h2><p>Your slot has been booked.</p><a href="/parent/dashboard">Go to Dashboard</a></div>';
+})->name('parent.payment.success');
+
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
@@ -60,13 +111,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/parent/register', ParentRegisterForm::class)->name('parent.register');
 });
 
+// Home page accessible by all users (both guests and authenticated users)
 Route::get('/', [LandingPageController::class, 'index'])->name('home');
 
+// Redirect route using the new role.redirect middleware
+Route::get('/redirect', function () {
+    return redirect()->route('dashboard');
+})->middleware(['auth', 'role.redirect'])->name('login.redirect');
 
-// Admin dashboard route
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', AdminDashboard::class)
-        ->name('admin.dashboard');
-});
+
+// This duplicate admin dashboard route was removed - using the route defined earlier in the file
 
 require __DIR__ . '/auth.php';

@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
 <x-layouts.onboarding class="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
-    <div class="max-w-lg w-full mx-auto bg-white/90 border border-gray-200 rounded-2xl shadow-xl p-10 text-center">
+    <div class="max-w-[800px]  w-full mx-auto bg-white/90 border border-gray-200 rounded-2xl shadow-xl p-10 text-center">
         <h1 class="text-3xl font-bold mb-8 text-blue-900 tracking-tight">Application Status</h1>
         @php $status = auth()->user()->verification_status; @endphp
         @if ($status === 'pending')
@@ -36,20 +36,20 @@
                             dashboard and all features.</p>
                     </div>
                 </div>
-                <div class="flex flex-col md:flex-row gap-4 w-full max-w-md mx-auto justify-center items-center">
-                    <a href="{{ route('dashboard') }}"
-                        class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold shadow-sm transition text-center cursor-pointer flex items-center justify-center">
+                <div class="flex flex-col md:flex-row gap-4 w-full max-w-[100%]  mx-auto justify-center items-center">
+                    <a href="{{ route('parent.dashboard') }}"
+                        class="flex-1 px-4 py-2 bg-orange-500 hover:bg-[#00bbae] text-white rounded-md font-semibold shadow-sm transition text-center cursor-pointer flex items-center justify-center">
                         <i class="fas fa-tachometer-alt mr-2"></i>Go to Dashboard
                     </a>
                     <form method="POST" action="{{ route('logout') }}" class="flex-1">
                         @csrf
                         <button type="submit"
-                            class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md font-semibold shadow-sm transition cursor-pointer flex items-center justify-center">
+                            class="w-full px-4 py-2 bg-[#00bbae] hover:bg-orange-600 text-white rounded-md font-semibold shadow-sm transition cursor-pointer flex items-center justify-center">
                             <i class="fas fa-sign-out-alt mr-2"></i>Logout
                         </button>
                     </form>
                     <a href="#"
-                        class="flex-1 px-4 py-2 border border-blue-400 text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md font-semibold shadow-sm transition text-center cursor-pointer flex items-center justify-center">
+                        class="flex-1 px-4 py-2 border border-orange-400 text-orange-500 bg-blue-50 hover:bg-blue-100 rounded-md font-semibold shadow-sm transition text-center cursor-pointer flex items-center justify-center">
                         <i class="fas fa-file-contract mr-2"></i>Terms & Conditions
                     </a>
                 </div>

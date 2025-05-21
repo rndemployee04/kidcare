@@ -38,22 +38,9 @@ class Login extends Component
         }
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
-        $user = Auth::user()->fresh();
-        if ($user && $user->role === 'admin') {
-            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
-        } elseif ($user && $user->role === 'carebuddy') {
-            if ($user->verification_status === 'approved') {
-                $this->redirectIntended(default: route('carebuddy.dashboard', absolute: false), navigate: true);
-            } else {
-                $this->redirectIntended(default: route('carebuddy.application.status', absolute: false), navigate: true);
-            }
-        } else {
-            if ($user->verification_status === 'approved') {
-                $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-            } else {
-                $this->redirectIntended(default: route('parent.application.status', absolute: false), navigate: true);
-            }
-        }
+        
+        // Let the role.redirect middleware handle the redirection
+        $this->redirectIntended(default: route('login.redirect', absolute: false), navigate: true);
     }
 
 
