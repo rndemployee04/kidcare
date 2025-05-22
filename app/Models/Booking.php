@@ -5,6 +5,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+    protected $casts = [
+        'paid_at' => 'datetime',
+    ];
     protected $fillable = [
         'carebuddy_id',
         'parent_id',
@@ -20,6 +23,6 @@ class Booking extends Model
 
     public function parent()
     {
-        return $this->belongsTo(\App\Models\Parent::class, 'parent_id');
+        return $this->belongsTo(\App\Models\Parents::class, 'parent_id');
     }
 }

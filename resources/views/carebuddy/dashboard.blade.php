@@ -68,10 +68,55 @@
                 <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Upcoming Schedule</h3>
                     
+                    @if($bookings->count())
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Parent</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($bookings as $booking)
+                                    <tr>
+                                        <td class="px-4 py-2">
+                                            {{ $booking->parent && $booking->parent->user ? $booking->parent->user->name : 'Unknown' }}
+                                        </td>
+                                        <td class="px-4 py-2">
+                                            @if($booking->status === 'accepted')
+                                                <span class="text-green-600 font-semibold">Accepted</span>
+                                            @else
+                                                <form action="{{ route('carebuddy.bookings.accept', $booking->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                                        Accept
+                                                    </button>
+                                                </form>
+                                                @if($booking->status === 'confirmed')
+                                                    <span class="text-blue-600 font-semibold ml-2">Confirmed</span>
+                                                @else
+                                                    <span class="text-yellow-500 font-semibold ml-2">Pending</span>
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td class="px-4 py-2">
+                                            {{ $booking->paid_at ? $booking->paid_at->format('d M Y H:i') : '-' }}
+                                        </td>
+                                        <td class="px-4 py-2">
+                                            ₹{{ $booking->amount }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
                     <div class="border border-gray-200 rounded-md p-4 text-center">
                         <p class="text-gray-500">No upcoming bookings at the moment.</p>
                         <p class="text-sm text-gray-400 mt-1">When parents book your services, they'll appear here.</p>
                     </div>
+                    @endif
                     
                     <div class="mt-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Notifications</h3>

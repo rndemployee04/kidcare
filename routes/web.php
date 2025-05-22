@@ -28,6 +28,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', 'App\Http\Controllers\AdminController@dashboard')->name('admin.dashboard');
     Route::get('/approve/{id}', 'App\Http\Controllers\AdminController@approveUser')->name('admin.approve');
     Route::get('/reject/{id}', 'App\Http\Controllers\AdminController@rejectUser')->name('admin.reject');
+    Route::get('/user/{id}/view', 'App\Http\Controllers\AdminController@viewApplication')->name('admin.viewApplication');
     // Add other admin-specific routes here
 });
 
@@ -78,26 +79,69 @@ Route::get('/parent/carebuddy/{id}', function ($id) {
     if (!$carebuddy || !$carebuddy->user) {
         abort(404, 'Carebuddy not found');
     }
+    $alreadyBooked = false;
+    if (Auth::check() && Auth::user()->parent) {
+        $alreadyBooked = Booking::where('carebuddy_id', $carebuddy->id)
+            ->where('parent_id', Auth::user()->parent->id)
+            ->exists();
+    }
+    // Gather all relevant fields
+    $user = $carebuddy->user;
     return view('parent.carebuddy-profile', [
-        'name' => $carebuddy->user->name,
-        'location' => $carebuddy->city ?? 'N/A',
-        'radius' => $carebuddy->service_radius ? $carebuddy->service_radius . ' km' : 'N/A',
-        'age' => $carebuddy->child_age_limit ?? 'N/A',
+        'name' => $user->name ?? 'N/A',
+        'email' => $user->email ?? 'N/A',
+        'phone' => $carebuddy->phone ?? 'N/A',
+        'gender' => $carebuddy->gender ?? 'N/A',
+        'dob' => $carebuddy->dob ?? null,
+        'current_address' => $carebuddy->current_address ?? 'N/A',
+        'permanent_address' => $carebuddy->permanent_address ?? 'N/A',
+        'city' => $carebuddy->city ?? 'N/A',
+        'state' => $carebuddy->state ?? 'N/A',
+        'zip' => $carebuddy->zip ?? 'N/A',
+        'service_radius' => $carebuddy->service_radius ? $carebuddy->service_radius . ' km' : 'N/A',
+        'child_age_limit' => $carebuddy->child_age_limit ?? 'N/A',
         'availability' => $carebuddy->availability ?? 'N/A',
+        'id_proof_path' => $carebuddy->id_proof_path ?? null,
+        'selfie_path' => $carebuddy->selfie_path ?? null,
+        'willing_to_take_insurance' => $carebuddy->willing_to_take_insurance ?? null,
+        'verification_status' => $carebuddy->verification_status ?? 'N/A',
         'bio' => $carebuddy->bio ?? '',
         'profile_photo' => $carebuddy->profile_photo ?? null,
         'carebuddy_id' => $carebuddy->id,
+        'alreadyBooked' => $alreadyBooked,
+        'user' => $user,
     ]);
 })->name('parent.carebuddy.profile');
 
 Route::get('/parent/book/{id}', function ($id) {
-    // For MVP, always redirect to payment page
-    return view('parent.payment');
+    // Show the payment form for booking
+    $carebuddy = \App\Models\CareBuddy::with('user')->find($id);
+    $amount = 500; // or fetch dynamic amount logic if needed
+    return view('parent.payment', [
+        'carebuddy_id' => $id,
+        'carebuddy_name' => $carebuddy ? ($carebuddy->user->name ?? 'N/A') : 'N/A',
+        'service_radius' => $carebuddy ? ($carebuddy->service_radius ?? 'N/A') : 'N/A',
+        'amount' => $amount
+    ]);
 })->name('parent.book.slot');
 
-Route::post('/parent/payment/success', function () {
-    // For MVP, just show a success message
-    return '<div style="text-align:center;margin-top:50px;"><h2>Payment Successful!</h2><p>Your slot has been booked.</p><a href="/parent/dashboard">Go to Dashboard</a></div>';
+// Parent booking POST route
+use App\Http\Controllers\ParentBookingController;
+use App\Http\Controllers\CarebuddyBookingController;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Booking;
+Route::post('/parent/book/{id}', [ParentBookingController::class, 'store'])->name('parent.book.store');
+
+// Parent and carebuddy bookings views
+Route::get('/parent/my-bookings', [ParentBookingController::class, 'myBookings'])->name('parent.bookings');
+Route::get('/carebuddy/my-bookings', [CarebuddyBookingController::class, 'myBookings'])->name('carebuddy.bookings');
+
+// Carebuddy accept/reject booking
+Route::post('/carebuddy/bookings/accept/{id}', [CarebuddyBookingController::class, 'accept'])->name('carebuddy.bookings.accept');
+Route::post('/carebuddy/bookings/reject/{id}', [CarebuddyBookingController::class, 'reject'])->name('carebuddy.bookings.reject');
+
+Route::match(['get', 'post'], '/parent/payment/success', function () {
+    return view('parent.payment-success');
 })->name('parent.payment.success');
 
 Route::middleware(['auth'])->group(function () {
