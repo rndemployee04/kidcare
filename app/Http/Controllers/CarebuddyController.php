@@ -19,10 +19,14 @@ class CarebuddyController extends Controller
 
         $user = Auth::user();
         $carebuddy = $user->careBuddy;
-        
+        $bookings = \App\Models\Booking::with('parent.user')
+            ->where('carebuddy_id', $carebuddy->id)
+            ->latest()
+            ->get();
         return view('carebuddy.dashboard', [
             'user' => $user,
-            'carebuddy' => $carebuddy
+            'carebuddy' => $carebuddy,
+            'bookings' => $bookings
         ]);
     }
 }

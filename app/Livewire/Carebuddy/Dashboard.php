@@ -18,9 +18,17 @@ class Dashboard extends Component
         $user = Auth::user();
         $carebuddy = $user->careBuddy;
         
+        $bookings = [];
+        if ($carebuddy) {
+            $bookings = \App\Models\Booking::with(['parent.user'])
+                ->where('carebuddy_id', $carebuddy->id)
+                ->latest()
+                ->get();
+        }
         return view('livewire.carebuddy.dashboard', [
             'user' => $user,
-            'carebuddy' => $carebuddy
+            'carebuddy' => $carebuddy,
+            'bookings' => $bookings
         ]);
     }
 }

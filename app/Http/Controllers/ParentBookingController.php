@@ -11,21 +11,39 @@ class ParentBookingController extends Controller
 {
     public function store(Request $request, $carebuddyId)
     {
-        $parent = Auth::user()->parent;
-        $carebuddy = CareBuddy::findOrFail($carebuddyId);
+        \Log::info('Booking POST hit!', ['user_id' => \Auth::id(), 'carebuddy_id' => $carebuddyId]);
+        $user = Auth::user();
+        // Role and relationship check
+        if (!$user->isParent() || !$user->parentProfile) {
+            return redirect()->back()->with('error', 'You must be logged in as a parent with a complete profile to book a carebuddy.');
+        }
+        $parent = $user->parentProfile;
+        $carebuddy = \App\Models\CareBuddy::findOrFail($carebuddyId);
         $amount = $request->input('amount', 500); // default amount
-        $booking = Booking::create([
+
+        // Prevent double booking
+        $existing = \App\Models\Booking::where('carebuddy_id', $carebuddy->id)
+            ->where('parent_id', $parent->id)
+            ->first();
+        if ($existing) {
+            return redirect()->back()->with('error', 'You have already booked this carebuddy.');
+        }
+
+        $booking = \App\Models\Booking::create([
             'carebuddy_id' => $carebuddy->id,
             'parent_id' => $parent->id,
             'status' => 'confirmed',
             'amount' => $amount,
-            'paid_at' => Carbon::now(),
+            'paid_at' => \Carbon\Carbon::now(),
         ]);
         return redirect()->route('parent.payment.success');
     }
     public function myBookings()
     {
-        $parent = Auth::user()->parent;
+        $parent = Auth::user()->parentProfile;
+        if (!$parent) {
+            return redirect()->route('parent.dashboard')->with('error', 'No parent profile found.');
+        }
         $bookings = Booking::with('carebuddy.user')->where('parent_id', $parent->id)->latest()->get();
         return view('parent.my-bookings', compact('bookings'));
     }

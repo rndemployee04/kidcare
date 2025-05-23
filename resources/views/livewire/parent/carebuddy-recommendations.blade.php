@@ -1,12 +1,67 @@
-<div>
-    <h2 class="mb-4">Recommended Carebuddies</h2>
-    <div class="mb-3">
-        <input type="text" wire:model.debounce.500ms="search"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Search by name...">
+<div class="w-full flex flex-col items-center">
+    <div class="w-full max-w-5xl bg-white/95 rounded-2xl shadow-lg px-6 py-4 mb-8">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-4 md:items-center md:justify-between">
+            <div class="flex flex-wrap gap-2 flex-1 items-center">
+                <input type="text" wire:model.debounce.500ms="search"
+                    class="flex-1 min-w-[160px] max-w-[200px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Search by name, city, etc...">
+                <select wire:model="location" class="px-3 py-2 border rounded-lg min-w-[120px]">
+                    <option value="">All Locations</option>
+                    @foreach($carebuddies->pluck('city')->unique()->filter()->sort() as $city)
+                        <option value="{{ $city }}">{{ $city }}</option>
+                    @endforeach
+                </select>
+                <select wire:model="radius" class="px-3 py-2 border rounded-lg min-w-[110px]">
+                    <option value="">Any Radius</option>
+                    <option value="2-3">2-3 km</option>
+                    <option value="3-4">3-4 km</option>
+                    <option value="4-5">4-5 km</option>
+                </select>
+                <select wire:model="child_age" class="px-3 py-2 border rounded-lg min-w-[100px]">
+                    <option value="">Any Age</option>
+                    <option value="2-3">2-3</option>
+                    <option value="3-5">3-5</option>
+                    <option value="5-8">5-8</option>
+                    <option value="8-10">8-10</option>
+                    <option value="all">All</option>
+                </select>
+                <select wire:model="category" class="px-3 py-2 border rounded-lg min-w-[120px]">
+                    <option value="any">Any Category</option>
+                    <option value="newlywed">Newlywed</option>
+                    <option value="professional">Professional</option>
+                    <option value="parent">Parent</option>
+                    <option value="senior">Senior</option>
+                </select>
+                <select wire:model="gender" class="px-3 py-2 border rounded-lg min-w-[110px]">
+                    <option value="any">Any Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="others">Others</option>
+                </select>
+                <div class="flex flex-row gap-2 items-center ml-2">
+                    <span class="text-xs font-semibold">Availability:</span>
+                    @foreach(['morning', 'afternoon', 'evening', 'full_day'] as $slot)
+                        <label class="inline-flex items-center text-xs gap-1">
+                            <input type="checkbox" wire:model="availability" value="{{ $slot }}"
+                                class="rounded border-gray-300">
+                            {{ ucfirst(str_replace('_', ' ', $slot)) }}
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+            <div class="flex flex-row gap-2 md:ml-4 justify-end">
+                <button type="button" wire:click="applyFilters"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">Apply
+                    Filters</button>
+                <button type="button" wire:click="clearFilters"
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg font-semibold hover:bg-gray-400 transition">Clear
+                    All</button>
+            </div>
+        </div>
     </div>
+
     <div id="carebuddy-list">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @forelse($carebuddies as $carebuddy)
                 <div
                     class="rounded-3xl shadow-lg flex flex-col items-center p-7 text-center min-h-[420px] transition-colors bg-gray-50 dark:bg-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
@@ -57,7 +112,8 @@
                             class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition">View
                             Profile</a>
                         @if(isset($bookedCarebuddies) && in_array($carebuddy->id, $bookedCarebuddies))
-                            <button class="w-1/2 bg-gray-400 text-white font-semibold py-2 rounded-lg cursor-not-allowed" disabled>Booked</button>
+                            <button class="w-1/2 bg-gray-400 text-white font-semibold py-2 rounded-lg cursor-not-allowed"
+                                disabled>Booked</button>
                         @else
                             <a href="/parent/book/{{ $carebuddy->id }}"
                                 class="w-1/2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition">Book</a>

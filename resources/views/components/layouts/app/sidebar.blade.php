@@ -11,6 +11,11 @@
             <flux:navlist.group :heading="__('Platform')" class="grid">
                 @auth
     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard') || request()->routeIs('parent.dashboard') || request()->routeIs('carebuddy.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+    @if(auth()->user() && auth()->user()->isParent())
+        <flux:navlist.item icon="calendar-days" :href="route('parent.bookings')" :current="request()->routeIs('parent.bookings')" wire:navigate>
+            {{ __('Bookings') }}
+        </flux:navlist.item>
+    @endif
 @else
     <flux:navlist.item icon="home" :href="route('home')" :current="request()->routeIs('home')" wire:navigate>{{ __('Home') }}</flux:navlist.item>
 @endauth

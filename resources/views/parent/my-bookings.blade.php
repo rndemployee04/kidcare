@@ -1,4 +1,4 @@
-<x-layouts.app>
+<x-parent.layouts.parent-layout>
     <div class="max-w-4xl mx-auto py-10">
         <h2 class="text-2xl font-bold mb-6">My Bookings</h2>
         <div class="bg-white dark:bg-neutral-800 rounded-xl shadow p-6">
@@ -18,22 +18,26 @@
                             <td class="py-2">{{ $booking->carebuddy->user->name ?? 'N/A' }}</td>
                             <td class="py-2">₹{{ $booking->amount }}</td>
                             <td class="py-2">
-                                @if($booking->carebuddy_accepted)
+                                @if($booking->status === 'accepted')
                                     <span class="text-green-600 font-semibold">Accepted</span>
+                                @elseif($booking->status === 'confirmed')
+                                    <span class="text-blue-600 font-semibold">Confirmed</span>
                                 @else
                                     <span class="text-yellow-500 font-semibold">Pending</span>
                                 @endif
                             </td>
                             <td class="py-2">{{ $booking->paid_at ? $booking->paid_at->format('d M Y H:i') : '-' }}</td>
                             <td class="py-2">
-                                <a href="/parent/carebuddy/{{ $booking->carebuddy_id }}" class="text-blue-600 underline">View</a>
+                                <a href=#" class="text-blue-600 underline">View</a>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-6 text-gray-500">No bookings found.</td></tr>
+                        <tr>
+                            <td colspan="5" class="text-center py-6 text-gray-500">No bookings found.</td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-</x-layouts.app>
+</x-parent.layouts.parent-layout>

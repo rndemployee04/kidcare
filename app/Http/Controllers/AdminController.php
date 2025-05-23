@@ -18,10 +18,14 @@ class AdminController extends Controller
             abort(403, 'Unauthorized');
         }
         
-        $pendingUsers = User::where('verification_status', 'pending')->get();
-        $approvedUsers = User::where('verification_status', 'approved')->get();
-        $rejectedUsers = User::where('verification_status', 'rejected')->get();
-        
+        $pendingUsers = User::where('verification_status', 'pending')
+            ->where('registration_complete', 1)
+            ->paginate(10, ['*'], 'pending_page');
+        $approvedUsers = User::where('verification_status', 'approved')
+            ->paginate(10, ['*'], 'approved_page');
+        $rejectedUsers = User::where('verification_status', 'rejected')
+            ->paginate(10, ['*'], 'rejected_page');
+
         return view('admin.dashboard', [
             'pendingUsers' => $pendingUsers,
             'approvedUsers' => $approvedUsers,
@@ -50,5 +54,15 @@ class AdminController extends Controller
         $user->save();
         
         return back()->with('error', 'User rejected.');
+    }
+
+    public function viewApplication($id)
+    {
+        // Ensure only admin users can access
+        if (!Auth::user() || !Auth::user()->isAdmin()) {
+            abort(403, 'Unauthorized');
+        }
+        $user = User::with(['careBuddy', 'parentProfile'])->findOrFail($id);
+        return view('admin.view-application', compact('user'));
     }
 }

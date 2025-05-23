@@ -32,6 +32,15 @@ class CarebuddyBookingController extends Controller
     {
         $carebuddy = Auth::user()->careBuddy;
         $bookings = Booking::with('parent.user')->where('carebuddy_id', $carebuddy->id)->latest()->get();
+        // Ensure platform_fee and carebuddy_earnings are set for display
+        foreach ($bookings as $booking) {
+            if (is_null($booking->platform_fee)) {
+                $booking->platform_fee = 0;
+            }
+            if (is_null($booking->carebuddy_earnings)) {
+                $booking->carebuddy_earnings = 0;
+            }
+        }
         return view('carebuddy.my-bookings', compact('bookings'));
     }
 }

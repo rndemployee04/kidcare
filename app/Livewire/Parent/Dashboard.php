@@ -28,21 +28,35 @@ class Dashboard extends Component
     public function render()
     {
         $user = Auth::user();
-        
-        // Get carebuddy recommendations with pagination
+
+        // 1. Get all carebuddy IDs already booked by this parent
+        $bookedCarebuddyIds = [];
+        if ($user->isParent() && $user->parentProfile) {
+            $parentProfileId = $user->parentProfile->id;
+            $bookedCarebuddyIds = \App\Models\Booking::where('parent_id', $parentProfileId)
+                ->pluck('carebuddy_id')->toArray();
+        }
+
+        // 2. Only recommend carebuddies NOT already booked
         $carebuddies = CareBuddy::with(['user' => function($query) {
-                $query->where('verification_status', 'approved');
+                $query->whereHas('user', function ($q) {
+    $q->where('verification_status', 'approved');
+});
             }])
             ->whereHas('user', function($query) {
-                $query->where('verification_status', 'approved');
+                $query->whereHas('user', function ($q) {
+    $q->where('verification_status', 'approved');
+});
             })
+            ->whereNotIn('id', $bookedCarebuddyIds)
             ->paginate($this->perPage);
-            
+
         $this->hasMoreItems = $carebuddies->hasMorePages();
-        
+
         return view('livewire.parent.dashboard', [
             'carebuddies' => $carebuddies,
-            'user' => $user
+            'user' => $user,
+            'bookedCarebuddyIds' => $bookedCarebuddyIds
         ]);
     }
 }
