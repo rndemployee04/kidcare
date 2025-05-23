@@ -410,7 +410,6 @@
                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
             @enderror
         </div>
-
         {{-- Location Selection Placeholder --}}
         {{-- Save & Submit Buttons --}}
         <div class="flex gap-4 mt-8">
@@ -430,7 +429,6 @@
         </div>
     </form>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     window.addEventListener('draft-saved', function () {
