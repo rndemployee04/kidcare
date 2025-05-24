@@ -17,10 +17,10 @@ class RegisterForm extends Component
     public string $dob = '';
     public string $phone = '';
     public string $gender = 'male';
-    public string $profile_photo = '';
-    public string $document_path = '';
-    public string $id_proof_path = '';
-    public string $selfie_path = '';
+    public $profile_photo;
+    public $certificate_path;
+    public $id_proof_path;
+    public $selfie_path;
     public string $permanent_address = '';
     public string $current_address = '';
     public string $city = '';
@@ -79,27 +79,25 @@ class RegisterForm extends Component
         $data = $this->only($this->fillableFields());
         $data['user_id'] = Auth::id();
 
-        // Handle file uploads (if any)
+        // Handle file uploads
         if ($this->profile_photo instanceof \Livewire\TemporaryUploadedFile) {
             $data['profile_photo'] = $this->profile_photo->store('profile_photos', 'public');
         }
+
         if ($this->id_proof_path instanceof \Livewire\TemporaryUploadedFile) {
             $data['id_proof_path'] = $this->id_proof_path->store('id_proofs', 'public');
         }
+
         if ($this->selfie_path instanceof \Livewire\TemporaryUploadedFile) {
             $data['selfie_path'] = $this->selfie_path->store('selfies', 'public');
         }
 
-        // Set empty strings to null for DB-required fields (must be nullable in DB for drafts to work)
-        foreach ([
-            'category','dob','phone','gender','id_proof_path','permanent_address','current_address','city','state','zip','service_radius','child_age_limit','selfie_path'
-        ] as $required) {
-            if (empty($data[$required])) {
-                $data[$required] = null;
+        // Set empty strings to null for DB-required fields
+        foreach (['category', 'dob', 'phone', 'gender', 'id_proof_path', 'permanent_address', 'current_address', 'city', 'state', 'zip', 'service_radius', 'child_age_limit', 'selfie_path'] as $field) {
+            if (empty($data[$field])) {
+                $data[$field] = null;
             }
         }
-        // NOTE: The following fields must be nullable in your care_buddies table for drafts to work:
-        // category, dob, phone, gender, id_proof_path, permanent_address, current_address, city, state, zip, service_radius, child_age_limit, selfie_path
 
         // Ensure availability is always an array
         if (!is_array($data['availability'])) {
@@ -122,10 +120,9 @@ class RegisterForm extends Component
             'dob' => 'required|date',
             'phone' => 'required|string',
             'gender' => 'required|in:male,female,others',
-            'profile_photo' => 'nullable|string',
-            'document_path' => 'nullable|string',
-            'id_proof_path' => 'required|string',
-            'selfie_path' => 'required|string',
+            'profile_photo' => 'required|file|mimes:jpg,jpeg,png|max:2048', // Image only
+            'id_proof_path' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120', // PDF or image
+            'selfie_path' => 'required|file|mimes:jpg,jpeg,png|max:2048', // Image only
             'permanent_address' => 'required|string',
             'current_address' => 'required|string',
             'city' => 'required|string',
@@ -141,13 +138,15 @@ class RegisterForm extends Component
 
         $validated['user_id'] = Auth::id();
 
-        // Handle file uploads (if any)
+        // Handle file uploads
         if ($this->profile_photo instanceof \Livewire\TemporaryUploadedFile) {
             $validated['profile_photo'] = $this->profile_photo->store('profile_photos', 'public');
         }
+
         if ($this->id_proof_path instanceof \Livewire\TemporaryUploadedFile) {
             $validated['id_proof_path'] = $this->id_proof_path->store('id_proofs', 'public');
         }
+
         if ($this->selfie_path instanceof \Livewire\TemporaryUploadedFile) {
             $validated['selfie_path'] = $this->selfie_path->store('selfies', 'public');
         }
@@ -157,7 +156,7 @@ class RegisterForm extends Component
             $validated['availability'] = $validated['availability'] ? [$validated['availability']] : [];
         }
 
-        // Upsert carebuddy profile (overwrite draft if exists)
+        // Upsert carebuddy profile
         \App\Models\CareBuddy::updateOrCreate(
             ['user_id' => Auth::id()],
             $validated
