@@ -14,13 +14,17 @@ use App\Livewire\Carebuddy\Dashboard as CarebuddyDashboard;
 // Parent dashboard and routes
 Route::prefix('parent')->middleware(['auth', 'parent.verified'])->group(function () {
     Route::get('/dashboard', 'App\Http\Controllers\ParentController@dashboard')->name('parent.dashboard');
-    // Add other parent-specific routes here
+    Route::get('/profile', [\App\Http\Controllers\ParentProfileController::class, 'show'])->name('parent.profile.show');
+    Route::put('/profile', [\App\Http\Controllers\ParentProfileController::class, 'update'])->name('parent.profile.update');
+    Route::get('/activity', [\App\Http\Controllers\Parent\ActivityController::class, 'index'])->name('parent.activity');
 });
 
 // Carebuddy dashboard and routes
 Route::prefix('carebuddy')->middleware(['auth', 'carebuddy.registration.complete', 'carebuddy.verified'])->group(function () {
     Route::get('/dashboard', 'App\Http\Controllers\CarebuddyController@dashboard')->name('carebuddy.dashboard');
-    // Add other carebuddy-specific routes here
+    Route::get('/profile', [\App\Http\Controllers\CarebuddyProfileController::class, 'show'])->name('carebuddy.profile.show');
+    Route::put('/profile', [\App\Http\Controllers\CarebuddyProfileController::class, 'update'])->name('carebuddy.profile.update');
+    Route::get('/activity', [\App\Http\Controllers\Carebuddy\ActivityController::class, 'index'])->name('carebuddy.activity');
 });
 
 // Admin dashboard and routes

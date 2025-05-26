@@ -61,7 +61,8 @@
                         </svg>
                         Bookings
                     </a>
-                    <a href="#" class="flex items-center p-2 mb-2 text-gray-800 hover:bg-green-50 rounded-lg">
+                    <a href="{{ route('carebuddy.profile.show') }}"
+                        class="flex items-center p-2 mb-2 text-gray-800 hover:bg-green-50 rounded-lg {{ request()->routeIs('carebuddy.profile.show') ? 'bg-green-100' : '' }}">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -69,7 +70,7 @@
                         </svg>
                         My Profile
                     </a>
-                    <a href="#" class="flex items-center p-2 mb-2 text-gray-800 hover:bg-green-50 rounded-lg">
+                    <a href="{{ route('carebuddy.activity') }}" class="flex items-center p-2 mb-2 text-gray-800 hover:bg-green-50 rounded-lg {{ request()->routeIs('carebuddy.activity') ? 'bg-green-100' : '' }}">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -113,8 +114,8 @@
                             <button class="flex items-center text-gray-700 focus:outline-none">
                                 <span class="mr-2">{{ Auth::user()->name }}</span>
                                 <img src="{{ Auth::user()->careBuddy && Auth::user()->careBuddy->profile_photo ? url('/storage/' . Auth::user()->careBuddy->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=7F9CF5&background=EBF4FF' }}"
-    alt="User Avatar" class="h-8 w-8 rounded-full object-cover"
-    onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF'">
+                                    alt="User Avatar" class="h-8 w-8 rounded-full object-cover"
+                                    onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF'">
                             </button>
                         </div>
                     </div>
