@@ -21,6 +21,9 @@ class RegisterForm extends Component
     public $certificate_path;
     public $id_proof_path;
     public $selfie_path;
+    public $marriage_certificate_path;
+    public $birth_certificate_path;
+    public $child_birth_certificate_path;
     public string $permanent_address = '';
     public string $current_address = '';
     public string $city = '';
@@ -39,7 +42,7 @@ class RegisterForm extends Component
             return redirect()->route('home');
         }
         // Load draft if exists
-        $carebuddy = \App\Models\CareBuddy::where('user_id', Auth::id())->first();
+        $carebuddy = CareBuddy::where('user_id', Auth::id())->first();
         if ($carebuddy) {
             foreach ($this->fillableFields() as $field) {
                 if (isset($carebuddy[$field])) {
@@ -60,6 +63,10 @@ class RegisterForm extends Component
             'profile_photo',
             'id_proof_path',
             'selfie_path',
+            'certificate_path',
+            'marriage_certificate_path',
+            'birth_certificate_path',
+            'child_birth_certificate_path',
             'permanent_address',
             'current_address',
             'city',
@@ -79,17 +86,58 @@ class RegisterForm extends Component
         $data = $this->only($this->fillableFields());
         $data['user_id'] = Auth::id();
 
-        // Handle file uploads
-        if ($this->profile_photo instanceof \Livewire\TemporaryUploadedFile) {
-            $data['profile_photo'] = $this->profile_photo->store('profile_photos', 'public');
+        // Store and log profile photo
+        \Log::info('Storing profile photo: ' . $this->profile_photo->getClientOriginalName());
+        $path = $this->profile_photo->store('profile_photos', 'public');
+        \Log::info('Stored profile photo at: ' . $path);
+        $data['profile_photo'] = $path;
+        $this->profile_photo = $path;
+
+        // Store and log ID proof
+        \Log::info('Storing ID proof: ' . $this->id_proof_path->getClientOriginalName());
+        $path = $this->id_proof_path->store('id_proofs', 'public');
+        \Log::info('Stored ID proof at: ' . $path);
+        $data['id_proof_path'] = $path;
+        $this->id_proof_path = $path;
+
+        // Store and log selfie
+        \Log::info('Storing selfie: ' . $this->selfie_path->getClientOriginalName());
+        $path = $this->selfie_path->store('selfies', 'public');
+        \Log::info('Stored selfie at: ' . $path);
+        $data['selfie_path'] = $path;
+        $this->selfie_path = $path;
+
+        // OPTIONAL: store certificates if uploaded
+        if ($this->certificate_path) {
+            \Log::info('Storing certificate: ' . $this->certificate_path->getClientOriginalName());
+            $path = $this->certificate_path->store('certificates', 'public');
+            \Log::info('Stored certificate at: ' . $path);
+            $data['certificate_path'] = $path;
+            $this->certificate_path = $path;
         }
 
-        if ($this->id_proof_path instanceof \Livewire\TemporaryUploadedFile) {
-            $data['id_proof_path'] = $this->id_proof_path->store('id_proofs', 'public');
+        if ($this->marriage_certificate_path) {
+            \Log::info('Storing marriage certificate: ' . $this->marriage_certificate_path->getClientOriginalName());
+            $path = $this->marriage_certificate_path->store('certificates', 'public');
+            \Log::info('Stored marriage certificate at: ' . $path);
+            $data['marriage_certificate_path'] = $path;
+            $this->marriage_certificate_path = $path;
         }
 
-        if ($this->selfie_path instanceof \Livewire\TemporaryUploadedFile) {
-            $data['selfie_path'] = $this->selfie_path->store('selfies', 'public');
+        if ($this->birth_certificate_path) {
+            \Log::info('Storing birth certificate: ' . $this->birth_certificate_path->getClientOriginalName());
+            $path = $this->birth_certificate_path->store('certificates', 'public');
+            \Log::info('Stored birth certificate at: ' . $path);
+            $data['birth_certificate_path'] = $path;
+            $this->birth_certificate_path = $path;
+        }
+
+        if ($this->child_birth_certificate_path) {
+            \Log::info('Storing child birth certificate: ' . $this->child_birth_certificate_path->getClientOriginalName());
+            $path = $this->child_birth_certificate_path->store('certificates', 'public');
+            \Log::info('Stored child birth certificate at: ' . $path);
+            $data['child_birth_certificate_path'] = $path;
+            $this->child_birth_certificate_path = $path;
         }
 
         // Set empty strings to null for DB-required fields
@@ -104,7 +152,7 @@ class RegisterForm extends Component
             $data['availability'] = $data['availability'] ? [$data['availability']] : [];
         }
 
-        \App\Models\CareBuddy::updateOrCreate(
+        CareBuddy::updateOrCreate(
             ['user_id' => Auth::id()],
             $data
         );
@@ -120,9 +168,9 @@ class RegisterForm extends Component
             'dob' => 'required|date',
             'phone' => 'required|string',
             'gender' => 'required|in:male,female,others',
-            'profile_photo' => 'required|file|mimes:jpg,jpeg,png|max:2048', // Image only
-            'id_proof_path' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120', // PDF or image
-            'selfie_path' => 'required|file|mimes:jpg,jpeg,png|max:2048', // Image only
+            'profile_photo' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'id_proof_path' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'selfie_path' => 'required|file|mimes:jpg,jpeg,png|max:2048',
             'permanent_address' => 'required|string',
             'current_address' => 'required|string',
             'city' => 'required|string',
@@ -138,17 +186,58 @@ class RegisterForm extends Component
 
         $validated['user_id'] = Auth::id();
 
-        // Handle file uploads
-        if ($this->profile_photo instanceof \Livewire\TemporaryUploadedFile) {
-            $validated['profile_photo'] = $this->profile_photo->store('profile_photos', 'public');
+        // Store and log profile photo
+        \Log::info('Storing profile photo: ' . $this->profile_photo->getClientOriginalName());
+        $path = $this->profile_photo->store('profile_photos', 'public');
+        \Log::info('Stored profile photo at: ' . $path);
+        $validated['profile_photo'] = $path;
+        $this->profile_photo = $path;
+
+        // Store and log ID proof
+        \Log::info('Storing ID proof: ' . $this->id_proof_path->getClientOriginalName());
+        $path = $this->id_proof_path->store('id_proofs', 'public');
+        \Log::info('Stored ID proof at: ' . $path);
+        $validated['id_proof_path'] = $path;
+        $this->id_proof_path = $path;
+
+        // Store and log selfie
+        \Log::info('Storing selfie: ' . $this->selfie_path->getClientOriginalName());
+        $path = $this->selfie_path->store('selfies', 'public');
+        \Log::info('Stored selfie at: ' . $path);
+        $validated['selfie_path'] = $path;
+        $this->selfie_path = $path;
+
+        // OPTIONAL: store certificates if uploaded
+        if ($this->certificate_path) {
+            \Log::info('Storing certificate: ' . $this->certificate_path->getClientOriginalName());
+            $path = $this->certificate_path->store('certificates', 'public');
+            \Log::info('Stored certificate at: ' . $path);
+            $validated['certificate_path'] = $path;
+            $this->certificate_path = $path;
         }
 
-        if ($this->id_proof_path instanceof \Livewire\TemporaryUploadedFile) {
-            $validated['id_proof_path'] = $this->id_proof_path->store('id_proofs', 'public');
+        if ($this->marriage_certificate_path) {
+            \Log::info('Storing marriage certificate: ' . $this->marriage_certificate_path->getClientOriginalName());
+            $path = $this->marriage_certificate_path->store('certificates', 'public');
+            \Log::info('Stored marriage certificate at: ' . $path);
+            $validated['marriage_certificate_path'] = $path;
+            $this->marriage_certificate_path = $path;
         }
 
-        if ($this->selfie_path instanceof \Livewire\TemporaryUploadedFile) {
-            $validated['selfie_path'] = $this->selfie_path->store('selfies', 'public');
+        if ($this->birth_certificate_path) {
+            \Log::info('Storing birth certificate: ' . $this->birth_certificate_path->getClientOriginalName());
+            $path = $this->birth_certificate_path->store('certificates', 'public');
+            \Log::info('Stored birth certificate at: ' . $path);
+            $validated['birth_certificate_path'] = $path;
+            $this->birth_certificate_path = $path;
+        }
+
+        if ($this->child_birth_certificate_path) {
+            \Log::info('Storing child birth certificate: ' . $this->child_birth_certificate_path->getClientOriginalName());
+            $path = $this->child_birth_certificate_path->store('certificates', 'public');
+            \Log::info('Stored child birth certificate at: ' . $path);
+            $validated['child_birth_certificate_path'] = $path;
+            $this->child_birth_certificate_path = $path;
         }
 
         // Ensure availability is always an array
@@ -156,13 +245,11 @@ class RegisterForm extends Component
             $validated['availability'] = $validated['availability'] ? [$validated['availability']] : [];
         }
 
-        // Upsert carebuddy profile
-        \App\Models\CareBuddy::updateOrCreate(
+        CareBuddy::updateOrCreate(
             ['user_id' => Auth::id()],
             $validated
         );
 
-        // Mark registration as complete
         $user = Auth::user();
         $user->registration_complete = true;
         $user->save();
@@ -175,4 +262,3 @@ class RegisterForm extends Component
         return view('carebuddy.register-form');
     }
 }
-

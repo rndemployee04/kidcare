@@ -6,21 +6,21 @@ use Livewire\Component;
 use App\Models\Parents;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\WithFileUploads;
+use Livewire\TemporaryUploadedFile;
 
 #[Layout('components.layouts.onboarding')]
-
 class RegisterForm extends Component
 {
-    use \Livewire\WithFileUploads;
+    use WithFileUploads;
 
     // Personal Info
     public string $phone = '';
     public string $dob = '';
     public string $gender = 'male';
-    public string $profile_photo = '';
+    public $profile_photo;
+    public $id_proof_path;
 
-    // ID Proof
-    public string $id_proof_path = '';
 
     // Address Info
     public string $permanent_address = '';
@@ -57,7 +57,6 @@ class RegisterForm extends Component
             return redirect()->route('home');
         }
 
-        // Load draft if exists
         $parent = Parents::where('user_id', Auth::id())->first();
         if ($parent) {
             foreach ($this->fillableFields() as $field) {
@@ -68,14 +67,35 @@ class RegisterForm extends Component
         }
     }
 
-    // Helper: list of all fillable fields
     protected function fillableFields(): array
     {
         return [
-            'phone','dob','gender','profile_photo','id_proof_path','permanent_address','current_address','city','state','zip',
-            'profession','spouse_name','spouse_email','spouse_phone','spouse_profession','monthly_income',
-            'number_of_children','number_needing_care','preferred_drop_off_time','preferred_type_of_caregiver','preferred_radius',
-            'needs_special_needs_support','reason_for_service','emergency_contact_name','emergency_contact_phone','terms_accepted',
+            'phone',
+            'dob',
+            'gender',
+            'profile_photo',
+            'id_proof_path',
+            'permanent_address',
+            'current_address',
+            'city',
+            'state',
+            'zip',
+            'profession',
+            'spouse_name',
+            'spouse_email',
+            'spouse_phone',
+            'spouse_profession',
+            'monthly_income',
+            'number_of_children',
+            'number_needing_care',
+            'preferred_drop_off_time',
+            'preferred_type_of_caregiver',
+            'preferred_radius',
+            'needs_special_needs_support',
+            'reason_for_service',
+            'emergency_contact_name',
+            'emergency_contact_phone',
+            'terms_accepted',
         ];
     }
 
@@ -84,26 +104,25 @@ class RegisterForm extends Component
         $data = $this->only($this->fillableFields());
         $data['user_id'] = Auth::id();
 
-        // Handle file uploads (if any)
-        if ($this->profile_photo instanceof \Livewire\TemporaryUploadedFile) {
+        if ($this->profile_photo instanceof TemporaryUploadedFile) {
+            \Log::info('Storing draft profile photo: ' . $this->profile_photo->getClientOriginalName());
             $data['profile_photo'] = $this->profile_photo->store('profile_photos', 'public');
-        }
-        if ($this->id_proof_path instanceof \Livewire\TemporaryUploadedFile) {
-            $data['id_proof_path'] = $this->id_proof_path->store('id_proofs', 'public');
+            $this->profile_photo = $data['profile_photo'];
         }
 
-        // Set empty strings to null for DB-required fields
-        foreach ([
-            'phone','dob','gender','id_proof_path','permanent_address','current_address','city','state','zip','profession',
-            'number_of_children','number_needing_care','preferred_drop_off_time','preferred_type_of_caregiver','preferred_radius',
-            'emergency_contact_name','emergency_contact_phone','terms_accepted'
-        ] as $required) {
+        if ($this->id_proof_path instanceof TemporaryUploadedFile) {
+            \Log::info('Storing draft ID proof: ' . $this->id_proof_path->getClientOriginalName());
+            $data['id_proof_path'] = $this->id_proof_path->store('id_proofs', 'public');
+            $this->id_proof_path = $data['id_proof_path'];
+        }
+
+        // Normalize null values
+        foreach (['phone', 'dob', 'gender', 'id_proof_path', 'permanent_address', 'current_address', 'city', 'state', 'zip', 'profession', 'number_of_children', 'number_needing_care', 'preferred_drop_off_time', 'preferred_type_of_caregiver', 'preferred_radius', 'emergency_contact_name', 'emergency_contact_phone', 'terms_accepted'] as $required) {
             if (empty($data[$required])) {
                 $data[$required] = null;
             }
         }
 
-        // Upsert draft (do not mark registration_complete)
         Parents::updateOrCreate(
             ['user_id' => Auth::id()],
             $data
@@ -120,10 +139,10 @@ class RegisterForm extends Component
             'phone' => 'required|string',
             'dob' => 'required|date',
             'gender' => 'required|in:male,female,others',
-            'profile_photo' => 'nullable|string',
+            'profile_photo' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
 
             // ID Proof
-            'id_proof_path' => 'required|string',
+            'id_proof_path' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
 
             // Address
             'permanent_address' => 'required|string',
@@ -159,31 +178,27 @@ class RegisterForm extends Component
 
         $validated['user_id'] = Auth::id();
 
-        // Handle file uploads
-        if ($this->profile_photo instanceof \Livewire\TemporaryUploadedFile) {
+        // Always store uploaded files if present
+        if ($this->profile_photo) {
             $validated['profile_photo'] = $this->profile_photo->store('profile_photos', 'public');
-        } else {
-            $validated['profile_photo'] = $this->profile_photo;
-        }
-        if ($this->id_proof_path instanceof \Livewire\TemporaryUploadedFile) {
-            $validated['id_proof_path'] = $this->id_proof_path->store('id_proofs', 'public');
-        } else {
-            $validated['id_proof_path'] = $this->id_proof_path;
         }
 
-        // Upsert parent profile (overwrite draft if exists)
+        if ($this->id_proof_path) {
+            $validated['id_proof_path'] = $this->id_proof_path->store('id_proofs', 'public');
+        }
+
         Parents::updateOrCreate(
             ['user_id' => Auth::id()],
             $validated
         );
 
-        // Mark registration as complete
         $user = Auth::user();
         $user->registration_complete = true;
         $user->save();
 
         return redirect()->route('parent.application.status');
     }
+
 
     public function render()
     {

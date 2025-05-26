@@ -26,8 +26,15 @@ class CareBuddy extends Model
         'service_radius',
         'child_age_limit',
         'willing_to_take_insurance',
+        'background_check_consent',
+        'terms_accepted',
         'availability',
+        'certificate_path',
+        'marriage_certificate_path',
+        'birth_certificate_path',
+        'child_birth_certificate_path',
     ];
+
 
     protected $casts = [
         'dob' => 'date',

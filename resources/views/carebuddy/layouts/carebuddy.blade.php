@@ -112,8 +112,9 @@
                         <div class="relative">
                             <button class="flex items-center text-gray-700 focus:outline-none">
                                 <span class="mr-2">{{ Auth::user()->name }}</span>
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF"
-                                    alt="User Avatar" class="h-8 w-8 rounded-full">
+                                <img src="{{ Auth::user()->careBuddy && Auth::user()->careBuddy->profile_photo ? url('/storage/' . Auth::user()->careBuddy->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=7F9CF5&background=EBF4FF' }}"
+    alt="User Avatar" class="h-8 w-8 rounded-full object-cover"
+    onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF'">
                             </button>
                         </div>
                     </div>
