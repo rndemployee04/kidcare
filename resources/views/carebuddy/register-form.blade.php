@@ -1,16 +1,17 @@
-<div class="max-w-4xl mx-auto px-6 py-10 text-slate-900 dark:text-slate-100">
+<div class="max-w-4xl mx-auto px-6 py-10 text-slate-900 dark:text-slate-100 bg-white shadow-xl rounded overflow-hidden">
+    <div class="top-hed flex items-center mb-5">
     <x-auth-header :title="__('CareBuddy Profile')" :description="__('Fill in your details below')" />
 
-    <div class="flex justify-end mb-4">
+    <div class="flex justify-end mb-0">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
-                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition font-semibold cursor-pointer">
+                class="px-4 py-2 bg-orange-400 hover:bg-orange-500 text-white rounded-md transition font-semibold cursor-pointer">
                 Logout
             </button>
         </form>
     </div>
-
+    </div>
     @if (session('message'))
         <div data-saved-message
             class="mb-4 p-4 bg-green-50 dark:bg-green-900 border border-green-400 dark:border-green-600 text-green-900 dark:text-green-100 rounded shadow flex items-center space-x-3 animate-fade-in">
@@ -30,8 +31,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- CareBuddy Category Grid -->
             <div
-                class="bg-yellow-100 dark:bg-yellow-900 border-l-4 border-yellow-500 dark:border-yellow-600 text-yellow-800 dark:text-yellow-100 p-4 rounded shadow flex items-start gap-3">
-                <svg class="w-6 h-6 mt-1 text-yellow-500 dark:text-yellow-300" fill="none" stroke="currentColor"
+                class="bg-orange-100 dark:bg-orange-900 border-l-4 border-orange-500 dark:border-orange-600 text-orange-800 dark:text-yelorangelow-100 p-4 rounded shadow flex items-start gap-3">
+                <svg class="w-6 h-6 mt-1 text-orange-500 dark:text-orange-300" fill="none" stroke="currentColor"
                     stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M13 16h-1v-4h-1m1-4h.01M12 20.5a8.38 8.38 0 100-16.76 8.38 8.38 0 000 16.76z"></path>
@@ -49,8 +50,8 @@
 
             <!-- Availability Time Slots Grid -->
             <div
-                class="bg-yellow-100 dark:bg-yellow-900 border-l-4 border-yellow-500 dark:border-yellow-600 text-yellow-800 dark:text-yellow-100 p-4 rounded shadow flex items-start gap-3">
-                <svg class="w-6 h-6 mt-1 text-yellow-500 dark:text-yellow-300" fill="none" stroke="currentColor"
+                class="bg-orange-100 dark:bg-orange-900 border-l-4 border-orange-500 dark:border-orange-600 text-orange-800 dark:text-orange-100 p-4 rounded shadow flex items-start gap-3">
+                <svg class="w-6 h-6 mt-1 text-orange-500 dark:text-orange-300" fill="none" stroke="currentColor"
                     stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M13 16h-1v-4h-1m1-4h.01M12 20.5a8.38 8.38 0 100-16.76 8.38 8.38 0 000 16.76z"></path>
@@ -112,7 +113,7 @@
             <div>
                 <label for="profile_photo" class="block mb-1 text-sm font-medium">Profile Photo</label>
                 <input type="file" wire:model="profile_photo" id="profile_photo"
-                    class="w-full file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                    class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload a recent photo for your profile. Max
                     size: 2MB. JPG/PNG only.</p>
                 @error('profile_photo')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
@@ -145,7 +146,7 @@
                     <label for="marriage_certificate_path" class="block mb-1 text-sm font-medium">Marriage Certificate
                         (PDF/JPG)</label>
                     <input type="file" wire:model="marriage_certificate_path" id="marriage_certificate_path"
-                        class="w-full file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                        class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your marriage certificate for
                         verification.</p>
                     @error('marriage_certificate_path')
@@ -159,7 +160,7 @@
                     <label for="certificate_path" class="block mb-1 text-sm font-medium">Professional Certificate
                         (PDF/JPG)</label>
                     <input type="file" wire:model="certificate_path" id="certificate_path"
-                        class="w-full file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                        class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your professional certification.</p>
                     @error('certificate_path')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
@@ -172,7 +173,7 @@
                     <label for="child_birth_certificate_path" class="block mb-1 text-sm font-medium">Child's Birth
                         Certificate (PDF/JPG)</label>
                     <input type="file" wire:model="child_birth_certificate_path" id="child_birth_certificate_path"
-                        class="w-full file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                        class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your child's birth certificate.</p>
                     @error('child_birth_certificate_path')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
@@ -185,7 +186,7 @@
                     <label for="birth_certificate_path" class="block mb-1 text-sm font-medium">Birth Certificate
                         (PDF/JPG)</label>
                     <input type="file" wire:model="birth_certificate_path" id="birth_certificate_path"
-                        class="w-full file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                        class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your birth certificate for age
                         verification.</p>
                     @error('birth_certificate_path')
@@ -202,7 +203,7 @@
             <label for="id_proof_path" class="block mb-1 text-sm font-medium">ID Proof <span
                     class="text-red-500">*</span></label>
             <input type="file" wire:model="id_proof_path" id="id_proof_path"
-                class="w-full file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Government issued ID (Aadhaar, Passport,
                 etc.)</p>
             @error('id_proof_path')
@@ -212,7 +213,7 @@
                 <label for="selfie_path" class="block mb-1 text-sm font-medium">Selfie with ID <span
                         class="text-red-500">*</span></label>
                 <input type="file" wire:model="selfie_path" id="selfie_path"
-                    class="w-full file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                    class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">A selfie holding your ID for verification.
                 </p>
                 @error('selfie_path')
@@ -225,7 +226,7 @@
                 <div class="flex-grow h-px bg-slate-300 dark:bg-slate-600"></div>
             </div>
             <a href="#" onclick="return false;"
-                class="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 text-base font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2">
+                class="w-full flex items-center justify-center px-4 py-2 bg-orange-400 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-orange-500 dark:hover:bg-blue-600 text-base font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2">
                 <img src="https://img1.digitallocker.gov.in/digilocker-landing-page/assets/img/about-1.svg"
                     alt="DigiLocker" style="height:28px;width:auto;" class="mr-2">
                 Verify with DigiLocker
@@ -409,7 +410,6 @@
                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
             @enderror
         </div>
-
         {{-- Location Selection Placeholder --}}
         {{-- Save & Submit Buttons --}}
         <div class="flex gap-4 mt-8">
@@ -423,13 +423,12 @@
             </button>
 
             <button type="submit"
-                class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition font-semibold cursor-pointer">
+                class="px-6 py-2 bg-orange-400 hover:bg-orange-500 text-white rounded-md transition font-semibold cursor-pointer">
                 Submit Registration
             </button>
         </div>
     </form>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     window.addEventListener('draft-saved', function () {

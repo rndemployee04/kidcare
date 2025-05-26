@@ -1,13 +1,12 @@
-<div class="max-w-md mx-auto w-full px-6 py-1 text-slate-900 dark:text-slate-100">
-    <div class="flex flex-col gap-6">
-        <!-- Header -->
-        <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+<div class="w-full px-6 py-1 text-slate-900 dark:text-slate-100 bg-white shadow-xl rounded overflow-hidden ">
+    <div class="flex flex-col gap-0 md:p-12 ">
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
 
         <!-- Registration Form -->
         <form wire:submit="register" class="flex flex-col gap-6">
+           <div class="form-info md:columns-2">
             <!-- Name -->
             <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name"
                 :placeholder="__('Full name')" />
@@ -15,24 +14,25 @@
             <!-- Email -->
             <flux:input wire:model="email" :label="__('Email address')" type="email" required autocomplete="email"
                 placeholder="email@example.com" />
-
+            </div>
             <!-- Password -->
+            <div class="form-info md:columns-2">
             <flux:input wire:model="password" :label="__('Password')" type="password" required
                 autocomplete="new-password" :placeholder="__('Password')" viewable />
 
             <!-- Confirm Password -->
             <flux:input wire:model="password_confirmation" :label="__('Confirm password')" type="password" required
                 autocomplete="new-password" :placeholder="__('Confirm password')" viewable />
-
+            </div>
             <!-- Role Selection -->
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col md:gap-2">
                 <label for="role" class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                     {{ __('I am registering as') }}
                 </label>
                 <div class="flex justify-between gap-4">
                     <!-- Parent Button -->
                     <button type="button" wire:click="$set('role', 'parent')"
-                        class="flex-1 flex flex-col items-center py-3 rounded-lg border-2 transition-all text-sm font-semibold gap-1 
+                        class="flex-1 flex flex-col items-center py-3 rounded-lg border-2 transition-all text-sm font-semibold gap-1
                         {{ $role === 'parent' ? 'bg-primary text-white border-primary ring-2 ring-primary' : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700' }}">
                         <span class="text-2xl">👨‍👧</span>
                         <span>{{ __('Parent') }}</span>
@@ -40,7 +40,7 @@
 
                     <!-- CareBuddy Button -->
                     <button type="button" wire:click="$set('role', 'carebuddy')"
-                        class="flex-1 flex flex-col items-center py-3 rounded-lg border-2 transition-all text-sm font-semibold gap-1 
+                        class="flex-1 flex flex-col items-center py-3 rounded-lg border-2 transition-all text-sm font-semibold gap-1
                         {{ $role === 'carebuddy' ? 'bg-primary text-white border-primary ring-2 ring-primary' : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700' }}">
                         <span class="text-2xl">🧑‍⚕️</span>
                         <span>{{ __('CareBuddy') }}</span>
@@ -50,7 +50,7 @@
 
             <!-- Submit -->
             <div>
-                <flux:button type="submit" variant="primary" class="w-full">
+                <flux:button type="submit" variant="primary" class="w-full  bg-orange-400 hover:bg-orange-500">
                     {{ __('Create account') }}
                 </flux:button>
             </div>
@@ -63,7 +63,7 @@
             <div class="flex-grow border-t border-zinc-700"></div>
         </div>
 
-        <!-- Social Buttons -->
+        {{-- <!-- Social Buttons -->
         <div class="flex justify-center gap-6 bg-white dark:bg-zinc-800 rounded-xl py-3 px-6 shadow">
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"
                 class="h-8 w-8 cursor-pointer hover:scale-110 transition-transform" />
@@ -83,7 +83,7 @@
             </svg>
             <img src="https://www.svgrepo.com/show/448234/linkedin.svg" alt="LinkedIn"
                 class="h-8 w-8 cursor-pointer hover:scale-110 transition-transform" />
-        </div>
+        </div> --}}
 
         <!-- Login Link -->
         <div class="text-center text-sm text-zinc-600 dark:text-zinc-400 mt-6">
