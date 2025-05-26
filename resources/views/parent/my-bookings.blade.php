@@ -1,5 +1,5 @@
 <x-parent.layouts.parent-layout>
-    <div class="py-10">
+    <div class="git add .">
         <h2 class="text-2xl font-bold mb-6">My Bookings</h2>
         <div class="bg-white dark:bg-neutral-800 rounded-xl shadow p-6">
             <table class="w-full text-left">

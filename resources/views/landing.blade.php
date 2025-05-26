@@ -18,10 +18,82 @@
     </style>
 </head>
 
+<body class="min-h-screen bg-white dark:bg-zinc-800 overflow-x-clip">
+    <flux:header container
+        class="dark:bg-zinc-900  dark:border-zinc-700 max-w-[1140px] mx-auto flex items-center header-phone">
+        <flux:sidebar.toggle class="lg:hidden bg-amber-500" icon="bars-3" inset="left" />
 
-<body class="bg-white text-gray-900 antialiased">
+        <flux:brand href="#" class="max-lg:hidden dark:hidden">
+            <h1 class="text-[24px] font-bold text-[#ff8904]">KidCare</h1>
+        </flux:brand>
+        <flux:brand href="#" logo="https://fluxui.dev/img/demo/dark-mode-logo.png" name="Acme Inc."
+            class="max-lg:hidden! hidden dark:flex" />
 
-    <!-- Navbar -->
+        <flux:navbar class="-mb-px max-lg:hidden justify-end w-full ">
+            <flux:navbar.item href="#" current>Home</flux:navbar.item>
+            <flux:navbar.item href="#">About</flux:navbar.item>
+
+            @if (Route::has('login'))
+                @auth
+                    @php $user = Auth::user(); @endphp
+                    @if ($user && $user->role === 'carebuddy')
+                        <flux:navbar.item href="{{ route('carebuddy.dashboard') }}">Dashboard</flux:navbar.item>
+                    @else
+                        <flux:navbar.item href="{{ route('dashboard') }}">Dashboard</flux:navbar.item>
+                    @endif
+                @else
+                    <flux:navbar.item href="{{ route('login') }}">Login</flux:navbar.item>
+                    @if (Route::has('register'))
+                        <flux:navbar.item href="{{ route('register') }}">Register</flux:navbar.item>
+                    @endif
+                @endauth
+            @endif
+
+            <flux:separator vertical variant="subtle" class="my-2" />
+        </flux:navbar>
+
+        <flux:spacer />
+    </flux:header>
+
+
+    <!-- Mobile Menu -->
+    <flux:sidebar stashable sticky
+        class="lg:hidden bg-zinc-50 dark:bg-zinc-900 border rtl:border-r-0 rtl:border-l border-zinc-200 dark:border-zinc-700">
+        <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
+
+        <flux:brand href="#" class="px-2 dark:hidden">
+            <h1 class="text-[24px] font-bold text-[#ff8904]">KidCare</h1>
+        </flux:brand>
+        <flux:brand href="#" logo="https://fluxui.dev/img/demo/dark-mode-logo.png" name="Acme Inc."
+            class="px-2 hidden dark:flex" />
+
+        <flux:navlist variant="outline">
+            <flux:navlist.item icon="home" href="#" current>Home</flux:navlist.item>
+            <flux:navlist.item icon="inbox" href="#">Inbox</flux:navlist.item>
+
+            @if (Route::has('login'))
+                @auth
+                    @php $user = Auth::user(); @endphp
+                    @if ($user && $user->role === 'carebuddy')
+                        <flux:navlist.item icon="user-circle" href="{{ route('carebuddy.dashboard') }}">Dashboard
+                        </flux:navlist.item>
+                    @else
+                        <flux:navlist.item icon="user-circle" href="{{ route('dashboard') }}">Dashboard</flux:navlist.item>
+                    @endif
+                @else
+                    <flux:navlist.item icon="document-text" href="{{ route('login') }}">Login</flux:navlist.item>
+                    @if (Route::has('register'))
+                        <flux:navlist.item icon="calendar" href="{{ route('register') }}">Register</flux:navlist.item>
+                    @endif
+                @endauth
+            @endif
+        </flux:navlist>
+
+        <flux:spacer />
+    </flux:sidebar>
+
+
+    {{-- <!-- Navbar -->
     <header class="fixed top-0 w-full z-50 backdrop-blur bg-white/70 border-b border-gray-200">
         <div class="max-w-[1140px] mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-[24px] font-bold text-[#ff8904]">KidCare</h1>
@@ -47,10 +119,10 @@
                 @endif
             </nav>
         </div>
-    </header>
+    </header> --}}
 
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-r from-[#fdf3eb] to-[#e9f7f7] overflow-hidden">
+    <section class="relative bg-gradient-to-r from-[#fdf3eb] to-[#e9f7f7] overflow-hidden  px-[20px] pb-0 md:pt-0">
         <div class="max-w-[1140px] mx-auto">
             <!-- Bottom Shape -->
             <div class="hidden md:block absolute bottom-0 left-0 w-full">
@@ -62,15 +134,17 @@
                     style="transform: translate(-50%, -50%);">
             </div>
 
-            <div class="relative z-10 max-w-7xl mx-auto pt-[100px]">
+            <div class="relative z-10 max-w-7xl mx-auto pt-[50px] md:pt-[100px]">
                 <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-10">
 
                     <!-- Left Content -->
                     <div>
-                        <span class="text-[20px] text-[#ff8904] font-semibold block mb-3" data-aos="fade-down">Welcome
+                        <span class="text-[20px] text-[#ff8904] md:font-semibold block mb-3"
+                            data-aos="fade-down">Welcome
                             To Childcare
                             Service</span>
-                        <h1 class="text-[66px] font-black text-gray-900 leading-tight mb-6" data-aos="fade-left">Get
+                        <h1 class="text-[40px] md:text-[66px] font-black text-gray-900 leading-tight mb-6"
+                            data-aos="fade-left">Get
                             Lifecare For <br>Your
                             Kids</h1>
                         <a href="shop.html"
@@ -99,9 +173,9 @@
         </div>
     </section>
 
-    <section class="py-16 bg-white" id="bd-promotion-area">
+    <section class="pt-[50px] px-[20px]  md:py-16 bg-white" id="bd-promotion-area">
         <div class="max-w-[1140px] mx-auto">
-            <div class="flex flex-col lg:flex-row items-center gap-10">
+            <div class="flex flex-col lg:flex-row items-center md:gap-10">
                 <!-- Left Image/Thumb -->
                 <div class="w-full lg:w-1/2">
                     <div class="relative mb-10 animate-fade-in-left">
@@ -162,7 +236,7 @@
         </div>
     </section>
 
-    <section class="py-16 px-4 bg-white">
+    <section class="md:py-16 px-4 bg-white">
         <div class="max-w-[1140px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
             <!-- Left Text Content -->
@@ -259,7 +333,8 @@
         </div>
     </section>
 
-    <section class="Serve py-[70px] bg-[linear-gradient(100.88deg,_#EBFFFE_0.6%,_#FFF6EB_100%)]">
+    <section
+        class="Serve pt-[50px] px-[20px] md:py-[70px] bg-[linear-gradient(100.88deg,_#EBFFFE_0.6%,_#FFF6EB_100%)]">
         <div class="max-w-[1140px] mx-auto">
             <h2 class="text-3xl font-bold text-center mb-10" data-aos="fade-down">Who We Serve</h2>
 
@@ -533,6 +608,14 @@
         .animate-bd-updown {
             animation: bd-updown 1.5s infinite alternate ease-in-out;
         }
+
+        @media (max-width: 767px) {
+            .header-phone svg,.whitespace-nowrap svg {
+                color: #000;
+                width: 30px;
+                height: 30px;
+            }
+        }
     </style>
     <script>
         AOS.init({
@@ -569,4 +652,5 @@
         });
     </script>
 </body>
+
 </html>
