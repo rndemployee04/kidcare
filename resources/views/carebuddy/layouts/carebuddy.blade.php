@@ -25,7 +25,7 @@
         <div class="flex">
             <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform sm:transform-none sm:opacity-100 transition duration-200"
                 id="sidebar">
-                <div class="flex items-center justify-between h-16 px-6 bg-green-600">
+                <div class="flex items-center justify-between h-16 px-6 bg-[#00bbae]">
                     <div class="flex items-center">
                         <a href="{{ route('home') }}" class="text-white text-xl font-bold">KidCare</a>
                     </div>

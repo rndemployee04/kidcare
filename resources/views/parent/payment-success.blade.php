@@ -16,7 +16,7 @@
             </div>
             <h2 class="text-2xl font-bold mb-2">Payment Successful!</h2>
             <p class="mb-4 text-lg text-gray-700 dark:text-gray-200">Your booking is confirmed.<br>Thank you for choosing KidCare!</p>
-            <a href="/parent/dashboard" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition">Go to Dashboard</a>
+            <a href="/parent/dashboard" class="mt-4 bg-orange-400 hover:bg-[#00bbae] text-white font-semibold py-2 px-6 rounded-lg transition">Go to Dashboard</a>
         </div>
     </div>
 </body>

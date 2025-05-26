@@ -1,5 +1,5 @@
-<div class="w-full flex flex-col items-center">
-    <div class="w-full max-w-5xl bg-white/95 rounded-2xl shadow-lg px-6 py-4 mb-8">
+<div class="w-full flex flex-col items-left">
+    <div class=" bg-white/95 rounded-2xl shadow-lg px-6 py-4 mb-8">
         <div class="flex flex-col gap-3 md:flex-row md:gap-4 md:items-center md:justify-between">
             <div class="flex flex-wrap gap-2 flex-1 items-center">
                 <input type="text" wire:model.debounce.500ms="search"
@@ -51,10 +51,10 @@
             </div>
             <div class="flex flex-row gap-2 md:ml-4 justify-end">
                 <button type="button" wire:click="applyFilters"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">Apply
+                    class="px-4 py-2 bg-orange-400 text-white rounded-lg font-semibold hover:bg-[#00bbae] transition">Apply
                     Filters</button>
                 <button type="button" wire:click="clearFilters"
-                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg font-semibold hover:bg-gray-400 transition">Clear
+                    class="px-4 py-2 bg-[#00bbae] text-white rounded-lg font-semibold hover:bg-orange-500 transition">Clear
                     All</button>
             </div>
         </div>
@@ -109,14 +109,14 @@
                     </div>
                     <div class="mt-auto w-full flex gap-2">
                         <a href="/parent/carebuddy/{{ $carebuddy->id }}"
-                            class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition">View
+                            class="w-1/2 bg-orange-400 hover:bg-[#00bbae] text-white font-semibold py-2 rounded-lg transition">View
                             Profile</a>
                         @if(isset($bookedCarebuddies) && in_array($carebuddy->id, $bookedCarebuddies))
                             <button class="w-1/2 bg-gray-400 text-white font-semibold py-2 rounded-lg cursor-not-allowed"
                                 disabled>Booked</button>
                         @else
                             <a href="/parent/book/{{ $carebuddy->id }}"
-                                class="w-1/2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition">Book</a>
+                                class="w-1/2 bg-[#00bbae] hover:bg-orange-500 text-white font-semibold py-2 rounded-lg transition">Book</a>
                         @endif
                     </div>
                 </div>
