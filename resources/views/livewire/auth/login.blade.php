@@ -3,8 +3,21 @@
         <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 bg-white shadow-xl rounded-lg overflow-hidden">
 
             <!-- Left Image -->
-            <div class=" md:block">
-                <img src="{{ url('images/kids-3.jpg') }}" alt="Snout Scouts" class="h-full w-full object-cover" />
+            <div class="flex flex-col justify-center text-center text-white bg-[#00bbae]">
+
+                   <div class="mb-4 text-center">
+                    <div class="w-[100px] h-[100px] bg-white text-green-600 rounded-full flex items-center justify-center mx-auto">
+                        <h2 class="font-bold text-xl text-orange-400">KidCare</h2>
+                    </div>
+                </div>
+                  <h3 class="text-2xl font-semibold mb-2">Welcome Back!</h3>
+                <p class="text-sm mb-6">
+                    To stay connected with us<br />
+                    please login with your personal info
+                </p>
+                <flux:link :href="route('register')" wire:navigate class="inline-block text-white font-medium text-sm border border-white rounded-full px-5 py-1.5 mx-auto !no-underline ">
+                            {{ __('Sign up') }}
+                        </flux:link>
             </div>
 
             <!-- Right Form -->
@@ -78,7 +91,7 @@
                 @if (Route::has('register'))
                     <div class="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
                         {{ __('Don\'t have an account?') }}
-                        <flux:link :href="route('register')" wire:navigate class="font-semibold text-black underline ml-1">
+                        <flux:link :href="route('register')" wire:navigate class="font-semibold text-[#00bbae] underline ml-1">
                             {{ __('Sign up') }}
                         </flux:link>
                     </div>

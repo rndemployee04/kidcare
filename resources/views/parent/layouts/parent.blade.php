@@ -25,7 +25,7 @@
         <div class="flex">
             <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform sm:transform-none sm:opacity-100 transition duration-200"
                 id="sidebar">
-                <div class="flex items-center justify-between h-16 px-6 bg-indigo-600">
+                <div class="flex items-center justify-between h-16 px-6 bg-[#00bbae]">
                     <div class="flex items-center">
                         <a href="{{ route('home') }}" class="text-white text-xl font-bold">KidCare</a>
                     </div>
@@ -76,7 +76,7 @@
                                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
                             </path>
                         </svg>
-                        Activity
+                        Activityi
                     </a>
                     <div class="mt-8">
                         <form method="POST" action="{{ route('logout') }}">
