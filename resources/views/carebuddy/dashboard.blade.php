@@ -13,7 +13,7 @@
                     <div class="flex items-center mb-6">
                         <div class="flex-shrink-0 h-16 w-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500">
                             @if($carebuddy && $carebuddy->profile_photo)
-                                <img src="{{ $carebuddy->profile_photo }}" alt="{{ $user->name }}" class="h-16 w-16 rounded-full object-cover">
+                                <img src="{{ asset('storage/' . $carebuddy->profile_photo) }}" alt="{{ $user->name }}" class="h-16 w-16 rounded-full object-cover">
                             @else
                                 <span class="text-2xl font-medium">{{ substr($user->name, 0, 1) }}</span>
                             @endif

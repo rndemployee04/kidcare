@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    <form wire:submit.prevent="submit" class="space-y-8">
+    <form wire:submit.prevent="submit" class="space-y-8" enctype="multipart/form-data">
         <h2 class="text-xl font-semibold mb-6 border-b border-slate-200 dark:border-slate-700 pb-2">Personal Information
         </h2>
 
