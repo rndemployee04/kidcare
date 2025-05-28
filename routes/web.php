@@ -148,6 +148,10 @@ Route::match(['get', 'post'], '/parent/payment/success', function () {
     return view('parent.payment-success');
 })->name('parent.payment.success');
 
+// Public explore page for carebuddies
+Route::get('/explore', [App\Http\Controllers\ExploreController::class, 'index'])->name('explore');
+Route::get('/explore/{id}', [App\Http\Controllers\ExploreController::class, 'show'])->name('explore.show');
+
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 

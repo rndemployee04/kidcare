@@ -32,6 +32,7 @@
         <flux:navbar class="-mb-px max-lg:hidden justify-end w-full ">
             <flux:navbar.item href="#" current>Home</flux:navbar.item>
             <flux:navbar.item href="#">About</flux:navbar.item>
+            <flux:navbar.item href="{{ route('explore') }}">Explore Carebuddies</flux:navbar.item>
 
             @if (Route::has('login'))
                 @auth
@@ -69,8 +70,6 @@
 
         <flux:navlist variant="outline">
             <flux:navlist.item icon="home" href="#" current>Home</flux:navlist.item>
-            <flux:navlist.item icon="inbox" href="#">Inbox</flux:navlist.item>
-
             @if (Route::has('login'))
                 @auth
                     @php $user = Auth::user(); @endphp
@@ -610,7 +609,9 @@
         }
 
         @media (max-width: 767px) {
-            .header-phone svg,.whitespace-nowrap svg {
+
+            .header-phone svg,
+            .whitespace-nowrap svg {
                 color: #000;
                 width: 30px;
                 height: 30px;
