@@ -1,28 +1,28 @@
-<div class="w-full px-6 py-1 text-slate-900 dark:text-slate-100 bg-white shadow-xl rounded overflow-hidden ">
+<div class="w-full px-6 py-1 text-slate-900 dark:text-slate-100 bg-white shadow-xl rounded overflow-hidden register-fom">
     <div class="flex flex-col gap-0 md:p-12 ">
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
 
         <!-- Registration Form -->
-        <form wire:submit="register" class="flex flex-col gap-6">
-           <div class="form-info md:columns-2">
+        <form wire:submit="register" class="flex flex-col gap-6 ">
+           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-baseline">
             <!-- Name -->
             <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name"
                 :placeholder="__('Full name')" />
 
             <!-- Email -->
-            <flux:input wire:model="email" :label="__('Email address')" type="email" required autocomplete="email"
+            <flux:input wire:model="email" :label="__('Email address')"  type="email" required autocomplete="email"
                 placeholder="email@example.com" />
             </div>
             <!-- Password -->
-            <div class="form-info md:columns-2">
+           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-baseline">
             <flux:input wire:model="password" :label="__('Password')" type="password" required
                 autocomplete="new-password" :placeholder="__('Password')" viewable />
 
             <!-- Confirm Password -->
             <flux:input wire:model="password_confirmation" :label="__('Confirm password')" type="password" required
-                autocomplete="new-password" :placeholder="__('Confirm password')" viewable />
+                autocomplete="new-password" :placeholder="__('Confirm password')" viewable  />
             </div>
             <!-- Role Selection -->
             <div class="flex flex-col md:gap-2">

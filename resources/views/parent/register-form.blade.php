@@ -330,8 +330,8 @@
         </div>
 
         {{-- Terms and Submit --}}
-        <div class="flex items-start space-x-3">
-            <input type="checkbox" wire:model.defer="terms_accepted" id="terms_accepted" class="mr-2" required>
+        <div class="flex  space-x-3 items-center">
+            <input type="checkbox" wire:model.defer="terms_accepted" id="terms_accepted" class="mr-2 mt-1" required>
             <label for="terms_accepted" class="text-sm">I accept the <a href="#" class="underline">terms and
                     conditions</a> <span class="text-red-500">*</span>.</label>
             <p class="text-xs text-slate-500 mt-1">You must accept the terms to use our service.</p>
