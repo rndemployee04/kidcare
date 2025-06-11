@@ -32,7 +32,7 @@
                 </div>
                 <div class="flex items-center justify-between py-2">
                     <span class="text-gray-600 font-medium">Total Amount</span>
-                    <span class="font-bold text-green-600 text-lg">₹{{ $amount ?? '500' }}</span>
+                    <span class="font-bold text-green-600 text-lg">${{ $amount ?? '500' }}</span>
                 </div>
             </div>
             <form action="{{ route('parent.book.store', $carebuddy_id) }}" method="POST" class="w-full">

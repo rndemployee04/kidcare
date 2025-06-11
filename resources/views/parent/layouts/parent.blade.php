@@ -17,6 +17,7 @@
 
     <!-- Styles -->
     @livewireStyles
+    @fluxAppearance
 </head>
 
 <body class="font-sans antialiased">
@@ -129,6 +130,7 @@
     </div>
 
     @livewireScripts
+    @fluxScripts
 </body>
 
 </html>

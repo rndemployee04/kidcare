@@ -18,7 +18,7 @@
             <!-- Password -->
            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-baseline">
             <flux:input wire:model="password" :label="__('Password')" type="password" required
-                autocomplete="new-password" :placeholder="__('Password')" viewable />
+                autocomplete="new-password" :placeholder="__('Password')" viewable hide-errors />
 
             <!-- Confirm Password -->
             <flux:input wire:model="password_confirmation" :label="__('Confirm password')" type="password" required
@@ -63,7 +63,7 @@
             <div class="flex-grow border-t border-zinc-700"></div>
         </div>
 
-        {{-- <!-- Social Buttons -->
+        <!-- Social Buttons -->
         <div class="flex justify-center gap-6 bg-white dark:bg-zinc-800 rounded-xl py-3 px-6 shadow">
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"
                 class="h-8 w-8 cursor-pointer hover:scale-110 transition-transform" />
@@ -83,7 +83,7 @@
             </svg>
             <img src="https://www.svgrepo.com/show/448234/linkedin.svg" alt="LinkedIn"
                 class="h-8 w-8 cursor-pointer hover:scale-110 transition-transform" />
-        </div> --}}
+        </div>
 
         <!-- Login Link -->
         <div class="text-center text-sm text-zinc-600 dark:text-zinc-400 mt-6">

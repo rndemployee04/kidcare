@@ -34,6 +34,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/reject/{id}', 'App\Http\Controllers\AdminController@rejectUser')->name('admin.reject');
     Route::get('/user/{id}/view', 'App\Http\Controllers\AdminController@viewApplication')->name('admin.viewApplication');
     // Add other admin-specific routes here
+    
+    // Booking routes
+    Route::get('/parent/bookings', 'App\Http\Controllers\ParentBookingController@index')->name('parent.bookings');
+    Route::get('/parent/booking/{id}', 'App\Http\Controllers\ParentBookingController@show')->name('parent.booking.show');
+    Route::get('/carebuddy/bookings', 'App\Http\Controllers\CarebuddyBookingController@index')->name('carebuddy.bookings');
+    Route::get('/carebuddy/booking/{id}', 'App\Http\Controllers\CarebuddyBookingController@show')->name('carebuddy.booking.show');
 });
 
 // Root route handler - redirects to appropriate dashboard based on role

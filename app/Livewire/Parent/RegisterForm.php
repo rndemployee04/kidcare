@@ -136,8 +136,14 @@ class RegisterForm extends Component
     {
         $validated = $this->validate([
             // Personal
-            'phone' => 'required|string',
-            'dob' => 'required|date',
+            'phone' => 'required|string|max_digits:13',
+            'dob' => ['required', 'date', function($attribute, $value, $fail) {
+                $minAge = 18;
+                $minDate = now()->subYears($minAge);
+                if ($value > $minDate) {
+                    $fail('You must be at least 18 years old to register.');
+                }
+            }],
             'gender' => 'required|in:male,female,others',
             'profile_photo' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
 
@@ -160,7 +166,7 @@ class RegisterForm extends Component
             'monthly_income' => 'nullable|in:<50K,50–100K,100–200K,200K+',
 
             // Preferences
-            'number_of_children' => 'required|integer|min:1|max:10',
+            'number_of_children' => ['required', 'integer', 'min:1', 'max:10'],
             'number_needing_care' => 'required|integer|min:1|max:10',
             'preferred_drop_off_time' => 'required|in:morning,afternoon,evening,full_day',
             'preferred_type_of_caregiver' => 'required|in:newlywed,professional,parent,senior,any',
@@ -170,7 +176,7 @@ class RegisterForm extends Component
 
             // Emergency
             'emergency_contact_name' => 'required|string',
-            'emergency_contact_phone' => 'required|string',
+            'emergency_contact_phone' => 'required|string|max_digits:13',
 
             // Terms
             'terms_accepted' => 'accepted',

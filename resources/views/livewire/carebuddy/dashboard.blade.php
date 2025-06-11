@@ -94,7 +94,7 @@
                             @endif
                         </td>
                         <td class="px-4 py-2 text-gray-700">{{ $booking->created_at ? $booking->created_at->format('d M Y H:i') : 'N/A' }}</td>
-                        <td class="px-4 py-2 text-green-700 font-bold">₹{{ $booking->amount }}</td>
+                        <td class="px-4 py-2 text-green-700 font-bold">${{ $booking->amount }}</td>
                     </tr>
                 @endforeach
             </tbody>

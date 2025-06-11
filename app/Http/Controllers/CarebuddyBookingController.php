@@ -28,6 +28,15 @@ class CarebuddyBookingController extends Controller
         ]);
         return redirect()->route('carebuddy.bookings');
     }
+
+
+
+    public function reject($bookingId)
+    {
+        $booking = Booking::findOrFail($bookingId);
+        $booking->delete();
+        return redirect()->route('carebuddy.bookings');
+    }
     public function myBookings()
     {
         $carebuddy = Auth::user()->careBuddy;
@@ -42,5 +51,17 @@ class CarebuddyBookingController extends Controller
             }
         }
         return view('carebuddy.my-bookings', compact('bookings'));
+    }
+
+    public function show($id)
+    {
+        $booking = Booking::with(['parent.user', 'carebuddy.user'])->findOrFail($id);
+        
+        // Ensure the booking belongs to the current carebuddy
+        if ($booking->carebuddy_id !== Auth::user()->careBuddy->id) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('carebuddy.booking-details', compact('booking'));
     }
 }
