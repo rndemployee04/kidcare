@@ -10,6 +10,7 @@ use App\Livewire\Parent\RegisterForm as ParentRegisterForm;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Parent\Dashboard as ParentDashboard;
 use App\Livewire\Carebuddy\Dashboard as CarebuddyDashboard;
+use Illuminate\Http\Request;
 
 // Parent dashboard and routes
 Route::prefix('parent')->middleware(['auth', 'parent.verified'])->group(function () {
@@ -178,6 +179,14 @@ Route::get('/redirect', function () {
 })->middleware(['auth', 'role.redirect'])->name('login.redirect');
 
 
+
+Route::post('/dismiss-alert', function (Request $request) {
+    $key = $request->input('key');
+    if ($key) {
+        session()->put($key, true); // Mark it as dismissed
+    }
+    return response()->json(['status' => 'dismissed']);
+})->name('dismiss.alert');
 // This duplicate admin dashboard route was removed - using the route defined earlier in the file
 
 require __DIR__ . '/auth.php';

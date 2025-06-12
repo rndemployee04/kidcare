@@ -10,7 +10,7 @@ use Carbon\Carbon;
 class ParentBookingController extends Controller
 {
     public function store(Request $request, $carebuddyId)
-    {
+    {   
         \Log::info('Booking POST hit!', ['user_id' => \Auth::id(), 'carebuddy_id' => $carebuddyId]);
         $user = Auth::user();
         // Role and relationship check
@@ -29,12 +29,15 @@ class ParentBookingController extends Controller
             return redirect()->back()->with('error', 'You have already booked this carebuddy.');
         }
 
+        $duration = $request->input('duration');
+        
         $booking = \App\Models\Booking::create([
             'carebuddy_id' => $carebuddy->id,
             'parent_id' => $parent->id,
             'status' => 'confirmed',
             'amount' => $amount,
             'paid_at' => \Carbon\Carbon::now(),
+            'duration' => $duration,
         ]);
         return redirect()->route('parent.payment.success');
     }

@@ -8,6 +8,7 @@
                         <th class="py-2">Carebuddy</th>
                         <th class="py-2">Amount</th>
                         <th class="py-2">Status</th>
+                        <th class="py-2">Duration</th>
                         <th class="py-2">Paid At</th>
                         <th class="py-2">Actions</th>
                     </tr>
@@ -22,10 +23,13 @@
                                     <span class="text-green-600 font-semibold">Accepted</span>
                                 @elseif($booking->status === 'confirmed')
                                     <span class="text-blue-600 font-semibold">Confirmed</span>
+                                @elseif($booking->status === 'rejected')
+                                    <span class="text-red-600 font-semibold">Rejected</span>
                                 @else
                                     <span class="text-yellow-500 font-semibold">Pending</span>
                                 @endif
                             </td>
+                            <td class="py-2">{{ $booking->duration }}
                             <td class="py-2">{{ $booking->paid_at ? $booking->paid_at->format('d M Y H:i') : '-' }}
                             </td>
                             <td class="py-2">

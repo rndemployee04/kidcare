@@ -66,8 +66,8 @@
                         <span class="font-medium">{{ $booking->carebuddy->phone }}</span>
                     </div>
                     <div>
-                        <p class="text-gray-600 mb-1">Experience</p>
-                        <span class="font-medium">{{ $booking->carebuddy->experience_years }} years</span>
+                        <p class="text-gray-600 mb-1">Duration</p>
+                        <span class="font-medium">{{ $booking->duration }}</span>
                     </div>
                     <div>
                         <p class="text-gray-600 mb-1">Background Check</p>

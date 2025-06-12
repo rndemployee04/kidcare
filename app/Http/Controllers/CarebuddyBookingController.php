@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 
 class CarebuddyBookingController extends Controller
 {
@@ -34,7 +35,18 @@ class CarebuddyBookingController extends Controller
     public function reject($bookingId)
     {
         $booking = Booking::findOrFail($bookingId);
-        $booking->delete();
+        // Instead of deleting, update the status to cancelled
+        $booking->update([
+            'status' => 'rejected',
+        ]);
+        
+        // Store a message in the session for the parent to see
+        // This will be stored in the database and retrieved when the parent views their dashboard
+        Session::put('parent_'.$booking->parent_id.'_booking_cancelled', [
+            'message' => 'Your booking with '.$booking->carebuddy->user->name.' was cancelled. Your payment will be refunded.',
+            'booking_id' => $booking->id
+        ]);
+        
         return redirect()->route('carebuddy.bookings');
     }
     public function myBookings()

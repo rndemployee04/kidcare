@@ -77,6 +77,10 @@
                         <p class="text-gray-600 mb-1">Number of Children</p>
                         <span class="font-medium">{{ $booking->parent->number_of_children }}</span>
                     </div>
+                    <div>
+                        <p class="text-gray-600 mb-1">Duration</p>
+                        <span class="font-medium">{{ $booking->duration }}</span>
+                    </div>
                     @if($booking->parent->profile_photo)
                         <div class="col-span-2">
                             <p class="text-gray-600 mb-1">Profile Photo</p>

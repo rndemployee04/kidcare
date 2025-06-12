@@ -8,6 +8,7 @@
                         <th class="py-2">Parent</th>
                         <th class="py-2">Amount</th>
                         <th class="py-2">Status</th>
+                        <th class="py-2">Duration</th>
                         <th class="py-2">Platform Fee</th>
                         <th class="py-2">Your Earnings</th>
                         <th class="py-2">Actions</th>
@@ -29,6 +30,7 @@
                                     <span class="text-yellow-500 font-semibold">Pending</span>
                                 @endif
                             </td>
+                            <td class="py-2">{{ $booking->duration }}</td>
                             <td class="py-2">${{ $booking->platform_fee ?? '-' }}</td>
                             <td class="py-2">${{ $booking->carebuddy_earnings ?? '-' }}</td>
                             <td class="py-2">

@@ -21,22 +21,31 @@
                 <div class="text-gray-500 text-center text-base">Booking for <span
                         class="font-semibold">{{ $carebuddy_name ?? 'N/A' }}</span></div>
             </div>
-            <div class="w-full mb-6 divide-y divide-gray-200">
-                <div class="flex items-center justify-between py-2">
-                    <span class="text-gray-600 font-medium">Carebuddy</span>
-                    <span class="font-bold text-gray-900">{{ $carebuddy_name ?? 'N/A' }}</span>
-                </div>
-                <div class="flex items-center justify-between py-2">
-                    <span class="text-gray-600 font-medium">Service Radius</span>
-                    <span class="font-bold text-gray-900">{{ $service_radius ?? 'N/A' }}</span>
-                </div>
-                <div class="flex items-center justify-between py-2">
-                    <span class="text-gray-600 font-medium">Total Amount</span>
-                    <span class="font-bold text-green-600 text-lg">${{ $amount ?? '500' }}</span>
-                </div>
-            </div>
+
             <form action="{{ route('parent.book.store', $carebuddy_id) }}" method="POST" class="w-full">
                 @csrf
+                <div class="w-full mb-6 divide-y divide-gray-200">
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-gray-600 font-medium">Carebuddy</span>
+                        <span class="font-bold text-gray-900">{{ $carebuddy_name ?? 'N/A' }}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-gray-600 font-medium">Service Radius</span>
+                        <span class="font-bold text-gray-900">{{ $service_radius ?? 'N/A' }}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-gray-600 font-medium">Total Amount</span>
+                        <span class="font-bold text-green-600 text-lg">${{ $amount ?? '500' }}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-gray-600 font-medium">Duration</span>
+                        <div class="flex gap-2 w-[70%]">
+                            <input type="text" name="duration" placeholder="Duration (1 day, 1 week etc.)"
+                                class="border rounded p-1 w-full text-gray-900">
+                        </div>
+                    </div>
+                </div>
+
                 <input type="hidden" name="amount" value="{{ $amount ?? '500' }}">
                 <button type="submit"
                     class="w-full bg-orange-400 hover:bg-[#00bbae] text-white font-semibold py-3 rounded-lg transition flex items-center justify-center gap-2 text-lg mt-2">
