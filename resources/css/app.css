@@ -64,3 +64,12 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+.ring-2 {
+    background: #00bbae;
+}
+.register-fom .mt-3.text-sm.font-medium.text-red-500.dark\:text-red-400 {
+    margin-top: 0;
+}
+button {
+    cursor: pointer;
+}

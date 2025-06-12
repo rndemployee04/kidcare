@@ -111,7 +111,7 @@
                                             {{ $booking->paid_at ? $booking->paid_at->format('d M Y H:i') : '-' }}
                                         </td>
                                         <td class="px-4 py-2">
-                                            ₹{{ $booking->amount }}
+                                            ${{ $booking->amount }}
                                         </td>
                                     </tr>
                                 @endforeach

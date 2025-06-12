@@ -165,12 +165,57 @@ class RegisterForm extends Component
     {
         $validated = $this->validate([
             'category' => 'required|in:newlywed,professional,parent,senior',
-            'dob' => 'required|date',
-            'phone' => 'required|string',
+            'dob' => ['required', 'date', function($attribute, $value, $fail) {
+                $minAge = 18;
+                $minDate = now()->subYears($minAge);
+                if ($value > $minDate) {
+                    $fail('You must be at least 18 years old to register.');
+                }
+            }],
+            'phone' => 'required|string|max_digits:13',
             'gender' => 'required|in:male,female,others',
-            'profile_photo' => 'required|file|mimes:jpg,jpeg,png|max:2048',
-            'id_proof_path' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'selfie_path' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'profile_photo' => [
+                'required',
+                'file',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
+            'id_proof_path' => [
+                'required',
+                'file',
+                'mimes:pdf,jpg,jpeg',
+                'max:2048',
+            ],
+            'selfie_path' => [
+                'required',
+                'file',
+                'mimes:jpg,jpeg',
+                'max:2048',
+            ],
+            'marriage_certificate_path' => [
+                'nullable',
+                'file',
+                'mimes:pdf,jpg,jpeg',
+                'max:2048',
+            ],
+            'certificate_path' => [
+                'nullable',
+                'file',
+                'mimes:pdf,jpg,jpeg',
+                'max:2048',
+            ],
+            'birth_certificate_path' => [
+                'nullable',
+                'file',
+                'mimes:pdf,jpg,jpeg',
+                'max:2048',
+            ],
+            'child_birth_certificate_path' => [
+                'nullable',
+                'file',
+                'mimes:pdf,jpg,jpeg',
+                'max:2048',
+            ],
             'permanent_address' => 'required|string',
             'current_address' => 'required|string',
             'city' => 'required|string',

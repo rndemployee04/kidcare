@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
 <x-layouts.onboarding class="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
-    <div class="max-w-[800px]  w-full mx-auto bg-white/90 border border-gray-200 rounded-2xl shadow-xl p-10 text-center">
+    <div class="max-w-[800px]  w-full mx-auto bg-white/90 border border-gray-200 rounded-2xl shadow-xl p-10 text-center md:absolute left-0 right-0 top-[30%]">
         <h1 class="text-3xl font-bold mb-8 text-blue-900 tracking-tight">Application Status</h1>
         @php $status = auth()->user()->verification_status; @endphp
         @if ($status === 'pending')

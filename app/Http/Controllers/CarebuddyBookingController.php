@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 
 class CarebuddyBookingController extends Controller
 {
@@ -28,6 +29,26 @@ class CarebuddyBookingController extends Controller
         ]);
         return redirect()->route('carebuddy.bookings');
     }
+
+
+
+    public function reject($bookingId)
+    {
+        $booking = Booking::findOrFail($bookingId);
+        // Instead of deleting, update the status to cancelled
+        $booking->update([
+            'status' => 'rejected',
+        ]);
+        
+        // Store a message in the session for the parent to see
+        // This will be stored in the database and retrieved when the parent views their dashboard
+        Session::put('parent_'.$booking->parent_id.'_booking_cancelled', [
+            'message' => 'Your booking with '.$booking->carebuddy->user->name.' was cancelled. Your payment will be refunded.',
+            'booking_id' => $booking->id
+        ]);
+        
+        return redirect()->route('carebuddy.bookings');
+    }
     public function myBookings()
     {
         $carebuddy = Auth::user()->careBuddy;
@@ -42,5 +63,17 @@ class CarebuddyBookingController extends Controller
             }
         }
         return view('carebuddy.my-bookings', compact('bookings'));
+    }
+
+    public function show($id)
+    {
+        $booking = Booking::with(['parent.user', 'carebuddy.user'])->findOrFail($id);
+        
+        // Ensure the booking belongs to the current carebuddy
+        if ($booking->carebuddy_id !== Auth::user()->careBuddy->id) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('carebuddy.booking-details', compact('booking'));
     }
 }

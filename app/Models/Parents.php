@@ -46,6 +46,11 @@ class Parents extends Model
         'needs_special_needs_support' => 'boolean',
     ];
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'parent_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

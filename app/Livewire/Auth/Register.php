@@ -23,8 +23,19 @@ class Register extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                'min:8',
+                'regex:/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};:\",.\/?]).+$/',
+                'max:255',
+            ],
             'role' => ['required', 'in:parent,carebuddy'],
+        ], [
+            'password.min' => 'Password too short',
+            'password.regex' => 'Password must include one uppercase, number, and special character',
+            'password.confirmed' => 'Passwords don\'t match',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);

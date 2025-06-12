@@ -10,6 +10,7 @@ use App\Livewire\Parent\RegisterForm as ParentRegisterForm;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Parent\Dashboard as ParentDashboard;
 use App\Livewire\Carebuddy\Dashboard as CarebuddyDashboard;
+use Illuminate\Http\Request;
 
 // Parent dashboard and routes
 Route::prefix('parent')->middleware(['auth', 'parent.verified'])->group(function () {
@@ -34,6 +35,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/reject/{id}', 'App\Http\Controllers\AdminController@rejectUser')->name('admin.reject');
     Route::get('/user/{id}/view', 'App\Http\Controllers\AdminController@viewApplication')->name('admin.viewApplication');
     // Add other admin-specific routes here
+    
+    // Booking routes
+    Route::get('/parent/bookings', 'App\Http\Controllers\ParentBookingController@index')->name('parent.bookings');
+    Route::get('/parent/booking/{id}', 'App\Http\Controllers\ParentBookingController@show')->name('parent.booking.show');
+    Route::get('/carebuddy/bookings', 'App\Http\Controllers\CarebuddyBookingController@index')->name('carebuddy.bookings');
+    Route::get('/carebuddy/booking/{id}', 'App\Http\Controllers\CarebuddyBookingController@show')->name('carebuddy.booking.show');
 });
 
 // Root route handler - redirects to appropriate dashboard based on role
@@ -172,6 +179,14 @@ Route::get('/redirect', function () {
 })->middleware(['auth', 'role.redirect'])->name('login.redirect');
 
 
+
+Route::post('/dismiss-alert', function (Request $request) {
+    $key = $request->input('key');
+    if ($key) {
+        session()->put($key, true); // Mark it as dismissed
+    }
+    return response()->json(['status' => 'dismissed']);
+})->name('dismiss.alert');
 // This duplicate admin dashboard route was removed - using the route defined earlier in the file
 
 require __DIR__ . '/auth.php';

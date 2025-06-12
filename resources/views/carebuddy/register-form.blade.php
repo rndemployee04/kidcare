@@ -1,16 +1,16 @@
 <div class="max-w-4xl mx-auto px-6 py-10 text-slate-900 dark:text-slate-100 bg-white shadow-xl rounded overflow-hidden">
     <div class="top-hed flex items-center mb-5">
-    <x-auth-header :title="__('CareBuddy Profile')" :description="__('Fill in your details below')" />
+        <x-auth-header :title="__('CareBuddy Profile')" :description="__('Fill in your details below')" />
 
-    <div class="flex justify-end mb-0">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit"
-                class="px-4 py-2 bg-orange-400 hover:bg-orange-500 text-white rounded-md transition font-semibold cursor-pointer">
-                Logout
-            </button>
-        </form>
-    </div>
+        <div class="flex justify-end mb-0">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit"
+                    class="px-4 py-2 bg-orange-400 hover:bg-orange-500 text-white rounded-md transition font-semibold cursor-pointer">
+                    Logout
+                </button>
+            </form>
+        </div>
     </div>
     @if (session('message'))
         <div data-saved-message
@@ -27,7 +27,7 @@
     @endif
 
     {{-- Info Board: Carebuddy Category --}}
-    <div class="mb-6">
+    {{-- <div class="mb-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- CareBuddy Category Grid -->
             <div
@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <form wire:submit.prevent="submit" class="space-y-8" enctype="multipart/form-data">
         <h2 class="text-xl font-semibold mb-6 border-b border-slate-200 dark:border-slate-700 pb-2">Personal Information
@@ -78,7 +78,13 @@
             <div>
                 <label for="phone" class="block mb-1 text-sm font-medium">Phone <span
                         class="text-red-500">*</span></label>
-                <input type="text" wire:model.defer="phone" id="phone"
+                <input type="text" wire:model.defer="phone" id="phone" oninput="{
+                                const maxLength = 13;
+                                if (this.value.length > maxLength) {
+                                    this.value = this.value.slice(0, maxLength);
+                                }
+                                this.value = this.value.replace(/[^0-9]/g, '');
+                            }" maxlength="13" pattern="[0-9]*"
                     class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Enter your mobile number for contact and
                     verification.</p>
@@ -122,9 +128,34 @@
 
         {{-- Category --}}
         <div>
-            <label for="category" class="block mb-1 text-sm font-medium">Category <span
-                    class="text-red-500">*</span></label>
-            <select wire:model.defer="category" id="category"
+            <flux:heading class="flex items-center gap-2">
+                Category <span class="text-red-500">*</span>
+
+                <flux:tooltip toggleable>
+                    <flux:button icon="information-circle" size="sm" variant="ghost" />
+                    <flux:tooltip.content class="max-w-[20rem] space-y-2 !bg-transparent">
+                        <div
+                            class="bg-orange-100 dark:bg-orange-900 border-l-4 border-orange-500 dark:border-orange-600 text-orange-800 dark:text-yelorangelow-100 p-4 rounded shadow flex items-start gap-3">
+                            <svg class="w-6 h-6 mt-1 text-orange-500 dark:text-orange-300" fill="none"
+                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M13 16h-1v-4h-1m1-4h.01M12 20.5a8.38 8.38 0 100-16.76 8.38 8.38 0 000 16.76z">
+                                </path>
+                            </svg>
+                            <div>
+                                <strong>Confused about CareBuddy Category?</strong><br>
+                                <span>
+                                    <b>Newlywed:</b> Young couples, energetic and nurturing.<br>
+                                    <b>Professional:</b> Certified nannies, therapists.<br>
+                                    <b>Parent:</b> Experienced parents.<br>
+                                    <b>Senior:</b> Elderly with wisdom and patience.<br>
+                                </span>
+                            </div>
+                        </div>
+                    </flux:tooltip.content>
+                </flux:tooltip>
+            </flux:heading>
+            <select wire:model.live="category" id="category"
                 class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 <option value="">Select Category</option>
                 <option value="newlywed">Newlywed</option>
@@ -148,7 +179,7 @@
                     <input type="file" wire:model="marriage_certificate_path" id="marriage_certificate_path"
                         class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your marriage certificate for
-                        verification.</p>
+                        verification. Max size: 2MB. JPG/PDF</p>
                     @error('marriage_certificate_path')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -161,7 +192,7 @@
                         (PDF/JPG)</label>
                     <input type="file" wire:model="certificate_path" id="certificate_path"
                         class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your professional certification.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your professional certification. Max size: 2MB. JPG/PDF</p>
                     @error('certificate_path')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -174,7 +205,7 @@
                         Certificate (PDF/JPG)</label>
                     <input type="file" wire:model="child_birth_certificate_path" id="child_birth_certificate_path"
                         class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your child's birth certificate.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your child's birth certificate. Max size: 2MB. JPG/PDF</p>
                     @error('child_birth_certificate_path')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -188,7 +219,7 @@
                     <input type="file" wire:model="birth_certificate_path" id="birth_certificate_path"
                         class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your birth certificate for age
-                        verification.</p>
+                        verification. Max size: 2MB. JPG/PDF</p>
                     @error('birth_certificate_path')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -205,22 +236,36 @@
             <input type="file" wire:model="id_proof_path" id="id_proof_path"
                 class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Government issued ID (Aadhaar, Passport,
-                etc.)</p>
+                etc.) Max size: 2MB. JPG/PDF</p>
             @error('id_proof_path')
                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
             @enderror
             <div>
                 <label for="selfie_path" class="block mb-1 text-sm font-medium">Selfie with ID <span
                         class="text-red-500">*</span></label>
-                <input type="file" wire:model="selfie_path" id="selfie_path"
-                    class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">A selfie holding your ID for verification.
-                </p>
-                @error('selfie_path')
-                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                @enderror
+                <div class="flex flex-col gap-2">
+                    <div class="flex gap-2">
+                        <input type="file" wire:model="selfie_path" id="selfie_path"
+                            class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                        <button type="button" onclick="openCamera()"
+                            class="px-4 flex items-center justify-center py-2 bg-orange-400 text-white text-center rounded-md hover:bg-orange-500 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">A selfie holding your ID for
+                        verification. Max size: 2MB. JPG</p>
+                    @error('selfie_path')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
-            <div class="flex items-center my-3">
+            {{-- <div class="flex items-center my-3">
                 <div class="flex-grow h-px bg-slate-300 dark:bg-slate-600"></div>
                 <span class="mx-3 text-sm text-slate-500 dark:text-slate-400">or verify using DigiLocker</span>
                 <div class="flex-grow h-px bg-slate-300 dark:bg-slate-600"></div>
@@ -230,7 +275,7 @@
                 <img src="https://img1.digitallocker.gov.in/digilocker-landing-page/assets/img/about-1.svg"
                     alt="DigiLocker" style="height:28px;width:auto;" class="mr-2">
                 Verify with DigiLocker
-            </a>
+            </a> --}}
 
         </div>
 
@@ -371,7 +416,33 @@
 
         {{-- Availability --}}
         <div>
-            <label class="block mb-1 text-sm font-medium">Availability <span class="text-red-500">*</span></label>
+            <flux:heading class="flex items-center gap-2">
+                Availability <span class="text-red-500">*</span>
+
+                <flux:tooltip toggleable>
+                    <flux:button icon="information-circle" size="sm" variant="ghost" />
+                    <flux:tooltip.content class="max-w-[20rem] space-y-2 !bg-transparent">
+                        <div
+                            class="bg-orange-100 dark:bg-orange-900 border-l-4 border-orange-500 dark:border-orange-600 text-orange-800 dark:text-orange-100 p-4 rounded shadow flex items-start gap-3">
+                            <svg class="w-6 h-6 mt-1 text-orange-500 dark:text-orange-300" fill="none"
+                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M13 16h-1v-4h-1m1-4h.01M12 20.5a8.38 8.38 0 100-16.76 8.38 8.38 0 000 16.76z">
+                                </path>
+                            </svg>
+                            <div>
+                                <strong>Confused about Availability Time Slots?</strong><br>
+                                <span>
+                                    <b>Morning:</b> 9 AM – 12 PM<br>
+                                    <b>Afternoon:</b> 12 PM – 3 PM<br>
+                                    <b>Evening:</b> 3 PM – 6 PM<br>
+                                    <b>Full Day:</b> 9 AM – 6 PM<br>
+                                </span>
+                            </div>
+                        </div>
+                    </flux:tooltip.content>
+                </flux:tooltip>
+            </flux:heading>
             <div class="flex flex-wrap gap-4">
                 @foreach ([['morning', 'Morning'], ['afternoon', 'Afternoon'], ['evening', 'Evening'], ['full-day', 'Full Day']] as [$val, $label])
                     <label class="inline-flex items-center">
@@ -431,6 +502,131 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // Camera functionality
+    let cameraModal = null;
+    let cameraStream = null;
+    let cameraCanvas = null;
+
+    function openCamera() {
+        if (!cameraModal) {
+            // Create camera modal
+            cameraModal = document.createElement('div');
+            cameraModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            cameraModal.innerHTML = `
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-lg max-w-md w-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Take Photo</h2>
+                        <button onclick="closeCamera()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="relative aspect-video mb-4">
+                        <video id="cameraVideo" class="w-full h-full object-cover"></video>
+                        <canvas id="cameraCanvas" class="hidden"></canvas>
+                    </div>
+                    <div class="flex gap-4">
+                        <button onclick="capturePhoto()" class="w-full px-4 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-500">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                            </svg>
+                            Take Photo
+                        </button>
+                        <button onclick="closeCamera()" class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(cameraModal);
+
+            // Get video element
+            const video = document.getElementById('cameraVideo');
+            cameraCanvas = document.getElementById('cameraCanvas');
+
+            // Check if camera is supported
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Camera access is not supported in this browser. Please use the file upload option instead.');
+                closeCamera();
+                return;
+            }
+
+            // Request camera access
+            navigator.mediaDevices.getUserMedia({ 
+                video: {
+                    facingMode: 'user',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            })
+            .then(stream => {
+                cameraStream = stream;
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch(err => {
+                console.error('Error accessing camera:', err);
+                let errorMessage = 'Unable to access camera. Please check:';
+                if (err.name === 'NotAllowedError') {
+                    errorMessage += '\n1. Allow camera permissions in your browser settings';
+                } else if (err.name === 'NotFoundError') {
+                    errorMessage += '\n1. Ensure your device has a camera';
+                } else {
+                    errorMessage += '\n1. Try refreshing the page';
+                    errorMessage += '\n2. If using XAMPP, ensure you are accessing the site through HTTPS';
+                }
+                alert(errorMessage);
+                closeCamera();
+            });
+        }
+    }
+
+    function capturePhoto() {
+        if (!cameraCanvas || !cameraStream) {
+            alert('Camera is not initialized. Please try again.');
+            return;
+        }
+
+        const video = document.getElementById('cameraVideo');
+        const canvas = cameraCanvas;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+
+        // Convert canvas to blob and trigger file input
+        canvas.toBlob(blob => {
+            const file = new File([blob], 'selfie.jpg', { 
+                type: 'image/jpeg',
+                lastModified: Date.now()
+            });
+            const input = document.getElementById('selfie_path');
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            input.files = dataTransfer.files;
+            @this.selfie_path = file;
+            closeCamera();
+        }, 'image/jpeg', 0.8); // 80% quality
+    }
+
+    function closeCamera() {
+        if (cameraStream) {
+            cameraStream.getTracks().forEach(track => track.stop());
+            cameraStream = null;
+        }
+        if (cameraModal) {
+            document.body.removeChild(cameraModal);
+            cameraModal = null;
+        }
+    }
+
+    // Add event listeners
+    window.addEventListener('beforeunload', closeCamera);
+
+    // Check if HTTPS is needed
+    if (window.location.protocol !== 'https:') {
+        console.warn('Camera access requires HTTPS. Please use HTTPS for camera functionality.');
+    }
     window.addEventListener('draft-saved', function () {
         Swal.fire({
             icon: 'success',
