@@ -192,30 +192,58 @@ class RegisterForm extends Component
                 'mimes:jpg,jpeg',
                 'max:2048',
             ],
-            'marriage_certificate_path' => [
-                'nullable',
-                'file',
-                'mimes:pdf,jpg,jpeg',
-                'max:2048',
-            ],
-            'certificate_path' => [
-                'nullable',
-                'file',
-                'mimes:pdf,jpg,jpeg',
-                'max:2048',
-            ],
-            'birth_certificate_path' => [
-                'nullable',
-                'file',
-                'mimes:pdf,jpg,jpeg',
-                'max:2048',
-            ],
-            'child_birth_certificate_path' => [
-                'nullable',
-                'file',
-                'mimes:pdf,jpg,jpeg',
-                'max:2048',
-            ],
+            'marriage_certificate_path' => function ($attribute, $value, $fail) {
+                if ($this->category === 'newlywed' || $this->category === 'parent') {
+                    if (!$value) {
+                        $fail('Marriage certificate is required for newlywed and parent categories.');
+                    }
+                    if ($value && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                        $fail('Marriage certificate must be a PDF, JPG, or JPEG file.');
+                    }
+                    if ($value && $value->getSize() > 2048 * 1024) {
+                        $fail('Marriage certificate must not exceed 2MB.');
+                    }
+                }
+            },
+            'certificate_path' => function ($attribute, $value, $fail) {
+                if ($this->category === 'professional') {
+                    if (!$value) {
+                        $fail('Professional certificate is required for professional category.');
+                    }
+                    if ($value && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                        $fail('Professional certificate must be a PDF, JPG, or JPEG file.');
+                    }
+                    if ($value && $value->getSize() > 2048 * 1024) {
+                        $fail('Professional certificate must not exceed 2MB.');
+                    }
+                }
+            },
+            'birth_certificate_path' => function ($attribute, $value, $fail) {
+                if ($this->category === 'senior') {
+                    if (!$value) {
+                        $fail('Birth certificate is required for senior category.');
+                    }
+                    if ($value && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                        $fail('Birth certificate must be a PDF, JPG, or JPEG file.');
+                    }
+                    if ($value && $value->getSize() > 2048 * 1024) {
+                        $fail('Birth certificate must not exceed 2MB.');
+                    }
+                }
+            },
+            'child_birth_certificate_path' => function ($attribute, $value, $fail) {
+                if ($this->category === 'parent') {
+                    if (!$value) {
+                        $fail('Child birth certificate is required for parent category.');
+                    }
+                    if ($value && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                        $fail('Child birth certificate must be a PDF, JPG, or JPEG file.');
+                    }
+                    if ($value && $value->getSize() > 2048 * 1024) {
+                        $fail('Child birth certificate must not exceed 2MB.');
+                    }
+                }
+            },
             'permanent_address' => 'required|string',
             'current_address' => 'required|string',
             'city' => 'required|string',
