@@ -7,7 +7,7 @@
         <form method="POST" action="{{ route('carebuddy.profile.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div class="flex items-center mb-6">
+            <div class="flex items-center mb-6 justify-center">
                 <div class="mr-6">
                     <img src="{{ $carebuddy && $carebuddy->profile_photo ? asset('storage/' . $carebuddy->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&color=7F9CF5&background=EBF4FF' }}"
                         class="h-24 w-24 rounded-full object-cover border-2 border-blue-400" alt="Profile Photo">

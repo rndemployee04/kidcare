@@ -73,7 +73,7 @@
                                         class="text-base font-normal text-gray-500">/hr</span></div>
                                 <div class="mt-2">
                                     @auth
-                                        @if (auth()->user()->role === 'parent')
+                                        @if (auth()->user()->role === 'parent'  && auth()->user()->verification_status === 'accepted')
                                             <a href="{{ route('parent.book.slot', $carebuddy->id) }}"
                                                 class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
                                                 Book Now

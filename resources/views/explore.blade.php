@@ -177,7 +177,7 @@
                                             </svg>
                                         </a>
                                         @auth
-                                            @if (auth()->user()->role === 'parent')
+                                            @if (auth()->user()->role === 'parent' && auth()->user()->verification_status === 'accepted')
                                                 <a href="{{ route('parent.book.slot', $carebuddy->id) }}"
                                                     class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-600 transition duration-200">
                                                     Book Now
