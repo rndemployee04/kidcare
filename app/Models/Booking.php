@@ -30,6 +30,6 @@ class Booking extends Model
 
     public function parent()
     {
-        return $this->belongsTo(\App\Models\Parents::class, 'parent_id');
+        return $this->belongsTo(Parents::class, 'parent_id');
     }
 }

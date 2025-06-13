@@ -6,11 +6,12 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\CareBuddy;
 use Illuminate\Support\Facades\Auth;
-#[Layout('components.layouts.onboarding')]
+use Livewire\WithFileUploads;
 
+#[Layout('components.layouts.onboarding')]
 class RegisterForm extends Component
 {
-    use \Livewire\WithFileUploads;
+    use WithFileUploads;
 
     // CareBuddy Info
     public string $category = '';
@@ -45,8 +46,8 @@ class RegisterForm extends Component
         $carebuddy = CareBuddy::where('user_id', Auth::id())->first();
         if ($carebuddy) {
             foreach ($this->fillableFields() as $field) {
-                if (isset($carebuddy[$field])) {
-                    $this->$field = $carebuddy[$field];
+                if (isset($carebuddy->$field)) {
+                    $this->$field = $carebuddy->$field;
                 }
             }
         }
@@ -83,32 +84,49 @@ class RegisterForm extends Component
 
     public function saveDraft()
     {
+        // Validate file inputs to ensure they meet requirements
+        $this->validate([
+            'profile_photo' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'id_proof_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
+            'selfie_path' => ['nullable', 'file', 'mimes:jpg,jpeg', 'max:2048'],
+            'certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
+            'marriage_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
+            'birth_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
+            'child_birth_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
+        ]);
+
         $data = $this->only($this->fillableFields());
         $data['user_id'] = Auth::id();
 
         // Store and log profile photo
-        \Log::info('Storing profile photo: ' . $this->profile_photo->getClientOriginalName());
-        $path = $this->profile_photo->store('profile_photos', 'public');
-        \Log::info('Stored profile photo at: ' . $path);
-        $data['profile_photo'] = $path;
-        $this->profile_photo = $path;
+        if ($this->profile_photo && !is_string($this->profile_photo)) {
+            \Log::info('Storing profile photo: ' . $this->profile_photo->getClientOriginalName());
+            $path = $this->profile_photo->store('profile_photos', 'public');
+            \Log::info('Stored profile photo at: ' . $path);
+            $data['profile_photo'] = $path;
+            $this->profile_photo = $path;
+        }
 
         // Store and log ID proof
-        \Log::info('Storing ID proof: ' . $this->id_proof_path->getClientOriginalName());
-        $path = $this->id_proof_path->store('id_proofs', 'public');
-        \Log::info('Stored ID proof at: ' . $path);
-        $data['id_proof_path'] = $path;
-        $this->id_proof_path = $path;
+        if ($this->id_proof_path && !is_string($this->id_proof_path)) {
+            \Log::info('Storing ID proof: ' . $this->id_proof_path->getClientOriginalName());
+            $path = $this->id_proof_path->store('id_proofs', 'public');
+            \Log::info('Stored ID proof at: ' . $path);
+            $data['id_proof_path'] = $path;
+            $this->id_proof_path = $path;
+        }
 
         // Store and log selfie
-        \Log::info('Storing selfie: ' . $this->selfie_path->getClientOriginalName());
-        $path = $this->selfie_path->store('selfies', 'public');
-        \Log::info('Stored selfie at: ' . $path);
-        $data['selfie_path'] = $path;
-        $this->selfie_path = $path;
+        if ($this->selfie_path && !is_string($this->selfie_path)) {
+            \Log::info('Storing selfie: ' . $this->selfie_path->getClientOriginalName());
+            $path = $this->selfie_path->store('selfies', 'public');
+            \Log::info('Stored selfie at: ' . $path);
+            $data['selfie_path'] = $path;
+            $this->selfie_path = $path;
+        }
 
         // OPTIONAL: store certificates if uploaded
-        if ($this->certificate_path) {
+        if ($this->certificate_path && !is_string($this->certificate_path)) {
             \Log::info('Storing certificate: ' . $this->certificate_path->getClientOriginalName());
             $path = $this->certificate_path->store('certificates', 'public');
             \Log::info('Stored certificate at: ' . $path);
@@ -116,7 +134,7 @@ class RegisterForm extends Component
             $this->certificate_path = $path;
         }
 
-        if ($this->marriage_certificate_path) {
+        if ($this->marriage_certificate_path && !is_string($this->marriage_certificate_path)) {
             \Log::info('Storing marriage certificate: ' . $this->marriage_certificate_path->getClientOriginalName());
             $path = $this->marriage_certificate_path->store('certificates', 'public');
             \Log::info('Stored marriage certificate at: ' . $path);
@@ -124,7 +142,7 @@ class RegisterForm extends Component
             $this->marriage_certificate_path = $path;
         }
 
-        if ($this->birth_certificate_path) {
+        if ($this->birth_certificate_path && !is_string($this->birth_certificate_path)) {
             \Log::info('Storing birth certificate: ' . $this->birth_certificate_path->getClientOriginalName());
             $path = $this->birth_certificate_path->store('certificates', 'public');
             \Log::info('Stored birth certificate at: ' . $path);
@@ -132,7 +150,7 @@ class RegisterForm extends Component
             $this->birth_certificate_path = $path;
         }
 
-        if ($this->child_birth_certificate_path) {
+        if ($this->child_birth_certificate_path && !is_string($this->child_birth_certificate_path)) {
             \Log::info('Storing child birth certificate: ' . $this->child_birth_certificate_path->getClientOriginalName());
             $path = $this->child_birth_certificate_path->store('certificates', 'public');
             \Log::info('Stored child birth certificate at: ' . $path);
@@ -165,42 +183,68 @@ class RegisterForm extends Component
     {
         $validated = $this->validate([
             'category' => 'required|in:newlywed,professional,parent,senior',
-            'dob' => ['required', 'date', function($attribute, $value, $fail) {
-                $minAge = 18;
-                $minDate = now()->subYears($minAge);
-                if ($value > $minDate) {
-                    $fail('You must be at least 18 years old to register.');
-                }
-            }],
+            'dob' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    $minAge = 18;
+                    $minDate = now()->subYears($minAge);
+                    if ($value > $minDate) {
+                        $fail('You must be at least 18 years old to register.');
+                    }
+                },
+            ],
             'phone' => 'required|string|max_digits:13',
             'gender' => 'required|in:male,female,others',
             'profile_photo' => [
-                'required',
-                'file',
-                'mimes:jpg,jpeg,png',
-                'max:2048',
+                function ($attribute, $value, $fail) {
+                    if (!$value) {
+                        $fail('Profile photo is required.');
+                    } elseif (is_string($value)) {
+                        // File already saved, no further validation needed
+                        return;
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
+                        $fail('Profile photo must be a JPG or PNG file.');
+                    } elseif ($value->getSize() > 2048 * 1024) {
+                        $fail('Profile photo must not exceed 2MB.');
+                    }
+                },
             ],
             'id_proof_path' => [
-                'required',
-                'file',
-                'mimes:pdf,jpg,jpeg',
-                'max:2048',
+                function ($attribute, $value, $fail) {
+                    if (!$value) {
+                        $fail('ID proof is required.');
+                    } elseif (is_string($value)) {
+                        return;
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                        $fail('ID proof must be a PDF, JPG, or JPEG file.');
+                    } elseif ($value->getSize() > 2048 * 1024) {
+                        $fail('ID proof must not exceed 2MB.');
+                    }
+                },
             ],
             'selfie_path' => [
-                'required',
-                'file',
-                'mimes:jpg,jpeg',
-                'max:2048',
+                function ($attribute, $value, $fail) {
+                    if (!$value) {
+                        $fail('Selfie is required.');
+                    } elseif (is_string($value)) {
+                        return;
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg'])) {
+                        $fail('Selfie must be a JPG or JPEG file.');
+                    } elseif ($value->getSize() > 2048 * 1024) {
+                        $fail('Selfie must not exceed 2MB.');
+                    }
+                },
             ],
             'marriage_certificate_path' => function ($attribute, $value, $fail) {
                 if ($this->category === 'newlywed' || $this->category === 'parent') {
                     if (!$value) {
                         $fail('Marriage certificate is required for newlywed and parent categories.');
-                    }
-                    if ($value && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                    } elseif (is_string($value)) {
+                        return;
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
                         $fail('Marriage certificate must be a PDF, JPG, or JPEG file.');
-                    }
-                    if ($value && $value->getSize() > 2048 * 1024) {
+                    } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Marriage certificate must not exceed 2MB.');
                     }
                 }
@@ -209,11 +253,11 @@ class RegisterForm extends Component
                 if ($this->category === 'professional') {
                     if (!$value) {
                         $fail('Professional certificate is required for professional category.');
-                    }
-                    if ($value && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                    } elseif (is_string($value)) {
+                        return;
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
                         $fail('Professional certificate must be a PDF, JPG, or JPEG file.');
-                    }
-                    if ($value && $value->getSize() > 2048 * 1024) {
+                    } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Professional certificate must not exceed 2MB.');
                     }
                 }
@@ -222,11 +266,11 @@ class RegisterForm extends Component
                 if ($this->category === 'senior') {
                     if (!$value) {
                         $fail('Birth certificate is required for senior category.');
-                    }
-                    if ($value && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                    } elseif (is_string($value)) {
+                        return;
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
                         $fail('Birth certificate must be a PDF, JPG, or JPEG file.');
-                    }
-                    if ($value && $value->getSize() > 2048 * 1024) {
+                    } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Birth certificate must not exceed 2MB.');
                     }
                 }
@@ -235,11 +279,11 @@ class RegisterForm extends Component
                 if ($this->category === 'parent') {
                     if (!$value) {
                         $fail('Child birth certificate is required for parent category.');
-                    }
-                    if ($value && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                    } elseif (is_string($value)) {
+                        return;
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
                         $fail('Child birth certificate must be a PDF, JPG, or JPEG file.');
-                    }
-                    if ($value && $value->getSize() > 2048 * 1024) {
+                    } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Child birth certificate must not exceed 2MB.');
                     }
                 }
@@ -259,58 +303,68 @@ class RegisterForm extends Component
 
         $validated['user_id'] = Auth::id();
 
-        // Store and log profile photo
-        \Log::info('Storing profile photo: ' . $this->profile_photo->getClientOriginalName());
-        $path = $this->profile_photo->store('profile_photos', 'public');
-        \Log::info('Stored profile photo at: ' . $path);
-        $validated['profile_photo'] = $path;
-        $this->profile_photo = $path;
+        // Store files only if they are UploadedFile instances
+        if ($this->profile_photo && !is_string($this->profile_photo)) {
+            \Log::info('Storing profile photo: ' . $this->profile_photo->getClientOriginalName());
+            $path = $this->profile_photo->store('profile_photos', 'public');
+            \Log::info('Stored profile photo at: ' . $path);
+            $validated['profile_photo'] = $path;
+        } else {
+            $validated['profile_photo'] = $this->profile_photo;
+        }
 
-        // Store and log ID proof
-        \Log::info('Storing ID proof: ' . $this->id_proof_path->getClientOriginalName());
-        $path = $this->id_proof_path->store('id_proofs', 'public');
-        \Log::info('Stored ID proof at: ' . $path);
-        $validated['id_proof_path'] = $path;
-        $this->id_proof_path = $path;
+        if ($this->id_proof_path && !is_string($this->id_proof_path)) {
+            \Log::info('Storing ID proof: ' . $this->id_proof_path->getClientOriginalName());
+            $path = $this->id_proof_path->store('id_proofs', 'public');
+            \Log::info('Stored ID proof at: ' . $path);
+            $validated['id_proof_path'] = $path;
+        } else {
+            $validated['id_proof_path'] = $this->id_proof_path;
+        }
 
-        // Store and log selfie
-        \Log::info('Storing selfie: ' . $this->selfie_path->getClientOriginalName());
-        $path = $this->selfie_path->store('selfies', 'public');
-        \Log::info('Stored selfie at: ' . $path);
-        $validated['selfie_path'] = $path;
-        $this->selfie_path = $path;
+        if ($this->selfie_path && !is_string($this->selfie_path)) {
+            \Log::info('Storing selfie: ' . $this->selfie_path->getClientOriginalName());
+            $path = $this->selfie_path->store('selfies', 'public');
+            \Log::info('Stored selfie at: ' . $path);
+            $validated['selfie_path'] = $path;
+        } else {
+            $validated['selfie_path'] = $this->selfie_path;
+        }
 
-        // OPTIONAL: store certificates if uploaded
-        if ($this->certificate_path) {
+        if ($this->certificate_path && !is_string($this->certificate_path)) {
             \Log::info('Storing certificate: ' . $this->certificate_path->getClientOriginalName());
             $path = $this->certificate_path->store('certificates', 'public');
             \Log::info('Stored certificate at: ' . $path);
             $validated['certificate_path'] = $path;
-            $this->certificate_path = $path;
+        } else {
+            $validated['certificate_path'] = $this->certificate_path;
         }
 
-        if ($this->marriage_certificate_path) {
+        if ($this->marriage_certificate_path && !is_string($this->marriage_certificate_path)) {
             \Log::info('Storing marriage certificate: ' . $this->marriage_certificate_path->getClientOriginalName());
             $path = $this->marriage_certificate_path->store('certificates', 'public');
             \Log::info('Stored marriage certificate at: ' . $path);
             $validated['marriage_certificate_path'] = $path;
-            $this->marriage_certificate_path = $path;
+        } else {
+            $validated['marriage_certificate_path'] = $this->marriage_certificate_path;
         }
 
-        if ($this->birth_certificate_path) {
+        if ($this->birth_certificate_path && !is_string($this->birth_certificate_path)) {
             \Log::info('Storing birth certificate: ' . $this->birth_certificate_path->getClientOriginalName());
             $path = $this->birth_certificate_path->store('certificates', 'public');
             \Log::info('Stored birth certificate at: ' . $path);
             $validated['birth_certificate_path'] = $path;
-            $this->birth_certificate_path = $path;
+        } else {
+            $validated['birth_certificate_path'] = $this->birth_certificate_path;
         }
 
-        if ($this->child_birth_certificate_path) {
+        if ($this->child_birth_certificate_path && !is_string($this->child_birth_certificate_path)) {
             \Log::info('Storing child birth certificate: ' . $this->child_birth_certificate_path->getClientOriginalName());
             $path = $this->child_birth_certificate_path->store('certificates', 'public');
             \Log::info('Stored child birth certificate at: ' . $path);
             $validated['child_birth_certificate_path'] = $path;
-            $this->child_birth_certificate_path = $path;
+        } else {
+            $validated['child_birth_certificate_path'] = $this->child_birth_certificate_path;
         }
 
         // Ensure availability is always an array

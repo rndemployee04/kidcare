@@ -26,49 +26,6 @@
         </div>
     @endif
 
-    {{-- Info Board: Carebuddy Category --}}
-    {{-- <div class="mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- CareBuddy Category Grid -->
-            <div
-                class="bg-orange-100 dark:bg-orange-900 border-l-4 border-orange-500 dark:border-orange-600 text-orange-800 dark:text-yelorangelow-100 p-4 rounded shadow flex items-start gap-3">
-                <svg class="w-6 h-6 mt-1 text-orange-500 dark:text-orange-300" fill="none" stroke="currentColor"
-                    stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M13 16h-1v-4h-1m1-4h.01M12 20.5a8.38 8.38 0 100-16.76 8.38 8.38 0 000 16.76z"></path>
-                </svg>
-                <div>
-                    <strong>Confused about CareBuddy Category?</strong><br>
-                    <span>
-                        <b>Newlywed:</b> Young couples, energetic and nurturing.<br>
-                        <b>Professional:</b> Certified nannies, therapists.<br>
-                        <b>Parent:</b> Experienced parents.<br>
-                        <b>Senior:</b> Elderly with wisdom and patience.<br>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Availability Time Slots Grid -->
-            <div
-                class="bg-orange-100 dark:bg-orange-900 border-l-4 border-orange-500 dark:border-orange-600 text-orange-800 dark:text-orange-100 p-4 rounded shadow flex items-start gap-3">
-                <svg class="w-6 h-6 mt-1 text-orange-500 dark:text-orange-300" fill="none" stroke="currentColor"
-                    stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M13 16h-1v-4h-1m1-4h.01M12 20.5a8.38 8.38 0 100-16.76 8.38 8.38 0 000 16.76z"></path>
-                </svg>
-                <div>
-                    <strong>Confused about Availability Time Slots?</strong><br>
-                    <span>
-                        <b>Morning:</b> 9 AM – 12 PM<br>
-                        <b>Afternoon:</b> 12 PM – 3 PM<br>
-                        <b>Evening:</b> 3 PM – 6 PM<br>
-                        <b>Full Day:</b> 9 AM – 6 PM<br>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
     <form wire:submit.prevent="submit" class="space-y-8" enctype="multipart/form-data">
         <h2 class="text-xl font-semibold mb-6 border-b border-slate-200 dark:border-slate-700 pb-2">Personal Information
         </h2>
@@ -117,9 +74,14 @@
             </div>
 
             <div>
-                <label for="profile_photo" class="block mb-1 text-sm font-medium">Profile Photo</label>
-                <input type="file" wire:model="profile_photo" id="profile_photo"
+                <label for="profile_photo" class="block mb-1 text-sm font-medium">Profile Photo <span
+                        class="text-red-500">*</span></label>
+                <input type="file" wire:model="profile_photo" id="profile_photo" accept="image/*"
                     class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                @if($profile_photo && is_string($profile_photo))
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: {{ basename($profile_photo) }}
+                    </p>
+                @endif
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload a recent photo for your profile. Max
                     size: 2MB. JPG/PNG only.</p>
                 @error('profile_photo')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
@@ -178,6 +140,10 @@
                         (PDF/JPG)</label>
                     <input type="file" wire:model="marriage_certificate_path" id="marriage_certificate_path"
                         class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                    @if($marriage_certificate_path && is_string($marriage_certificate_path))
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
+                            {{ basename($marriage_certificate_path) }}</p>
+                    @endif
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your marriage certificate for
                         verification. Max size: 2MB. JPG/PDF</p>
                     @error('marriage_certificate_path')
@@ -192,7 +158,12 @@
                         (PDF/JPG)</label>
                     <input type="file" wire:model="certificate_path" id="certificate_path"
                         class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your professional certification. Max size: 2MB. JPG/PDF</p>
+                    @if($certificate_path && is_string($certificate_path))
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
+                            {{ basename($certificate_path) }}</p>
+                    @endif
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your professional certification. Max
+                        size: 2MB. JPG/PDF</p>
                     @error('certificate_path')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -205,7 +176,12 @@
                         Certificate (PDF/JPG)</label>
                     <input type="file" wire:model="child_birth_certificate_path" id="child_birth_certificate_path"
                         class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your child's birth certificate. Max size: 2MB. JPG/PDF</p>
+                    @if($child_birth_certificate_path && is_string($child_birth_certificate_path))
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
+                            {{ basename($child_birth_certificate_path) }}</p>
+                    @endif
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your child's birth certificate. Max
+                        size: 2MB. JPG/PDF</p>
                     @error('child_birth_certificate_path')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -218,6 +194,10 @@
                         (PDF/JPG)</label>
                     <input type="file" wire:model="birth_certificate_path" id="birth_certificate_path"
                         class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+                    @if($birth_certificate_path && is_string($birth_certificate_path))
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
+                            {{ basename($birth_certificate_path) }}</p>
+                    @endif
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your birth certificate for age
                         verification. Max size: 2MB. JPG/PDF</p>
                     @error('birth_certificate_path')
@@ -235,6 +215,9 @@
                     class="text-red-500">*</span></label>
             <input type="file" wire:model="id_proof_path" id="id_proof_path"
                 class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
+            @if($id_proof_path && is_string($id_proof_path))
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: {{ basename($id_proof_path) }}</p>
+            @endif
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Government issued ID (Aadhaar, Passport,
                 etc.) Max size: 2MB. JPG/PDF</p>
             @error('id_proof_path')
@@ -258,6 +241,10 @@
                             </svg>
                         </button>
                     </div>
+                    @if($selfie_path && is_string($selfie_path))
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
+                            {{ basename($selfie_path) }}</p>
+                    @endif
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">A selfie holding your ID for
                         verification. Max size: 2MB. JPG</p>
                     @error('selfie_path')
@@ -265,21 +252,7 @@
                     @enderror
                 </div>
             </div>
-            {{-- <div class="flex items-center my-3">
-                <div class="flex-grow h-px bg-slate-300 dark:bg-slate-600"></div>
-                <span class="mx-3 text-sm text-slate-500 dark:text-slate-400">or verify using DigiLocker</span>
-                <div class="flex-grow h-px bg-slate-300 dark:bg-slate-600"></div>
-            </div>
-            <a href="#" onclick="return false;"
-                class="w-full flex items-center justify-center px-4 py-2 bg-orange-400 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-orange-500 dark:hover:bg-blue-600 text-base font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2">
-                <img src="https://img1.digitallocker.gov.in/digilocker-landing-page/assets/img/about-1.svg"
-                    alt="DigiLocker" style="height:28px;width:auto;" class="mr-2">
-                Verify with DigiLocker
-            </a> --}}
-
         </div>
-
-
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="col-span-2">
@@ -481,7 +454,6 @@
                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
             @enderror
         </div>
-        {{-- Location Selection Placeholder --}}
         {{-- Save & Submit Buttons --}}
         <div class="flex gap-4 mt-8">
             <button type="button" wire:click="saveDraft"
@@ -509,7 +481,6 @@
 
     function openCamera() {
         if (!cameraModal) {
-            // Create camera modal
             cameraModal = document.createElement('div');
             cameraModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
             cameraModal.innerHTML = `
@@ -541,18 +512,15 @@
             `;
             document.body.appendChild(cameraModal);
 
-            // Get video element
-            const video = document.getElementById('cameraVideo');
+            let video = document.getElementById('cameraVideo');
             cameraCanvas = document.getElementById('cameraCanvas');
 
-            // Check if camera is supported
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
                 alert('Camera access is not supported in this browser. Please use the file upload option instead.');
                 closeCamera();
                 return;
             }
 
-            // Request camera access
             navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: 'user',
@@ -560,53 +528,45 @@
                     height: { ideal: 720 }
                 }
             })
-            .then(stream => {
-                cameraStream = stream;
-                video.srcObject = stream;
-                video.play();
-            })
-            .catch(err => {
-                console.error('Error accessing camera:', err);
-                let errorMessage = 'Unable to access camera. Please check:';
-                if (err.name === 'NotAllowedError') {
-                    errorMessage += '\n1. Allow camera permissions in your browser settings';
-                } else if (err.name === 'NotFoundError') {
-                    errorMessage += '\n1. Ensure your device has a camera';
-                } else {
-                    errorMessage += '\n1. Try refreshing the page';
-                    errorMessage += '\n2. If using XAMPP, ensure you are accessing the site through HTTPS';
-                }
-                alert(errorMessage);
-                closeCamera();
-            });
+                .then(stream => {
+                    cameraStream = stream;
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(err => {
+                    let errorMessage = 'Unable to access camera. Please check:\n';
+                    if (err.name === 'NotAllowedError') {
+                        errorMessage += '1. Allow camera permissions in your browser settings\n';
+                    } else if (err.name === 'NotFoundError') {
+                        errorMessage += '1. Ensure your device has a camera\n';
+                    } else {
+                        errorMessage += '1. Try refreshing the page\n2. If using XAMPP/ngrok, ensure you are accessing the site through HTTPS\n';
+                    }
+                    alert(errorMessage);
+                    closeCamera();
+                });
         }
     }
 
     function capturePhoto() {
-        if (!cameraCanvas || !cameraStream) {
-            alert('Camera is not initialized. Please try again.');
-            return;
-        }
-
         const video = document.getElementById('cameraVideo');
-        const canvas = cameraCanvas;
+        const canvas = document.getElementById('cameraCanvas');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
-
-        // Convert canvas to blob and trigger file input
         canvas.toBlob(blob => {
-            const file = new File([blob], 'selfie.jpg', {
-                type: 'image/jpeg',
-                lastModified: Date.now()
+            const file = new File([blob], 'selfie.jpg', { type: 'image/jpeg' });
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            document.getElementById('selfie_path').files = dt.files;
+            // Trigger Livewire update
+            window.livewire.upload('selfie_path', file, () => {
+                console.log('Selfie uploaded');
+                closeCamera();
+            }, error => {
+                console.error('Upload error:', error);
             });
-            const input = document.getElementById('selfie_path');
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            input.files = dataTransfer.files;
-            @this.selfie_path = file;
-            closeCamera();
-        }, 'image/jpeg', 0.8); // 80% quality
+        }, 'image/jpeg');
     }
 
     function closeCamera() {

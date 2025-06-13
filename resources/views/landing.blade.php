@@ -16,6 +16,7 @@
             font-family: 'Inter', sans-serif;
         }
     </style>
+    @fluxAppearance
 </head>
 
 <body class="min-h-screen bg-white dark:bg-zinc-800 overflow-x-clip">
@@ -35,19 +36,47 @@
             <flux:navbar.item href="{{ route('explore') }}">Explore Carebuddies</flux:navbar.item>
 
             @if (Route::has('login'))
-                @auth
-                    @php $user = Auth::user(); @endphp
-                    @if ($user && $user->role === 'carebuddy')
-                        <flux:navbar.item href="{{ route('carebuddy.dashboard') }}">Dashboard</flux:navbar.item>
-                    @else
-                        <flux:navbar.item href="{{ route('dashboard') }}">Dashboard</flux:navbar.item>
-                    @endif
+            @auth
+            @php $user = Auth::user(); @endphp
+
+            <flux:dropdown position="bottom" align="end">
+                @if($user->role === 'parent')
+                <flux:profile avatar="{{ $user->parentProfile && $user->parentProfile->profile_photo ?  asset('storage/'.$user->parentProfile->profile_photo) : ''}}"
+                    name="{{ $user->name }}" />
                 @else
-                    <flux:navbar.item href="{{ route('login') }}">Login</flux:navbar.item>
-                    @if (Route::has('register'))
-                        <flux:navbar.item href="{{ route('register') }}">Register</flux:navbar.item>
+                <flux:profile avatar="{{ $user->careBuddy && $user->careBuddy->profile_photo ? asset('storage/'.$user->careBuddy->profile_photo) : '' }}"
+                    name="{{ $user->name }}" />
+                @endif
+
+
+
+                <flux:navmenu>
+
+                    @if ($user && $user->role === 'carebuddy')
+                    <flux:navmenu.item icon="user" href="{{ route('carebuddy.dashboard') }}" icon="view-columns">
+                        Dashboard
+                    </flux:navmenu.item>
+                    @else
+                    <flux:navmenu.item icon="user" href="{{ route('dashboard') }}" icon="view-columns">
+                        Dashboard
+                    </flux:navmenu.item>
                     @endif
-                @endauth
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <flux:navmenu.item href="#" icon="arrow-right-start-on-rectangle" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); this.closest('form').submit();">Logout</flux:navmenu.item>
+
+                    </form>
+                </flux:navmenu>
+            </flux:dropdown>
+
+            @else
+            <flux:navbar.item href="{{ route('login') }}">Login</flux:navbar.item>
+            @if (Route::has('register'))
+            <flux:navbar.item href="{{ route('register') }}">Register</flux:navbar.item>
+            @endif
+            @endauth
             @endif
 
             <flux:separator vertical variant="subtle" class="my-2" />
@@ -71,54 +100,25 @@
         <flux:navlist variant="outline">
             <flux:navlist.item icon="home" href="#" current>Home</flux:navlist.item>
             @if (Route::has('login'))
-                @auth
-                    @php $user = Auth::user(); @endphp
-                    @if ($user && $user->role === 'carebuddy')
-                        <flux:navlist.item icon="user-circle" href="{{ route('carebuddy.dashboard') }}">Dashboard
-                        </flux:navlist.item>
-                    @else
-                        <flux:navlist.item icon="user-circle" href="{{ route('dashboard') }}">Dashboard</flux:navlist.item>
-                    @endif
-                @else
-                    <flux:navlist.item icon="document-text" href="{{ route('login') }}">Login</flux:navlist.item>
-                    @if (Route::has('register'))
-                        <flux:navlist.item icon="calendar" href="{{ route('register') }}">Register</flux:navlist.item>
-                    @endif
-                @endauth
+            @auth
+            @php $user = Auth::user(); @endphp
+            @if ($user && $user->role === 'carebuddy')
+            <flux:navlist.item icon="user-circle" href="{{ route('carebuddy.dashboard') }}">Dashboard
+            </flux:navlist.item>
+            @else
+            <flux:navlist.item icon="user-circle" href="{{ route('dashboard') }}">Dashboard</flux:navlist.item>
+            @endif
+            @else
+            <flux:navlist.item icon="document-text" href="{{ route('login') }}">Login</flux:navlist.item>
+            @if (Route::has('register'))
+            <flux:navlist.item icon="calendar" href="{{ route('register') }}">Register</flux:navlist.item>
+            @endif
+            @endauth
             @endif
         </flux:navlist>
 
         <flux:spacer />
     </flux:sidebar>
-
-
-    {{-- <!-- Navbar -->
-    <header class="fixed top-0 w-full z-50 backdrop-blur bg-white/70 border-b border-gray-200">
-        <div class="max-w-[1140px] mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-[24px] font-bold text-[#ff8904]">KidCare</h1>
-            <nav class="space-x-6 text-sm font-medium flex items-center">
-                <a href="{{ url('/') }}" class="text-gray-700 hover:text-blue-600">Home</a>
-                <a href="#about" class="text-gray-700 hover:text-blue-600">About</a>
-
-                @if (Route::has('login'))
-                    @auth
-                        @php $user = Auth::user(); @endphp
-                        @if ($user && $user->role === 'carebuddy')
-                            <a href="{{ route('carebuddy.dashboard') }}"
-                                class="text-gray-700 hover:text-blue-600">Dashboard</a>
-                        @else
-                            <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-blue-600">Dashboard</a>
-                        @endif
-                    @else
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600">Login</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="text-gray-700 hover:text-blue-600">Register</a>
-                        @endif
-                    @endauth
-                @endif
-            </nav>
-        </div>
-    </header> --}}
 
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-r from-[#fdf3eb] to-[#e9f7f7] overflow-hidden  px-[20px] pb-0 md:pt-0">
@@ -241,8 +241,7 @@
             <!-- Left Text Content -->
             <div>
                 <p class="text-sm font-semibold text-gray-800" data-aos="fade-down"> Benefits</p>
-                <h2 class="text-3xl sm:text-4xl font-bold text-black-500 leading-tight mt-2 mb-8"
-                    data-aos="fade-right">
+                <h2 class="text-3xl sm:text-4xl font-bold text-black-500 leading-tight mt-2 mb-8" data-aos="fade-right">
                     Why Choose KidCare?
                 </h2>
 
@@ -332,8 +331,7 @@
         </div>
     </section>
 
-    <section
-        class="Serve pt-[50px] px-[20px] md:py-[70px] bg-[linear-gradient(100.88deg,_#EBFFFE_0.6%,_#FFF6EB_100%)]">
+    <section class="Serve pt-[50px] px-[20px] md:py-[70px] bg-[linear-gradient(100.88deg,_#EBFFFE_0.6%,_#FFF6EB_100%)]">
         <div class="max-w-[1140px] mx-auto">
             <h2 class="text-3xl font-bold text-center mb-10" data-aos="fade-down">Who We Serve</h2>
 
@@ -524,18 +522,15 @@
                 <p class="text-sm">In our Adult Participation programs, for most students, it is their first program in
                     Kindedo.</p>
                 <div class="flex gap-4 mt-4 text-white">
-                    <div
-                        class="bg-[#2ba7c1] rounded-full w-10 h-10 flex items-center justify-center
+                    <div class="bg-[#2ba7c1] rounded-full w-10 h-10 flex items-center justify-center
               transition-transform duration-300 hover:bg-[#1f8aa6] hover:scale-110 cursor-pointer">
                         <i class="fab fa-facebook-f"></i>
                     </div>
-                    <div
-                        class="bg-[#2ba7c1] rounded-full w-10 h-10 flex items-center justify-center
+                    <div class="bg-[#2ba7c1] rounded-full w-10 h-10 flex items-center justify-center
               transition-transform duration-300 hover:bg-[#1f8aa6] hover:scale-110 cursor-pointer">
                         <i class="fab fa-twitter"></i>
                     </div>
-                    <div
-                        class="bg-[#2ba7c1] rounded-full w-10 h-10 flex items-center justify-center
+                    <div class="bg-[#2ba7c1] rounded-full w-10 h-10 flex items-center justify-center
               transition-transform duration-300 hover:bg-[#1f8aa6] hover:scale-110 cursor-pointer">
                         <i class="fab fa-youtube"></i>
                     </div>
@@ -618,6 +613,7 @@
             }
         }
     </style>
+    @fluxScripts
     <script>
         AOS.init({
             duration: 1200,
