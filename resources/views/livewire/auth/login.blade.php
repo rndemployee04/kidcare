@@ -84,7 +84,7 @@
 
                     <!-- LinkedIn -->
                     <img src="https://www.svgrepo.com/show/448234/linkedin.svg" alt="LinkedIn"
-                        class="h-8 w-8 cursor-pointer hover:scale-110 transition-transform" />
+                        class="h-10 w-10 cursor-pointer hover:scale-110 transition-transform" />
                 </div>
 
                 <!-- Register Link -->

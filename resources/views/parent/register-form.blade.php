@@ -133,7 +133,7 @@
         <h2 class="text-xl font-semibold mb-6 border-b border-slate-200 dark:border-slate-700 pb-2">Identity
             Verification</h2>
 
-        <div>
+        <div class="!mb-[1.5rem]">
             <label for="id_proof_path" class="block mb-1 text-sm font-medium">ID Proof <span
                     class="text-red-500">*</span></label>
             <input type="file" wire:model="id_proof_path" id="id_proof_path"

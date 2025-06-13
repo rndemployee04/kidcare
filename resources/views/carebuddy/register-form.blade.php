@@ -240,7 +240,7 @@
             @error('id_proof_path')
                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
             @enderror
-            <div>
+            <div class="!mt-[1.5rem]">
                 <label for="selfie_path" class="block mb-1 text-sm font-medium">Selfie with ID <span
                         class="text-red-500">*</span></label>
                 <div class="flex flex-col gap-2">
@@ -553,7 +553,7 @@
             }
 
             // Request camera access
-            navigator.mediaDevices.getUserMedia({ 
+            navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: 'user',
                     width: { ideal: 1280 },
@@ -596,7 +596,7 @@
 
         // Convert canvas to blob and trigger file input
         canvas.toBlob(blob => {
-            const file = new File([blob], 'selfie.jpg', { 
+            const file = new File([blob], 'selfie.jpg', {
                 type: 'image/jpeg',
                 lastModified: Date.now()
             });
