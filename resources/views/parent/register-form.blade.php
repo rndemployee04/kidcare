@@ -158,7 +158,7 @@
             @foreach ([['profession', 'Profession'], ['spouse_name', 'Spouse Name'], ['spouse_email', 'Spouse Email'], ['spouse_phone', 'Spouse Phone'], ['spouse_profession', 'Spouse Profession']] as [$field, $label])
                 <div>
                     <label for="{{ $field }}" class="block mb-1 text-sm font-medium">{{ $label }}
-                        {{ $field === 'profession' ? '<span class="text-red-500">*</span>' : '' }}</label>
+                        {!! $field === 'profession' ? "<span class='text-red-500'>*</span>" : '' !!}</label>
                     <input type="{{ Str::contains($field, 'email') ? 'email' : 'text' }}" wire:model.defer="{{ $field }}"
                         id="{{ $field }}"
                         class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"

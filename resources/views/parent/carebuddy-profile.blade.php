@@ -1,6 +1,6 @@
 <x-parent.layouts.parent-layout>
     <div class="min-h-screen flex flex-col justify-center items-center px-4 pb-0 bg-gray-50">
-        <a href="http://localhost:8000/parent/dashboard"
+        <a href="{{ route('parent.dashboard') }}"
             class="block flex items-center text-[18px] text-[#ff8904] font-semibold hover:underline mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
