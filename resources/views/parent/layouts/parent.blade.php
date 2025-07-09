@@ -11,7 +11,9 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -62,7 +64,8 @@
                         </svg>
                         Bookings
                     </a>
-                    <a href="{{ route('parent.profile.show') }}" class="flex items-center p-2 mb-2 text-gray-800 hover:bg-indigo-50 rounded-lg {{ request()->routeIs('parent.profile.show') ? 'bg-indigo-100' : '' }}">
+                    <a href="{{ route('parent.profile.show') }}"
+                        class="flex items-center p-2 mb-2 text-gray-800 hover:bg-indigo-50 rounded-lg {{ request()->routeIs('parent.profile.show') ? 'bg-indigo-100' : '' }}">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -70,15 +73,10 @@
                         </svg>
                         My Profile
                     </a>
-                    {{-- <a href="{{ route('parent.activity') }}" class="flex items-center p-2 mb-2 text-gray-800 hover:bg-indigo-50 rounded-lg {{ request()->routeIs('parent.activity') ? 'bg-indigo-100' : '' }}">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                            </path>
-                        </svg>
-                        Activity
-                    </a> --}}
+                    <a href="{{ route('parent.children.index') }}"
+                        class="flex items-center p-2 mb-2 text-gray-800 hover:bg-indigo-50 rounded-lg {{ request()->routeIs('parent.children.*') ? 'bg-indigo-100' : '' }}">
+                        <i class="fa-solid fa-children me-2"></i> Children
+                    </a>
                     <div class="mt-8">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

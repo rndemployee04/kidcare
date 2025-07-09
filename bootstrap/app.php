@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'carebuddy.role' => \App\Http\Middleware\EnsureCarebuddyRole::class,
             'admin.verified' => \App\Http\Middleware\EnsureAdminVerified::class,
             'role.redirect' => \App\Http\Middleware\CheckRoleAndRedirect::class,
+            'playpal.registration.complete' => \App\Http\Middleware\EnsurePlayPalRegistrationComplete::class,
+            'playpal.verified' => \App\Http\Middleware\EnsurePlayPalVerified::class,
+            'playpal.role' => \App\Http\Middleware\EnsurePlayPalRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

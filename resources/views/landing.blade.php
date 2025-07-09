@@ -33,50 +33,54 @@
         <flux:navbar class="-mb-px max-lg:hidden justify-end w-full ">
             <flux:navbar.item href="#" current>Home</flux:navbar.item>
             <flux:navbar.item href="#">About</flux:navbar.item>
-            <flux:navbar.item href="{{ route('explore') }}">Explore Carebuddies</flux:navbar.item>
+            {{-- <flux:navbar.item href="{{ route('explore') }}">Explore Carebuddies</flux:navbar.item> --}}
 
             @if (Route::has('login'))
-            @auth
-            @php $user = Auth::user(); @endphp
+                @auth
+                    @php $user = Auth::user(); @endphp
 
-            <flux:dropdown position="bottom" align="end">
-                @if($user->role === 'parent')
-                <flux:profile avatar="{{ $user->parentProfile && $user->parentProfile->profile_photo ?  asset('storage/'.$user->parentProfile->profile_photo) : ''}}"
-                    name="{{ $user->name }}" />
+                    <flux:dropdown position="bottom" align="end">
+                        @if($user->role === 'parent')
+                            <flux:profile
+                                avatar="{{ $user->parentProfile && $user->parentProfile->profile_photo ? asset('storage/' . $user->parentProfile->profile_photo) : ''}}"
+                                name="{{ $user->name }}" />
+                        @else
+                            <flux:profile
+                                avatar="{{ $user->careBuddy && $user->careBuddy->profile_photo ? asset('storage/' . $user->careBuddy->profile_photo) : '' }}"
+                                name="{{ $user->name }}" />
+                        @endif
+
+                        <flux:navmenu>
+
+                            @if ($user && $user->role === 'carebuddy')
+                                <flux:navmenu.item icon="user" href="{{ route('carebuddy.dashboard') }}" icon="view-columns">
+                                    Dashboard
+                                </flux:navmenu.item>
+                            @elseif ($user && $user->role === 'playpal')
+                                <flux:navmenu.item icon="user" href="{{ route('playpal.dashboard') }}" icon="view-columns">
+                                    Dashboard
+                                </flux:navmenu.item>
+                            @else
+                                <flux:navmenu.item icon="user" href="{{ route('dashboard') }}" icon="view-columns">
+                                    Dashboard
+                                </flux:navmenu.item>
+                            @endif
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <flux:navmenu.item href="#" icon="arrow-right-start-on-rectangle" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); this.closest('form').submit();">Logout</flux:navmenu.item>
+
+                            </form>
+                        </flux:navmenu>
+                    </flux:dropdown>
+
                 @else
-                <flux:profile avatar="{{ $user->careBuddy && $user->careBuddy->profile_photo ? asset('storage/'.$user->careBuddy->profile_photo) : '' }}"
-                    name="{{ $user->name }}" />
-                @endif
-
-
-
-                <flux:navmenu>
-
-                    @if ($user && $user->role === 'carebuddy')
-                    <flux:navmenu.item icon="user" href="{{ route('carebuddy.dashboard') }}" icon="view-columns">
-                        Dashboard
-                    </flux:navmenu.item>
-                    @else
-                    <flux:navmenu.item icon="user" href="{{ route('dashboard') }}" icon="view-columns">
-                        Dashboard
-                    </flux:navmenu.item>
+                    <flux:navbar.item href="{{ route('login') }}">Login</flux:navbar.item>
+                    @if (Route::has('register'))
+                        <flux:navbar.item href="{{ route('register') }}">Register</flux:navbar.item>
                     @endif
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <flux:navmenu.item href="#" icon="arrow-right-start-on-rectangle" href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); this.closest('form').submit();">Logout</flux:navmenu.item>
-
-                    </form>
-                </flux:navmenu>
-            </flux:dropdown>
-
-            @else
-            <flux:navbar.item href="{{ route('login') }}">Login</flux:navbar.item>
-            @if (Route::has('register'))
-            <flux:navbar.item href="{{ route('register') }}">Register</flux:navbar.item>
-            @endif
-            @endauth
+                @endauth
             @endif
 
             <flux:separator vertical variant="subtle" class="my-2" />
@@ -100,20 +104,23 @@
         <flux:navlist variant="outline">
             <flux:navlist.item icon="home" href="#" current>Home</flux:navlist.item>
             @if (Route::has('login'))
-            @auth
-            @php $user = Auth::user(); @endphp
-            @if ($user && $user->role === 'carebuddy')
-            <flux:navlist.item icon="user-circle" href="{{ route('carebuddy.dashboard') }}">Dashboard
-            </flux:navlist.item>
-            @else
-            <flux:navlist.item icon="user-circle" href="{{ route('dashboard') }}">Dashboard</flux:navlist.item>
-            @endif
-            @else
-            <flux:navlist.item icon="document-text" href="{{ route('login') }}">Login</flux:navlist.item>
-            @if (Route::has('register'))
-            <flux:navlist.item icon="calendar" href="{{ route('register') }}">Register</flux:navlist.item>
-            @endif
-            @endauth
+                @auth
+                    @php $user = Auth::user(); @endphp
+                    @if ($user && $user->role === 'carebuddy')
+                        <flux:navlist.item icon="user-circle" href="{{ route('carebuddy.dashboard') }}">Dashboard
+                        </flux:navlist.item>
+                    @elseif ($user && $user->role === 'playpal')
+                        <flux:navlist.item icon="user-circle" href="{{ route('playpal.dashboard') }}">Dashboard
+                        </flux:navlist.item>
+                    @else
+                        <flux:navlist.item icon="user-circle" href="{{ route('dashboard') }}">Dashboard</flux:navlist.item>
+                    @endif
+                @else
+                    <flux:navlist.item icon="document-text" href="{{ route('login') }}">Login</flux:navlist.item>
+                    @if (Route::has('register'))
+                        <flux:navlist.item icon="calendar" href="{{ route('register') }}">Register</flux:navlist.item>
+                    @endif
+                @endauth
             @endif
         </flux:navlist>
 

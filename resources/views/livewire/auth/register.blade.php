@@ -1,4 +1,5 @@
-<div class="w-full px-6 py-1 text-slate-900 dark:text-slate-100 bg-white shadow-xl rounded overflow-hidden register-fom">
+<div
+    class="w-full px-6 py-1 text-slate-900 dark:text-slate-100 bg-white shadow-xl rounded overflow-hidden register-fom">
     <div class="flex flex-col gap-0 md:p-12 ">
 
         <!-- Session Status -->
@@ -6,23 +7,23 @@
 
         <!-- Registration Form -->
         <form wire:submit="register" class="flex flex-col gap-6 ">
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-baseline">
-            <!-- Name -->
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name"
-                :placeholder="__('Full name')" />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-baseline">
+                <!-- Name -->
+                <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name"
+                    :placeholder="__('Full name')" />
 
-            <!-- Email -->
-            <flux:input wire:model="email" :label="__('Email address')"  type="email" required autocomplete="email"
-                placeholder="email@example.com" />
+                <!-- Email -->
+                <flux:input wire:model="email" :label="__('Email address')" type="email" required autocomplete="email"
+                    placeholder="email@example.com" />
             </div>
             <!-- Password -->
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-baseline">
-            <flux:input wire:model="password" :label="__('Password')" type="password" required
-                autocomplete="new-password" :placeholder="__('Password')" viewable hide-errors />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-baseline">
+                <flux:input wire:model="password" :label="__('Password')" type="password" required
+                    autocomplete="new-password" :placeholder="__('Password')" viewable hide-errors />
 
-            <!-- Confirm Password -->
-            <flux:input wire:model="password_confirmation" :label="__('Confirm password')" type="password" required
-                autocomplete="new-password" :placeholder="__('Confirm password')" viewable  />
+                <!-- Confirm Password -->
+                <flux:input wire:model="password_confirmation" :label="__('Confirm password')" type="password" required
+                    autocomplete="new-password" :placeholder="__('Confirm password')" viewable />
             </div>
             <!-- Role Selection -->
             <div class="flex flex-col md:gap-2">
@@ -39,11 +40,19 @@
                     </button>
 
                     <!-- CareBuddy Button -->
-                    <button type="button" wire:click="$set('role', 'carebuddy')"
+                    {{-- <button type="button" wire:click="$set('role', 'carebuddy')"
                         class="flex-1 flex flex-col items-center py-3 rounded-lg border-2 transition-all text-sm font-semibold gap-1
                         {{ $role === 'carebuddy' ? 'bg-primary text-white border-primary ring-2 ring-primary' : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700' }}">
                         <span class="text-2xl">🧑‍⚕️</span>
                         <span>{{ __('CareBuddy') }}</span>
+                    </button> --}}
+
+                    <!-- PlayPal Button -->
+                    <button type="button" wire:click="$set('role', 'playpal')"
+                        class="flex-1 flex flex-col items-center py-3 rounded-lg border-2 transition-all text-sm font-semibold gap-1
+                        {{ $role === 'playpal' ? 'bg-primary text-white border-primary ring-2 ring-primary' : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700' }}">
+                        <span class="text-2xl">🤸‍♂️</span>
+                        <span>{{ __('PlayPal') }}</span>
                     </button>
                 </div>
             </div>

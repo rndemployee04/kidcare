@@ -16,6 +16,7 @@ class Booking extends Model
         'carebuddy_earnings',
         'accepted_at',
         'duration',
+        'playpal_id'
     ];
 
     protected $casts = [
@@ -25,11 +26,17 @@ class Booking extends Model
 
     public function carebuddy()
     {
-        return $this->belongsTo(CareBuddy::class);
+        return $this->belongsTo(CareBuddy::class, 'carebuddy_id');
     }
 
     public function parent()
     {
         return $this->belongsTo(Parents::class, 'parent_id');
     }
+
+    public function playPal()
+    {
+        return $this->belongsTo(PlayPal::class, 'playpal_id');
+    }
+    
 }

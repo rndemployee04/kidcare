@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
-use Illuminate\Http\Request;
+use App\Models\Child;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use App\Models\CareBuddy;
-use Illuminate\Support\Facades\Session;
 
 class ParentController extends Controller
 {
@@ -22,37 +19,32 @@ class ParentController extends Controller
         }
 
         $parent = Auth::user()->parentProfile;
-        $booking = Booking::where('parent_id', Auth::user()->parentProfile->id)->latest()->first();
-
-        $type = '';
-        $status = $booking->status ?? 'none';
-        $dismissedKey = 'booking_dismissed_' . ($booking->id ?? 'none') . '_' . $status;
-
-        if ($booking && !session()->has($dismissedKey)) {
-            if ($booking->status === 'accepted') {
-                $type = 'success';
-                session()->flash('booking', 'Your booking has been accepted!');
-                session()->flash('alertType', $type);
-            } elseif ($booking->status === 'rejected') {
-                $type = 'error';
-                $careBuddyName = optional($booking->careBuddy->user)->name ?? 'CareBuddy';
-                $message = "Your booking #{$booking->id} was cancelled by {$careBuddyName}. Your payment will be refunded shortly.";
-                session()->flash('booking', $message);
-                session()->flash('alertType', $type);
-            }
-        }
-
-        $cancelKey = 'parent_' . $parent->id . '_booking_cancelled';
-        if (Session::has($cancelKey)) {
-            $cancelData = Session::get($cancelKey);
-            session()->flash('booking', $cancelData['message']);
-            session()->flash('alertType', $cancelData['type'] ?? 'error');
-            Session::forget($cancelKey);
-        }
 
         // Get statistics
-        $activeBookings = $parent->bookings()->where('status', 'confirmed')->count();
-        $completedBookings = $parent->bookings()->where('status', 'accepted')->count();
-        return view('parent.dashboard', compact('activeBookings', 'completedBookings'))->with('dismissedKey', $dismissedKey);
+        $activeBookings = $parent->bookings()->where('status', 'confirmed')->orWhere('status', 'accepted')->count();
+        $completedBookings = $parent->bookings()->where('status', 'completed')->count();
+
+        $bookings = Booking::with('parent.user')
+            ->where('parent_id', $parent->id)
+            ->where('status', 'confirmed')
+            ->latest()
+            ->get();
+
+        $data = [
+            'activeBookings' => $activeBookings,
+            'completedBookings' => $completedBookings,
+            'bookings' => $bookings
+        ];
+
+        return view('parent.dashboard', $data);
+    }
+
+
+
+    public function children()
+    {   
+        $user = Auth::user();
+        $children = Child::where('parent_id',$user->parentProfile->id)->get();
+        return view('parent.children.index', compact('children'));
     }
 }

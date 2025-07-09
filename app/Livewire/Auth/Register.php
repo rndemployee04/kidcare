@@ -31,7 +31,7 @@ class Register extends Component
                 'regex:/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};:\",.\/?]).+$/',
                 'max:255',
             ],
-            'role' => ['required', 'in:parent,carebuddy'],
+            'role' => ['required', 'in:parent,carebuddy,playpal'],
         ], [
             'password.min' => 'Password too short',
             'password.regex' => 'Password must include one uppercase, number, and special character',
@@ -51,8 +51,11 @@ class Register extends Component
         $user->save();
         
         // Redirect to the appropriate registration form
-        $route = $user->role === 'carebuddy' ? 'carebuddy.register' : 'parent.register';
-        $this->redirect(route($route), navigate: true);
+        match ($user->role) {
+             'parent' => $this->redirect(route('parent.register'), navigate: true),
+             'carebuddy' => $this->redirect(route('carebuddy.register'), navigate: true),
+             'playpal' => $this->redirect(route('playpal.register'), navigate: true),
+        };
     }
 
     public function render()

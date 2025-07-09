@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['parent', 'carebuddy', 'admin'])
+            $table->enum('role', ['parent', 'carebuddy', 'playpal', 'admin'])
                 ->default('parent')
                 ->after('email');
 
