@@ -62,7 +62,7 @@ class AdminController extends Controller
         if (!Auth::user() || !Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized');
         }
-        $user = User::with(['careBuddy', 'parentProfile'])->findOrFail($id);
+        $user = User::with(['careBuddy', 'parentProfile', 'playPal'])->findOrFail($id);
         return view('admin.view-application', compact('user'));
     }
 }

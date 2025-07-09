@@ -76,6 +76,27 @@ class CheckRoleAndRedirect
             
             // Registration complete and verified - go to dashboard
             return redirect()->route('parent.dashboard');
+        } elseif ($user->role === 'playpal') { 
+            // Check if registration is completed for playpal
+            if (!$user->registration_complete) {
+                // If user just registered, send them to the registration form
+                if ($request->routeIs('playpal.register')) {
+                    return $next($request);
+                }
+                return redirect()->route('playpal.registration.incomplete');
+            }
+            
+            // Check verification status for playpal
+            if ($user->verification_status !== 'approved') {
+                // If already on application status page, allow that
+                if ($request->routeIs('playpal.application.status')) {
+                    return $next($request);
+                }
+                return redirect()->route('playpal.application.status');
+            }
+            
+            // Registration complete and verified - go to dashboard
+            return redirect()->route('playpal.dashboard');
         }
 
         // If no specific role matches, continue with the request

@@ -72,4 +72,25 @@ class User extends Authenticatable
     {
         return $this->hasOne(Parents::class, 'user_id');
     }
+
+    public function playPal()
+    {
+        return $this->hasOne(PlayPal::class);
+    }
+
+    public function isPlayPal(): bool
+    {
+        return $this->role === 'playpal';
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->verification_status === 'approved';
+    }
+
+    public function isRegistrationComplete(): bool
+    {
+        return $this->registration_complete;
+    }
+
 }

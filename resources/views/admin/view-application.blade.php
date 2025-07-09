@@ -70,6 +70,29 @@
                         </div>
                     @endif
                 </div>
+            @elseif($user->role === 'playpal' && $user->playPal)
+                <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+                    <h3 class="font-semibold mb-2 text-lg text-purple-700">PlayPal Profile</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><strong>Phone:</strong> {{ $user->playPal->phone ?? '-' }}</div>
+                        <div><strong>Date of Birth:</strong> {{ $user->playPal->dob ?? '-' }}</div>
+                        <div><strong>Gender:</strong> {{ ucfirst($user->playPal->gender ?? '-') }}</div>
+                        <div class="md:col-span-2"><strong>Permanent Address:</strong>
+                            {{ $user->playPal->permanent_address ?? '-' }}</div>
+                        <div class="md:col-span-2"><strong>Current Address:</strong>
+                            {{ $user->playPal->current_address ?? '-' }}</div>
+                        <div><strong>City:</strong> {{ $user->playPal->city ?? '-' }}</div>
+                        <div><strong>State:</strong> {{ $user->playPal->state ?? '-' }}</div>
+                        <div><strong>Zip:</strong> {{ $user->playPal->zip ?? '-' }}</div>
+                    </div>
+                    @if($user->playPal->profile_photo)
+                        <div class="mt-4">
+                            <strong>Profile Photo:</strong><br>
+                            <img src="{{ asset('storage/' . $user->playPal->profile_photo) }}" alt="Profile Photo"
+                                class="h-24 w-24 rounded-full object-cover border mt-2">
+                        </div>
+                    @endif
+                </div>
             @endif
             <div class="flex space-x-4 mt-6">
                 @if($user->verification_status == 'pending')

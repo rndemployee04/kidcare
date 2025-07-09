@@ -8,7 +8,7 @@ return new class extends Migration {
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('carebuddy_id')->constrained('care_buddies')->onDelete('cascade');
+            $table->foreignId('carebuddy_id')->nullable()->constrained('care_buddies')->onDelete('cascade');
             $table->foreignId('parent_id')->constrained('parents')->onDelete('cascade');
             $table->string('status')->default('pending'); // pending, confirmed, cancelled
             $table->decimal('amount', 8, 2)->nullable();
