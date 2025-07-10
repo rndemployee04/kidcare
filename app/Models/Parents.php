@@ -56,6 +56,11 @@ class Parents extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function bankAccounts()
+    {
+        return $this->hasMany(ParentBankAccount::class, 'parent_id');
+    }
+
     public function children()
     {
         return $this->hasMany(Child::class, 'parent_id');

@@ -77,6 +77,10 @@
                         class="flex items-center p-2 mb-2 text-gray-800 hover:bg-indigo-50 rounded-lg {{ request()->routeIs('parent.children.*') ? 'bg-indigo-100' : '' }}">
                         <i class="fa-solid fa-children me-2"></i> Children
                     </a>
+                    <a href="{{ route('parent.payout') }}"
+                        class="flex items-center p-2 mb-2 text-gray-800 hover:bg-indigo-50 rounded-lg {{ request()->routeIs('parent.payout') ? 'bg-indigo-100' : '' }}">
+                        <i class="fa-solid fa-money-bill me-2"></i> Payout
+                    </a>
                     <div class="mt-8">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
