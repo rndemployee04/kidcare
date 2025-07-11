@@ -1,5 +1,5 @@
 <?php
-namespace App\Livewire\PlayPal;
+namespace App\Livewire\Playpal;
 
 use Livewire\Component;
 use App\Models\User;

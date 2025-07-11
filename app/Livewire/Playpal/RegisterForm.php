@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\PlayPal;
+namespace App\Livewire\Playpal;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
