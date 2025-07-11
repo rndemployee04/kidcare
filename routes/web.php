@@ -10,7 +10,7 @@ use App\Models\Parents;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Carebuddy\RegisterForm as CareBuddyRegisterForm;
 use App\Livewire\Parent\RegisterForm as ParentRegisterForm;
-use App\Livewire\PlayPal\RegisterForm as PlayPalRegisterForm;
+use App\Livewire\Playpal\RegisterForm as PlayPalRegisterForm;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Parent\Dashboard as ParentDashboard;
 use App\Livewire\Carebuddy\Dashboard as CarebuddyDashboard;
