@@ -93,4 +93,8 @@ class User extends Authenticatable
         return $this->registration_complete;
     }
 
+    public function payouts()
+    {
+        return $this->hasMany(Payout::class);
+    }
 }

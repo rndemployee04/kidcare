@@ -19,6 +19,8 @@ use App\Http\Controllers\PlayPalBookingController;
 
 // Parent dashboard and routes
 Route::prefix('parent')->name('parent.')->middleware(['auth', 'parent.verified'])->group(function () {
+    Route::get('/payout', [\App\Http\Controllers\ParentController::class, 'payout'])->name('payout');
+    Route::post('/payout/transfer', [\App\Http\Controllers\ParentController::class, 'transferPayout'])->name('payout.transfer');
     Route::get('/dashboard', 'App\Http\Controllers\ParentController@dashboard')->name('dashboard');
     Route::get('/profile', [\App\Http\Controllers\ParentProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [\App\Http\Controllers\ParentProfileController::class, 'update'])->name('profile.update');

@@ -8,8 +8,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-
-return function (Schedule $schedule) {
-    // Run every 5 minutes
-    $schedule->job(new CheckBookingCompletions())->everyFiveMinutes();
-};
+Schedule::job(new CheckBookingCompletions)->everyFiveMinutes();

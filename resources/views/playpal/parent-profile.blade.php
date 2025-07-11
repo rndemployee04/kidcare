@@ -20,13 +20,13 @@
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
+                {{-- <div>
                     <div class="text-[16px] text-[#00bbae] font-semibold mb-1 uppercase">Contact</div>
                     <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-envelope"></i>
                         {{ (string) ($email ?? 'N/A') }}</div>
                     <div class="flex items-center gap-2 text-sm"><i class="fa fa-phone"></i>
                         {{ (string) ($phone ?? 'N/A') }}</div>
-                </div>
+                </div> --}}
                 <div>
                     <div class="text-[16px] text-[#00bbae] font-semibold mb-1 uppercase">Personal</div>
                     <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-venus-mars"></i>
@@ -40,7 +40,7 @@
                         @endif
                     </div>
                 </div>
-                <div>
+                {{-- <div>
                     <div class="text-[16px] text-[#00bbae] font-semibold mb-1 uppercase">Location</div>
                     <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-location-dot"></i>
                         {{ (string) ($current_address ?? 'N/A') }}</div>
@@ -48,7 +48,7 @@
                         {{ (string) ($city ?? 'N/A') }}</div>
                     <div class="flex items-center gap-2 text-sm"><i class="fa fa-map"></i>
                         {{ (string) ($state ?? 'N/A') }}</div>
-                </div>
+                </div> --}}
                 <div>
                     <div class="text-[16px] text-[#00bbae] font-semibold mb-1 uppercase">Service</div>
                     <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-ruler-horizontal"></i> Radius:
