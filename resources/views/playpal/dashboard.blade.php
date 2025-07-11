@@ -121,7 +121,8 @@
         <div class="mt-8">
             <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Recommended Parents</h3>
-                @livewire('playpal.parent-recomendation')
+                {{-- @livewire('playpal.parent-recomendation') --}}
+                <livewire:playpal.parent-recomendation>
             </div>
         </div>
 </x-playpal.layouts.playpal>
