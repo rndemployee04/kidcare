@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\PlayPal;
+namespace App\Livewire\Playpal;
 
 use App\Models\Booking;
 use Illuminate\Database\Eloquent\Builder;
