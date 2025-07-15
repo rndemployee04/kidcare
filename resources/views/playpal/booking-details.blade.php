@@ -66,53 +66,146 @@
                 </div>
 
                 <!-- Parent Details -->
+                
                 <div class="bg-gray-50 rounded-lg p-6">
                     <h3 class="text-xl font-semibold mb-4">Parent Details</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                         <div>
                             <p class="text-gray-600 mb-1">Name</p>
                             <span class="font-medium">{{ $booking->parent->user->name }}</span>
                         </div>
+
                         <div>
                             <p class="text-gray-600 mb-1">Email</p>
                             <span class="font-medium">{{ $booking->parent->user->email }}</span>
                         </div>
+
                         <div>
                             <p class="text-gray-600 mb-1">Phone</p>
                             <span class="font-medium">{{ $booking->parent->phone }}</span>
                         </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Gender</p>
+                            <span class="font-medium">{{ ucfirst($booking->parent->gender ?? 'N/A') }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Date of Birth</p>
+                            <span
+                                class="font-medium">{{ $booking->parent->dob ? \Carbon\Carbon::parse($booking->parent->dob)->format('d M Y') : 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Profession</p>
+                            <span class="font-medium">{{ $booking->parent->profession ?? 'N/A' }}</span>
+                        </div>
+
                         <div>
                             <p class="text-gray-600 mb-1">Number of Children</p>
-                            <span class="font-medium">{{ $booking->parent->number_of_children }}</span>
+                            <span class="font-medium">{{ $booking->parent->number_of_children ?? 'N/A' }}</span>
                         </div>
+
                         <div>
-                            <p class="text-gray-600 mb-1">Duration</p>
+                            <p class="text-gray-600 mb-1">Children Needing Care</p>
+                            <span class="font-medium">{{ $booking->parent->number_needing_care ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Preferred Drop-off Time</p>
                             <span class="font-medium">
-
-                                @php $duration = json_decode($booking->duration, true); @endphp
-
-                                @if ($duration)
-                                    @if ($duration['type'] === 'time')
-                                        {{ \Carbon\Carbon::createFromFormat('H:i', $duration['start'])->format('g:i A') }}
-                                        for {{ $duration['hours'] }} hour{{ $duration['hours'] > 1 ? 's' : '' }}
-                                    @elseif ($duration['type'] === 'date')
-                                        {{ \Carbon\Carbon::parse($duration['start'])->format('d M Y') }}
-                                        to {{ \Carbon\Carbon::parse($duration['end'])->format('d M Y') }}
-                                    @elseif ($duration['type'] === 'week')
-                                        @php
-                                            $weekStart = \Carbon\Carbon::parse($duration['week']);
-                                            $weekEnd = $weekStart->copy()->addDays(6);
-                                        @endphp
-                                        Week of {{ $weekStart->format('d M Y') }} to {{ $weekEnd->format('d M Y') }}
-                                    @else
-                                        <span class="text-gray-500 italic">Invalid Duration</span>
-                                    @endif
-                                @else
-                                    <span class="text-gray-500 italic">Not Available</span>
-                                @endif
-
+                                {{ $booking->parent->preferred_drop_off_time ?? 'N/A' }}
                             </span>
                         </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Caregiver Preference</p>
+                            <span
+                                class="font-medium">{{ $booking->parent->preferred_type_of_caregiver ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Preferred Radius (km)</p>
+                            <span class="font-medium">{{ $booking->parent->preferred_radius ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Special Needs Support</p>
+                            <span
+                                class="font-medium">{{ $booking->parent->needs_special_needs_support ? 'Yes' : 'No' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Reason for Service</p>
+                            <span class="font-medium">{{ $booking->parent->reason_for_service ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Emergency Contact Name</p>
+                            <span class="font-medium">{{ $booking->parent->emergency_contact_name ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Emergency Contact Phone</p>
+                            <span class="font-medium">{{ $booking->parent->emergency_contact_phone ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Spouse Name</p>
+                            <span class="font-medium">{{ $booking->parent->spouse_name ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Spouse Email</p>
+                            <span class="font-medium">{{ $booking->parent->spouse_email ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Spouse Phone</p>
+                            <span class="font-medium">{{ $booking->parent->spouse_phone ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Spouse Profession</p>
+                            <span class="font-medium">{{ $booking->parent->spouse_profession ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Monthly Income</p>
+                            <span class="font-medium">${{ $booking->parent->monthly_income ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Permanent Address</p>
+                            <span class="font-medium">{{ $booking->parent->permanent_address ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Current Address</p>
+                            <span class="font-medium">{{ $booking->parent->current_address ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">City</p>
+                            <span class="font-medium">{{ $booking->parent->city ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">State</p>
+                            <span class="font-medium">{{ $booking->parent->state ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">ZIP</p>
+                            <span class="font-medium">{{ $booking->parent->zip ?? 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600 mb-1">Terms Accepted</p>
+                            <span class="font-medium">{{ $booking->parent->terms_accepted ? 'Yes' : 'No' }}</span>
+                        </div>
+
                         @if($booking->parent->profile_photo)
                             <div class="col-span-2">
                                 <p class="text-gray-600 mb-1">Profile Photo</p>
@@ -121,8 +214,20 @@
                                     class="w-48 h-48 rounded-lg object-cover">
                             </div>
                         @endif
+
+                        @if($booking->parent->id_proof_path)
+                            <div class="col-span-2">
+                                <p class="text-gray-600 mb-1">ID Proof</p>
+                                <a href="{{ asset('storage/' . $booking->parent->id_proof_path) }}" target="_blank"
+                                    class="text-blue-600 hover:underline">
+                                    View ID Proof
+                                </a>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
+
 
                 <!-- Booking Timeline -->
                 <div class="bg-gray-50 rounded-lg p-6">

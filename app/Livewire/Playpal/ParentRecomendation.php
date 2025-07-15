@@ -105,12 +105,13 @@ class ParentRecomendation extends Component
     public function render()
     {
         $user = auth()->user();
+        $playpal = $user && $user->isPlayPal() ? $user->playPal : null;
         $bookedParentIds = [];
         if ($user && $user->isPlayPal() && $user->playPal) {
             $playpalProfileId = $user->playPal->id;
             $bookedParentIds = Booking::where('playpal_id', $playpalProfileId)
                 ->where('status', '!=', 'rejected')
-                ->where('status', '!=', 'completed')
+                ->where('status', '!=', 'accepted')
                 ->pluck('parent_id')->toArray();
         }
 
@@ -119,6 +120,21 @@ class ParentRecomendation extends Component
         $query->whereHas('user', function ($q) {
             $q->where('verification_status', 'approved');
         });
+
+        if ($playpal) {
+            // Match caregiver type (PlayPal category to parent's preferred caregiver)
+            $query->where(function ($q) use ($playpal) {
+                $q->where('preferred_type_of_caregiver', 'like', "%{$playpal->category}%")
+                    ->orWhereNull('preferred_type_of_caregiver');
+            });
+
+            // Match radius (playpal provides service within parent's preferred radius)
+            $query->where(function ($q) use ($playpal) {
+                $q->whereNull('preferred_radius') // no preference
+                    ->orWhere('preferred_radius', '<=', $playpal->service_radius);
+            });
+        }
+
         // Exclude already booked parents
         if (!empty($bookedParentIds)) {
             $query->whereNotIn('id', $bookedParentIds);

@@ -42,43 +42,30 @@
                         <span class="text-gray-600 font-medium">Total Amount</span>
                         <span class="font-bold text-green-600 text-lg">${{ $amount ?? '500' }}</span>
                     </div>
-            
-                    <div x-data="{ durationType: '', timeStart: '', hours: '', dateStart: '', dateEnd: '' }"
-                        class="flex items-center justify-between py-2">
-                        <span class="text-gray-600 font-medium">Duration</span>
 
-                        <div class="flex flex-col gap-2 w-[70%]">
-                            <!-- Duration Type Dropdown -->
-                            <select x-model="durationType" name="duration_type"
-                                class="border rounded p-1 text-gray-900">
-                                <option value="" disabled selected>Select Type</option>
-                                <option value="time">Time</option>
-                                <option value="date">Date</option>
-                                <option value="week">Week</option>
-                            </select>
+                    @php
+                        $playpal = Auth::user()->isPlayPal() ? Auth::user()->playPal : null;
+                        $preferredSlot = $parent->preferred_drop_off_time; // single string
+                        $availableSlots = $playpal->availability ?? [];
+                        $isAvailable = in_array($preferredSlot, $availableSlots);
+                    @endphp
 
-                            <!-- Time: Start time and number of hours -->
-                            <div x-show="durationType === 'time'" class="flex gap-2">
-                                <input type="time" x-model="timeStart" name="time_start"
-                                    class="border rounded p-1 text-gray-900 w-1/2" placeholder="Start Time">
-                                <input type="number" min="1" x-model="hours" name="time_hours"
-                                    class="border rounded p-1 text-gray-900 w-1/2" placeholder="Duration (hours)">
-                            </div>
-
-                            <!-- Date Range: Start date to end date -->
-                            <div x-show="durationType === 'date'" class="flex gap-2">
-                                <input type="date" x-model="dateStart" name="date_start"
-                                    class="border rounded p-1 text-gray-900 w-1/2">
-                                <input type="date" x-model="dateEnd" name="date_end"
-                                    class="border rounded p-1 text-gray-900 w-1/2">
-                            </div>
-
-                            <!-- Week Input -->
-                            <div x-show="durationType === 'week'">
-                                <input type="week" name="duration_week" class="border rounded p-1 text-gray-900 w-full">
-                            </div>
-                        </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-gray-600 font-medium">Preferred Time Slot</span>
+                        <span class="font-bold {{ $isAvailable ? 'text-blue-600' : 'text-red-500' }}">
+                            {{ ucfirst($preferredSlot) }}
+                        </span>
                     </div>
+
+                    <input type="hidden" name="preferred_slot" value="{{ $preferredSlot }}">
+
+                    @if (!$isAvailable)
+                        <div class="text-red-600 text-sm mt-2 font-medium">
+                            You are not available at the parent's preferred time. Please update your availability or choose
+                            a different parent.
+                        </div>
+                    @endif
+
                 </div>
 
                 <input type="hidden" name="amount" value="{{ $amount ?? '500' }}">

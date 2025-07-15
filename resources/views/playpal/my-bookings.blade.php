@@ -8,7 +8,7 @@
                         <th class="py-2">Playpal</th>
                         <th class="py-2">Amount</th>
                         <th class="py-2">Status</th>
-                        <th class="py-2">Duration</th>
+                        <th class="py-2">Slot</th>
                         <th class="py-2">Paid At</th>
                         <th class="py-2">Actions</th>
                     </tr>
@@ -34,7 +34,11 @@
                             <td class="py-2">
                                 @php $duration = json_decode($booking->duration, true); @endphp
 
-                                @if ($duration)
+                                @if ($duration && isset($duration['type']) && $duration['type'] === 'auto')
+                                    <span class="text-indigo-600 font-semibold capitalize">
+                                        {{ $duration['matched_slot'] }}
+                                    </span>
+                                @elseif ($duration)
                                     @if ($duration['type'] === 'time')
                                         {{ \Carbon\Carbon::createFromFormat('H:i', $duration['start'])->format('g:i A') }}
                                         for {{ $duration['hours'] }} hour{{ $duration['hours'] > 1 ? 's' : '' }}
@@ -48,12 +52,13 @@
                                         @endphp
                                         Week of {{ $weekStart->format('d M Y') }} to {{ $weekEnd->format('d M Y') }}
                                     @else
-                                        <span class="text-gray-500 italic">Invalid Duration</span>
+                                        <span class="text-gray-500 italic">Unknown</span>
                                     @endif
                                 @else
                                     <span class="text-gray-500 italic">Not Available</span>
                                 @endif
                             </td>
+
 
                             <td class="py-2">{{ $booking->paid_at ? $booking->paid_at->format('d M Y H:i') : '-' }}
                             </td>
