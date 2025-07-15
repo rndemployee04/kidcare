@@ -125,6 +125,7 @@ class ParentRecomendation extends Component
             // Match caregiver type (PlayPal category to parent's preferred caregiver)
             $query->where(function ($q) use ($playpal) {
                 $q->where('preferred_type_of_caregiver', 'like', "%{$playpal->category}%")
+                    ->orWhere('preferred_type_of_caregiver','like','any')
                     ->orWhereNull('preferred_type_of_caregiver');
             });
 
