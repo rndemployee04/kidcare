@@ -30,7 +30,7 @@
                         <option value="{{ $i }}">{{ $i }}</option>
                     @endfor
                 </select>
-                <select wire:model="children_needing each_care" class="px-3 py-2 border rounded-lg min-w-[110px]">
+                <select wire:model="children_needing_care" class="px-3 py-2 border rounded-lg min-w-[110px]">
                     <option value="any">Any Needing Care</option>
                     @for ($i = 1; $i <= 10; $i++)
                         <option value="{{ $i }}">{{ $i }}</option>

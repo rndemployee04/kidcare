@@ -30,11 +30,11 @@
                 <div>
                     <div class="text-[16px] text-[#00bbae] font-semibold mb-1 uppercase">Personal</div>
                     <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-venus-mars"></i>
-                        {{ (string) ($gender ?? 'N/A') }}</div>
+                       Gender: {{ (string) (ucfirst($gender) ?? 'N/A') }}</div>
                     <div class="flex items-center gap-2 text-sm"><i class="fa fa-cake-candles"></i>
                         @php $dobValue = isset($dob) ? $dob : (isset($playpal_dob) ? $playpal_dob : null); @endphp
                         @if (!empty($dobValue))
-                            {{ \Carbon\Carbon::parse($dobValue)->format('d M Y') }}
+                            Date of Birth: {{ \Carbon\Carbon::parse($dobValue)->format('d M Y') }}
                         @else
                             N/A
                         @endif
@@ -54,10 +54,10 @@
                     <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-ruler-horizontal"></i> Radius:
                         {{ (string) ($service_radius ?? 'N/A') }}
                     </div>
-                    <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-child"></i> Age Limit:
-                        {{ (string) ($child_age_limit ?? 'N/A') }}
+                    <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-child"></i> Number of Needing Care:
+                        {{ (int) ($number_needing_care ?? 'N/A') }}
                     </div>
-                    <div class="flex items-center gap-2 text-sm"><i class="fa fa-calendar-check"></i> Availability:
+                    <div class="flex items-center gap-2 text-sm"><i class="fa fa-calendar-check"></i> Droff off Time:
                         {{ is_array($availability) ? implode(', ', $availability) : (string) ($availability ?? 'N/A') }}
                     </div>
                 </div>
@@ -73,20 +73,12 @@
                             <span class="text-gray-400 ml-1">N/A</span>
                         @endif
                     </div>
-                    <div class="flex items-center gap-2 text-sm"><i class="fa fa-camera"></i> Selfie:
-                        @if (!empty($selfie_path))
-                            <a href="{{ asset('storage/' . $selfie_path) }}" class="text-orange-500 underline ml-1"
-                                target="_blank">View</a>
-                        @else
-                            <span class="text-gray-400 ml-1">N/A</span>
-                        @endif
-                    </div>
                 </div>
                 <div>
                     <div class="text-[16px] text-[#00bbae] font-semibold mb-1 uppercase">Verification</div>
-                    <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-shield-heart"></i> Insurance:
+                    {{-- <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-shield-heart"></i> Insurance:
                         {{ isset($willing_to_take_insurance) ? ($willing_to_take_insurance ? 'Yes' : 'No') : 'N/A' }}
-                    </div>
+                    </div> --}}
                     <div class="flex items-center gap-2 text-sm mb-1"><i class="fa fa-user-check"></i> Status:
                         @php
                             $status = $user->verification_status ?? 'N/A';
