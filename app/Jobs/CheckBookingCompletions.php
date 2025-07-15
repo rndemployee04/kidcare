@@ -29,7 +29,7 @@ class CheckBookingCompletions implements ShouldQueue
     {
         $now = Carbon::now();
 
-        $bookings = Booking::where('status', 'accepted')->get();
+        $bookings = Booking::where('status', 'confirmed')->get();
 
         foreach ($bookings as $booking) {
             $duration = json_decode($booking->duration, true);
@@ -61,7 +61,7 @@ class CheckBookingCompletions implements ShouldQueue
             }
 
             if ($end && $now->greaterThan($end)) {
-                $booking->update(['status' => 'completed']);
+                $booking->update(['status' => 'accepted']);
             }
         }
     }

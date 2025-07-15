@@ -15,7 +15,7 @@ class PlayPalBookingController extends Controller
 
         $request->validate([
             'amount' => 'required',
-            'duration_type' => 'required',
+            'preferred_slot' => 'required',
         ]);
 
         Log::info('Booking POST hit!', ['user_id' => Auth::id(), 'parent_id' => $id]);
@@ -33,25 +33,25 @@ class PlayPalBookingController extends Controller
         $existing = Booking::where('playpal_id', $playpal->id)
             ->where('parent_id', $parent->id)
             ->where('status', '!=', 'rejected')
-            ->where('status','!=' ,'completed')
+            ->where('status', '!=', 'accepted')
             ->first();
+
         if ($existing) {
             return redirect()->back()->with('error', 'You have already booked this parent.');
         }
 
-        $durationType = $request->input('duration_type');
-        $duration = ['type' => $durationType];
-
-        if ($durationType === 'time') {
-            $duration['start'] = $request->input('time_start');
-            $duration['hours'] = $request->input('time_hours');
-        } elseif ($durationType === 'date') {
-            $duration['start'] = $request->input('date_start');
-            $duration['end'] = $request->input('date_end');
-        } elseif ($durationType === 'week') {
-            $duration['week'] = $request->input('duration_week');
+        $preferredSlot = $request->input('preferred_slot'); // e.g. 'morning'
+        $playpalAvailability = $playpal->availability ?? [];
+        
+        if (!in_array($preferredSlot, $playpalAvailability)) {
+            return redirect()->back()->with('error', 'You are not available at the parent\'s preferred drop-off time.');
         }
 
+        $duration = [
+            'type' => 'auto',
+            'matched_slot' => $preferredSlot,
+        ];
+        
         $duration_json = json_encode($duration);
 
         $booking = Booking::create([

@@ -44,7 +44,7 @@ class AdminController extends Controller
         $user->verification_status = 'approved';
         $user->save();
         
-        return redirect()->back()->with('success', 'User approved successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'User approved successfully.');
     }
 
     public function rejectUser($id)
@@ -53,7 +53,7 @@ class AdminController extends Controller
         $user->verification_status = 'rejected';
         $user->save();
         
-        return redirect()->back()->with('error', 'User rejected.');
+        return redirect()->route('admin.dashboard')->with('error', 'User rejected.');
     }
 
     public function viewApplication($id)

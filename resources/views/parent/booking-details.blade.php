@@ -98,42 +98,65 @@
                             <span class="font-medium">{{ $booking->playpal->phone }}</span>
                         </div>
                         <div>
-                            <p class="text-gray-600 mb-1">Duration</p>
+                            <p class="text-gray-600 mb-1">Gender</p>
+                            <span class="font-medium">{{ ucfirst($booking->playpal->gender) }}</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">Date of Birth</p>
+                            <span
+                                class="font-medium">{{ \Carbon\Carbon::parse($booking->playpal->dob)->format('F j, Y') }}</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">City</p>
+                            <span class="font-medium">{{ $booking->playpal->city }}</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">State</p>
+                            <span class="font-medium">{{ $booking->playpal->state }}</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">Zip Code</p>
+                            <span class="font-medium">{{ $booking->playpal->zip }}</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">Permanent Address</p>
+                            <span class="font-medium">{{ $booking->playpal->permanent_address }}</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">Current Address</p>
+                            <span class="font-medium">{{ $booking->playpal->current_address }}</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">Service Radius</p>
+                            <span class="font-medium">{{ $booking->playpal->service_radius }} km</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">Child Age Limit</p>
+                            <span class="font-medium">{{ $booking->playpal->child_age_limit }}</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">Willing to Take Insurance</p>
                             <span class="font-medium">
-
-                                @php $duration = json_decode($booking->duration, true); @endphp
-
-                                @if ($duration)
-                                    @if ($duration['type'] === 'time')
-                                        {{ \Carbon\Carbon::createFromFormat('H:i', $duration['start'])->format('g:i A') }}
-                                        for {{ $duration['hours'] }} hour{{ $duration['hours'] > 1 ? 's' : '' }}
-                                    @elseif ($duration['type'] === 'date')
-                                        {{ \Carbon\Carbon::parse($duration['start'])->format('d M Y') }}
-                                        to {{ \Carbon\Carbon::parse($duration['end'])->format('d M Y') }}
-                                    @elseif ($duration['type'] === 'week')
-                                        @php
-                                            $weekStart = \Carbon\Carbon::parse($duration['week']);
-                                            $weekEnd = $weekStart->copy()->addDays(6);
-                                        @endphp
-                                        Week of {{ $weekStart->format('d M Y') }} to {{ $weekEnd->format('d M Y') }}
-                                    @else
-                                        <span class="text-gray-500 italic">Invalid Duration</span>
-                                    @endif
-                                @else
-                                    <span class="text-gray-500 italic">Not Available</span>
-                                @endif
-
+                                {{ $booking->playpal->willing_to_take_insurance ? 'Yes' : 'No' }}
                             </span>
                         </div>
                         <div>
-                            <p class="text-gray-600 mb-1">Background Check</p>
+                            <p class="text-gray-600 mb-1">Background Check Consent</p>
                             <span class="font-medium">
-                                @if($booking->playpal->background_check_consent)
-                                    <span class="text-green-600">✓ Cleared</span>
-                                @else
-                                    <span class="text-yellow-600">Pending</span>
-                                @endif
+                                {{ $booking->playpal->background_check_consent ? 'Given' : 'Not Given' }}
                             </span>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="text-gray-600 mb-1">Availability Slots</p>
+                            @if ($booking->playpal->availability && is_array($booking->playpal->availability))
+                                <ul class="list-disc list-inside text-sm text-gray-800">
+                                    @foreach ($booking->playpal->availability as $slot)
+                                        <li class="capitalize">{{ $slot }}</li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <span class="text-gray-500 italic">Not Provided</span>
+                            @endif
                         </div>
                         @if($booking->playpal->profile_photo)
                             <div class="col-span-2">

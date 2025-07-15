@@ -28,32 +28,90 @@
         <h2 class="text-xl font-semibold mb-6 border-b border-slate-200 dark:border-slate-700 pb-2">Personal Information
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach ([['phone', 'Phone'], ['dob', 'Date of Birth']] as [$field, $label])
-                <div>
-                    <label for="{{ $field }}" class="block mb-1 text-sm font-medium">{{ $label }} <span
-                            class="text-red-500">*</span></label>
-                    <input type="{{ $field === 'dob' ? 'date' : 'text' }}" wire:model.defer="{{ $field }}" id="{{ $field }}"
-                        class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
-                        required @if($field === 'phone') oninput="{
+            {{-- @foreach ([['phone', 'Phone'], ['dob', 'Date of Birth']] as [$field, $label])
+            <div>
+                <label for="{{ $field }}" class="block mb-1 text-sm font-medium">{{ $label }} <span
+                        class="text-red-500">*</span></label>
+                <input type="{{ $field === 'dob' ? 'date' : 'text' }}" wire:model.defer="{{ $field }}" id="{{ $field }}"
+                    class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+                    required @if($field==='phone' ) oninput="{
                                 const maxLength = 13;
                                 if (this.value.length > maxLength) {
                                     this.value = this.value.slice(0, maxLength);
                                 }
                                 this.value = this.value.replace(/[^0-9]/g, '');
                             }" maxlength="13" pattern="[0-9]*" title="Please enter a valid phone number (10-13 digits)"
-                        @endif />
+                    @endif />
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    @if ($field === 'phone')
+                    Enter a mobile number (10-13 digits) for contact and verification.
+                    @elseif ($field === 'dob')
+                    Your date of birth helps us verify your eligibility.
+                    @endif
+                </p>
+                @error($field)
+                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            @endforeach --}}
+
+
+
+            <div>
+                {{-- Phone Field --}}
+                <div class="mb-4">
+                    <label for="phone" class="block mb-1 text-sm font-medium">
+                        Phone <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" wire:model.defer="phone" id="phone" maxlength="13" pattern="[0-9]*"
+                        title="Please enter a valid phone number (10-13 digits)"
+                        class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+                        oninput="
+                const maxLength = 13;
+                if (this.value.length > maxLength) {
+                    this.value = this.value.slice(0, maxLength);
+                }
+                this.value = this.value.replace(/[^0-9]/g, '');
+            " required />
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                        @if ($field === 'phone')
-                            Enter a mobile number (10-13 digits) for contact and verification.
-                        @elseif ($field === 'dob')
-                            Your date of birth helps us verify your eligibility.
-                        @endif
+                        Enter a mobile number (10-13 digits) for contact and verification.
                     </p>
-                    @error($field)
+                    @error('phone')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-            @endforeach
+
+                {{-- DOB Field with Alpine Validation --}}
+                <div x-data="{
+                            dob: '',
+                            showDobError: false,
+                            validateDob() {
+                                const dobDate = new Date(this.dob);
+                                const today = new Date();
+                                const minDob = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                                this.showDobError = dobDate > minDob;
+                            }
+                    }" class="mb-4">
+                    <label for="dob" class="block mb-1 text-sm font-medium">
+                        Date of Birth <span class="text-red-500">*</span>
+                    </label>
+                    <input type="date" wire:model.defer="dob" id="dob" x-model="dob" x-on:change="validateDob()"
+                        required
+                        class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" />
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                        Your date of birth helps us verify your eligibility.
+                    </p>
+                    <p x-show="showDobError" class="text-sm text-red-500 mt-1">
+                        You must be at least 18 years old.
+                    </p>
+                    @error('dob')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+
+
+                </div>
+            </div>
+
             <div>
                 <label for="gender" class="block mb-1 text-sm font-medium">Gender <span
                         class="text-red-500">*</span></label>
@@ -215,11 +273,11 @@
                     <input type="number" wire:model.defer="{{ $field }}" id="{{ $field }}"
                         class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
                         required min="1" max="10" oninput="{
-                                    const max = 10;
-                                    if (this.value > max) {
-                                        this.value = max;
-                                    }
-                                }" />
+                                            const max = 10;
+                                            if (this.value > max) {
+                                                this.value = max;
+                                            }
+                                        }" />
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
                         @if ($field === 'number_of_children')
                             Total children you have (1-10).
