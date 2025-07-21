@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserRegisterMail;
 #[Layout('components.layouts.auth')]
 class Register extends Component
 {
@@ -37,7 +38,7 @@ class Register extends Component
             'password.regex' => 'Password must include one uppercase, number, and special character',
             'password.confirmed' => 'Passwords don\'t match',
         ]);
-
+        $unhashedPass = $validated['password'];
         $validated['password'] = Hash::make($validated['password']);
         $validated['verification_status'] = 'pending';
 
@@ -49,7 +50,12 @@ class Register extends Component
         // After registration, mark registration as incomplete
         $user->registration_complete = false;
         $user->save();
-        
+
+        try {
+            Mail::to($user->email)->send(new UserRegisterMail($user, $unhashedPass));
+        } catch (\Throwable $th) {
+            \Log::error('Failed to send registration email', ['user' => $user, 'error' => $th]);
+        }
         // Redirect to the appropriate registration form
         match ($user->role) {
              'parent' => $this->redirect(route('parent.register'), navigate: true),

@@ -111,7 +111,7 @@ class ParentRecomendation extends Component
             $playpalProfileId = $user->playPal->id;
             $bookedParentIds = Booking::where('playpal_id', $playpalProfileId)
                 ->where('status', '!=', 'rejected')
-                ->where('status', '!=', 'accepted')
+                ->where('status', '!=', 'completed')
                 ->pluck('parent_id')->toArray();
         }
 

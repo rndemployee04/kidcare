@@ -43,7 +43,8 @@ return new class extends Migration {
             // Preferences
             $table->enum('service_radius', ['2-3', '3-4', '4-5']);
             $table->enum('child_age_limit', ['2-3', '3-5', '5-8', '8-10', 'all']);
-            $table->json('availability')->default(json_encode(['full_day'])); // morning, afternoon, full-day, etc.
+            $table->json('availability')->nullable(); // morning, afternoon, full-day, etc.
+            // $table->json('availability')->default(json_encode(['full_day'])); // morning, afternoon, full-day, etc.
 
             $table->boolean('willing_to_take_insurance')->default(false);
             $table->boolean('terms_accepted')->default(false);

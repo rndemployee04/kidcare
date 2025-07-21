@@ -7,6 +7,9 @@ use App\Models\CareBuddy;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Session;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingMail;
+use App\Mail\BookingMailStatusMail;
 
 class ParentBookingController extends Controller
 {
@@ -81,6 +84,9 @@ class ParentBookingController extends Controller
             'status' => 'accepted',
         ]);
 
+        // On status change (accept/reject/complete)
+        Mail::to($booking->playPal->user->email)->send(new BookingMailStatusMail($booking, $booking->parent, $booking->playPal, 'accepted'));
+
         return redirect()->route('parent.bookings');
     }
 
@@ -91,6 +97,9 @@ class ParentBookingController extends Controller
         $booking->update([
             'status' => 'rejected',
         ]);
+
+        // On status change (accept/reject/complete)
+        Mail::to($booking->playPal->user->email)->send(new BookingMailStatusMail($booking, $booking->parent, $booking->playPal, 'rejected'));
 
         // Store a message in the session for the parent to see
         // This will be stored in the database and retrieved when the parent views their dashboard

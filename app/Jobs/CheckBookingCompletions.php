@@ -28,8 +28,9 @@ class CheckBookingCompletions implements ShouldQueue
     public function handle(): void
     {
         $now = Carbon::now();
+        $today = Carbon::today();
 
-        $bookings = Booking::where('status', 'confirmed')->get();
+        $bookings = Booking::where('status', 'accepted')->get();
 
         foreach ($bookings as $booking) {
             $duration = json_decode($booking->duration, true);
@@ -58,10 +59,28 @@ class CheckBookingCompletions implements ShouldQueue
                         $end = $start->copy()->addDays(6)->endOfDay();
                     }
                     break;
+                case 'auto':
+                    if (isset($duration['matched_slot'])) {
+                        $slot = strtolower($duration['matched_slot']);
+
+                        // Define slot end times (customize as needed)
+                        $slotEndTimes = [
+                            'morning' => '12:00:00',
+                            'afternoon' => '16:00:00',
+                            'evening' => '20:00:00',
+                        ];
+
+                        if (array_key_exists($slot, $slotEndTimes)) {
+                            $end = Carbon::parse($today->format('Y-m-d') . ' ' . $slotEndTimes[$slot]);
+                        }
+                    }
+                    break;
             }
 
             if ($end && $now->greaterThan($end)) {
-                $booking->update(['status' => 'accepted']);
+                $booking->update(['status' => 'completed']);
+                $booking->save();
+                logger("Booking #{$booking->id} marked completed at {$now} (slot end: {$end})");
             }
         }
     }
