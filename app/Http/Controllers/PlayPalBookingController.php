@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use Auth;
 use Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingMail;
+
 class PlayPalBookingController extends Controller
 {
     public function store(Request $request, $id)
@@ -33,7 +36,7 @@ class PlayPalBookingController extends Controller
         $existing = Booking::where('playpal_id', $playpal->id)
             ->where('parent_id', $parent->id)
             ->where('status', '!=', 'rejected')
-            ->where('status', '!=', 'accepted')
+            ->where('status', '!=', 'completed')
             ->first();
 
         if ($existing) {
@@ -62,6 +65,12 @@ class PlayPalBookingController extends Controller
             'paid_at' => Carbon::now(),
             'duration' => $duration_json,
         ]);
+
+       // Send to PlayPal (confirmation)
+        Mail::to($playpal->user->email)->send(new BookingMail($booking, $playpal->user));
+
+        // Send to Parent (notification)
+        Mail::to($parent->user->email)->send(new BookingMail($booking, $parent->user));
 
         return redirect()->route('playpal.payment.success');
     }
