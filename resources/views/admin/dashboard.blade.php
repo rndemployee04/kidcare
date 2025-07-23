@@ -158,6 +158,9 @@
                                                 <a href="{{ route('admin.reject', $user->id) }}"
                                                     class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Revoke
                                                     Approval</a>
+                                                <a href="{{ route('admin.viewApplication', $user->id) }}"
+                                                    class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    View</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -232,6 +235,9 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <a href="{{ route('admin.approve', $user->id) }}"
                                                     class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Approve</a>
+                                                <a href="{{ route('admin.viewApplication', $user->id) }}"
+                                                    class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    View</a>
                                             </td>
                                         </tr>
                                     @endforeach
