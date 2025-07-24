@@ -68,11 +68,11 @@
                             <div><strong class="font-semibold text-gray-900">Gender:</strong> {{ ucfirst($user->parentProfile->gender) }}</div>
                         @endif
                         @if($user->parentProfile->permanent_address)
-                            <div class="md:col-span-2"><strong class="font-semibold text-gray-900">Permanent Address:</strong>
+                            <div><strong class="font-semibold text-gray-900">Permanent Address:</strong>
                                 {{ $user->parentProfile->permanent_address }}</div>
                         @endif
                         @if($user->parentProfile->current_address)
-                            <div class="md:col-span-2"><strong class="font-semibold text-gray-900">Current Address:</strong>
+                            <div><strong class="font-semibold text-gray-900">Current Address:</strong>
                                 {{ $user->parentProfile->current_address }}</div>
                         @endif
                         @if($user->parentProfile->city)
@@ -122,7 +122,7 @@
                                 {{ $user->parentProfile->needs_special_needs_support ? 'Yes' : 'No' }}</div>
                         @endif
                         @if($user->parentProfile->reason_for_service)
-                            <div class="md:col-span-2"><strong class="font-semibold text-gray-900">Reason for Service:</strong>
+                            <div><strong class="font-semibold text-gray-900">Reason for Service:</strong>
                                 {{ $user->parentProfile->reason_for_service }}</div>
                         @endif
                         @if($user->parentProfile->emergency_contact_name)
@@ -140,20 +140,23 @@
                                 {{ implode(', ', $user->parentProfile->children_ages) }}</div>
                         @endif
                     </div>
+                  
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
                     @if($user->parentProfile->profile_photo)
-                        <div class="mt-6">
+                        <div class="p-0">
                             <strong class="font-semibold text-gray-900">Profile Photo:</strong><br>
                             <img src="{{ asset('storage/' . $user->parentProfile->profile_photo) }}" alt="Profile Photo"
-                                 class="h-28 w-28 rounded-full object-cover border-4 border-purple-200 mt-3 shadow-sm hover:scale-105 transition-transform duration-300">
+                                class="h-28 w-28 rounded-full object-cover border-4 border-purple-200 mt-1 shadow-sm hover:scale-105 transition-transform duration-300">
                         </div>
                     @endif
                     @if($user->parentProfile->id_proof_path)
-                        <div class="mt-6">
+                        <div class="p-0">
                             <strong class="font-semibold text-gray-900">ID Proof:</strong><br>
                             <a href="{{ asset('storage/' . $user->parentProfile->id_proof_path) }}"
-                               class="text-purple-600 hover:text-purple-800 underline transition-colors duration-200" target="_blank">View Document</a>
+                            class="text-purple-600 hover:text-purple-800 underline transition-colors duration-200" target="_blank">View Document</a>
                         </div>
                     @endif
+                </div>
                 </div>
             @endif
 
@@ -181,9 +184,9 @@
                                 {{ $user->playPal->availability ?? '-' }}
                             @endif
                         </div>
-                        <div class="md:col-span-2"><strong class="font-semibold text-gray-900">Permanent Address:</strong>
+                        <div><strong class="font-semibold text-gray-900">Permanent Address:</strong>
                             {{ $user->playPal->permanent_address ?? '-' }}</div>
-                        <div class="md:col-span-2"><strong class="font-semibold text-gray-900">Current Address:</strong>
+                        <div><strong class="font-semibold text-gray-900">Current Address:</strong>
                             {{ $user->playPal->current_address ?? '-' }}</div>
                         <div><strong class="font-semibold text-gray-900">City:</strong> {{ $user->playPal->city ?? '-' }}</div>
                         <div><strong class="font-semibold text-gray-900">State:</strong> {{ $user->playPal->state ?? '-' }}</div>
@@ -191,63 +194,65 @@
                     </div>
 
                     {{-- File Uploads --}}
-                    <div class="mt-6 space-y-4">
-                        @if($user->playPal->profile_photo)
-                            <div>
-                                <strong class="font-semibold text-gray-900">Profile Photo:</strong><br>
-                                <img src="{{ asset('storage/' . $user->playPal->profile_photo) }}" alt="Profile Photo"
-                                     class="h-28 w-28 rounded-full object-cover border-4 border-teal-200 mt-3 shadow-sm hover:scale-105 transition-transform duration-300">
-                            </div>
-                        @endif
 
-                        @if($user->playPal->id_proof_path)
-                            <div>
-                                <strong class="font-semibold text-gray-900">ID Proof:</strong><br>
-                                <a href="{{ asset('storage/' . $user->playPal->id_proof_path) }}"
-                                   class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
-                            </div>
-                        @endif
-
-                        @if($user->playPal->selfie_path)
-                            <div>
-                                <strong class="font-semibold text-gray-900">Selfie with ID:</strong><br>
-                                <img src="{{ asset('storage/' . $user->playPal->selfie_path) }}" alt="Selfie"
-                                     class="h-28 w-28 rounded object-cover border-4 border-teal-200 mt-3 shadow-sm hover:scale-105 transition-transform duration-300">
-                            </div>
-                        @endif
-
-                        @if($user->playPal->certificate_path)
-                            <div>
-                                <strong class="font-semibold text-gray-900">Professional Certificate:</strong><br>
-                                <a href="{{ asset('storage/' . $user->playPal->certificate_path) }}"
-                                   class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
-                            </div>
-                        @endif
-
-                        @if($user->playPal->marriage_certificate_path)
-                            <div>
-                                <strong class="font-semibold text-gray-900">Marriage Certificate:</strong><br>
-                                <a href="{{ asset('storage/' . $user->playPal->marriage_certificate_path) }}"
-                                   class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
-                            </div>
-                        @endif
-
-                        @if($user->playPal->birth_certificate_path)
-                            <div>
-                                <strong class="font-semibold text-gray-900">Birth Certificate:</strong><br>
-                                <a href="{{ asset('storage/' . $user->playPal->birth_certificate_path) }}"
-                                   class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
-                            </div>
-                        @endif
-
-                        @if($user->playPal->child_birth_certificate_path)
-                            <div>
-                                <strong class="font-semibold text-gray-900">Child Birth Certificate:</strong><br>
-                                <a href="{{ asset('storage/' . $user->playPal->child_birth_certificate_path) }}"
-                                   class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
-                            </div>
-                        @endif
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
+                @if($user->playPal->profile_photo)
+                    <div class="p-0">
+                        <strong class="font-semibold text-gray-900">Profile Photo:</strong><br>
+                        <img src="{{ asset('storage/' . $user->playPal->profile_photo) }}" alt="Profile Photo"
+                            class="h-28 w-28 rounded-full object-cover border-4 border-teal-200 mt-1 shadow-sm hover:scale-105 transition-transform duration-300">
                     </div>
+                @endif
+
+                @if($user->playPal->id_proof_path)
+                    <div class="p-0">
+                        <strong class="font-semibold text-gray-900">ID Proof:</strong><br>
+                        <a href="{{ asset('storage/' . $user->playPal->id_proof_path) }}"
+                        class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
+                    </div>
+                @endif
+
+                @if($user->playPal->selfie_path)
+                    <div class="p-0">
+                        <strong class="font-semibold text-gray-900">Selfie with ID:</strong><br>
+                        <img src="{{ asset('storage/' . $user->playPal->selfie_path) }}" alt="Selfie"
+                            class="h-28 w-28 rounded object-cover border-4 border-teal-200 mt-1 shadow-sm hover:scale-105 transition-transform duration-300">
+                    </div>
+                @endif
+
+                @if($user->playPal->certificate_path)
+                    <div class="p-0">
+                        <strong class="font-semibold text-gray-900">Professional Certificate:</strong><br>
+                        <a href="{{ asset('storage/' . $user->playPal->certificate_path) }}"
+                        class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
+                    </div>
+                @endif
+
+                @if($user->playPal->marriage_certificate_path)
+                    <div class="p-0">
+                        <strong class="font-semibold text-gray-900">Marriage Certificate:</strong><br>
+                        <a href="{{ asset('storage/' . $user->playPal->marriage_certificate_path) }}"
+                        class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
+                    </div>
+                @endif
+
+                @if($user->playPal->birth_certificate_path)
+                    <div class="p-0">
+                        <strong class="font-semibold text-gray-900">Birth Certificate:</strong><br>
+                        <a href="{{ asset('storage/' . $user->playPal->birth_certificate_path) }}"
+                        class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
+                    </div>
+                @endif
+
+                @if($user->playPal->child_birth_certificate_path)
+                    <div class="p-0">
+                        <strong class="font-semibold text-gray-900">Child Birth Certificate:</strong><br>
+                        <a href="{{ asset('storage/' . $user->playPal->child_birth_certificate_path) }}"
+                        class="text-teal-600 hover:text-teal-800 underline transition-colors duration-200" target="_blank">View Document</a>
+                    </div>
+                @endif
+            </div>
+
                 </div>
             @endif
 
