@@ -241,7 +241,7 @@ class RegisterForm extends Component
                         $fail('Marriage certificate is required for newlywed and parent categories.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png'])) {
                         $fail('Marriage certificate must be a PDF, JPG, or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Marriage certificate must not exceed 2MB.');
@@ -254,7 +254,7 @@ class RegisterForm extends Component
                         $fail('Professional certificate is required for professional category.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png'])) {
                         $fail('Professional certificate must be a PDF, JPG, or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Professional certificate must not exceed 2MB.');
@@ -267,7 +267,7 @@ class RegisterForm extends Component
                         $fail('Birth certificate is required for senior category.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png'])) {
                         $fail('Birth certificate must be a PDF, JPG, or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Birth certificate must not exceed 2MB.');
@@ -280,7 +280,7 @@ class RegisterForm extends Component
                         $fail('Child birth certificate is required for parent category.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png'])) {
                         $fail('Child birth certificate must be a PDF, JPG, or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Child birth certificate must not exceed 2MB.');
