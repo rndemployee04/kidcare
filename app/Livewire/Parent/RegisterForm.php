@@ -100,11 +100,39 @@ class RegisterForm extends Component
 
     public function saveDraft()
     {
+        // Get existing Parent record, if any
+        $parent = Parents::where('user_id', Auth::id())->first();
+
+        // Define validation rules, conditionally requiring files only if no draft exists
+        $validationRules = [
+            'profile_photo' => [
+                'nullable',
+                function ($attribute, $value, $fail) use ($parent) {
+                    if (!$value && !$parent?->profile_photo) {
+                        $fail('Profile photo is required.');
+                    } elseif ($value && !is_string($value) && !in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png','webp'])) {
+                        $fail('Profile photo must be a JPG or PNG file.');
+                    } elseif ($value && !is_string($value) && $value->getSize() > 2048 * 1024) {
+                        $fail('Profile photo must not exceed 2MB.');
+                    }
+                },
+            ],
+            'id_proof_path' => [
+                'nullable',
+                function ($attribute, $value, $fail) use ($parent) {
+                    if (!$value && !$parent?->id_proof_path) {
+                        $fail('ID proof is required.');
+                    } elseif ($value && !is_string($value) && !in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'pdf','webp'])) {
+                        $fail('ID proof must be a JPG, PNG, or PDF file.');
+                    } elseif ($value && !is_string($value) && $value->getSize() > 4096 * 1024) {
+                        $fail('ID proof must not exceed 4MB.');
+                    }
+                },
+            ],
+        ];
+
         // Validate file inputs
-        $this->validate([
-            'profile_photo' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'id_proof_path' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
-        ]);
+        $this->validate($validationRules);
 
         $data = $this->only($this->fillableFields());
         $data['user_id'] = Auth::id();
@@ -115,6 +143,8 @@ class RegisterForm extends Component
             $path = $this->profile_photo->store('profile_photos', 'public');
             $data['profile_photo'] = $path;
             $this->profile_photo = $path;
+        } elseif ($parent?->profile_photo) {
+            $data['profile_photo'] = $parent->profile_photo; // Retain existing path
         }
 
         // Store ID proof if uploaded
@@ -123,6 +153,8 @@ class RegisterForm extends Component
             $path = $this->id_proof_path->store('id_proofs', 'public');
             $data['id_proof_path'] = $path;
             $this->id_proof_path = $path;
+        } elseif ($parent?->id_proof_path) {
+            $data['id_proof_path'] = $parent->id_proof_path; // Retain existing path
         }
 
         // Normalize null values for optional fields
@@ -166,7 +198,7 @@ class RegisterForm extends Component
                     } elseif (is_string($value)) {
                         // File already saved, no further validation needed
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png','webp'])) {
                         $fail('Profile photo must be a JPG or PNG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Profile photo must not exceed 2MB.');
@@ -179,7 +211,7 @@ class RegisterForm extends Component
                         $fail('ID proof is required.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'pdf'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'pdf','webp'])) {
                         $fail('ID proof must be a JPG, PNG, or PDF file.');
                     } elseif ($value->getSize() > 4096 * 1024) {
                         $fail('ID proof must not exceed 4MB.');

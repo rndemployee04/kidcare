@@ -5,7 +5,7 @@
             <table class="w-full text-left">
                 <thead>
                     <tr>
-                        <th class="py-2">Playpal</th>
+                        <th class="py-2">Parent Name</th>
                         <th class="py-2">Amount</th>
                         <th class="py-2">Status</th>
                         <th class="py-2">Slot</th>
@@ -16,7 +16,7 @@
                 <tbody>
                     @forelse($bookings as $booking)
                         <tr class="border-t">
-                            <td class="py-2">{{ $booking->playpal->user->name ?? 'N/A' }}</td>
+                            <td class="py-2">{{ $booking->parent->user->name ?? 'N/A' }}</td>
                             <td class="py-2">${{ $booking->amount }}</td>
                             <td class="py-2">
                                 @if ($booking->status === 'accepted')
