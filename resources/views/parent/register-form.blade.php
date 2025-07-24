@@ -134,7 +134,8 @@
                 <input type="file" wire:model="profile_photo" id="profile_photo" accept="image/*"
                     class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md" />
                 @if($profile_photo && is_string($profile_photo))
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: {{ basename($profile_photo) }}
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: 
+                         <a href="{{ asset('storage/' . $profile_photo) }}"> View </a>
                     </p>
                 @endif
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload a recent photo for your profile. Max
@@ -154,7 +155,9 @@
                 class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md"
                 required />
             @if($id_proof_path && is_string($id_proof_path))
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: {{ basename($id_proof_path) }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: 
+                    <a href="{{ asset('storage/' . $id_proof_path) }}"> View </a>
+                </p>
             @endif
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Government issued ID (Aadhaar, Passport, etc.)
                 Max size: 4MB. JPG/PNG/PDF only.</p>
