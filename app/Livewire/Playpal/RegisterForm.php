@@ -82,102 +82,199 @@ class RegisterForm extends Component
         ];
     }
 
-    public function saveDraft()
-    {
-        // Validate file inputs to ensure they meet requirements
-        $this->validate([
-            'profile_photo' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'id_proof_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
-            'selfie_path' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
-            'marriage_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
-            'birth_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
-            'child_birth_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
-        ]);
+public function saveDraft()
+{
+    // Get existing PlayPal record, if any
+    $playpal = PlayPal::where('user_id', Auth::id())->first();
 
-        $data = $this->only($this->fillableFields());
-        $data['user_id'] = Auth::id();
+    // Define validation rules, conditionally requiring files only if no draft exists and no new file is uploaded
+    $validationRules = [
+        'profile_photo' => [
+            'nullable',
+            function ($attribute, $value, $fail) use ($playpal) {
+                if (!$value && !$playpal?->profile_photo) {
+                    $fail('Profile photo is required.');
+                } elseif ($value && !is_string($value) && !in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png','webp'])) {
+                    $fail('Profile photo must be a JPG or PNG file.');
+                } elseif ($value && !is_string($value) && $value->getSize() > 2048 * 1024) {
+                    $fail('Profile photo must not exceed 2MB.');
+                }
+            },
+        ],
+        'id_proof_path' => [
+            'nullable',
+            function ($attribute, $value, $fail) use ($playpal) {
+                if (!$value && !$playpal?->id_proof_path) {
+                    $fail('ID proof is required.');
+                } elseif ($value && !is_string($value) && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg', 'png','webp'])) {
+                    $fail('ID proof must be a PDF, JPG, or JPEG file.');
+                } elseif ($value && !is_string($value) && $value->getSize() > 2048 * 1024) {
+                    $fail('ID proof must not exceed 2MB.');
+                }
+            },
+        ],
+        'selfie_path' => [
+            'nullable',
+            function ($attribute, $value, $fail) use ($playpal) {
+                if (!$value && !$playpal?->selfie_path) {
+                    $fail('Selfie is required.');
+                } elseif ($value && !is_string($value) && !in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png','webp'])) {
+                    $fail('Selfie must be a JPG or JPEG file.');
+                } elseif ($value && !is_string($value) && $value->getSize() > 2048 * 1024) {
+                    $fail('Selfie must not exceed 2MB.');
+                }
+            },
+        ],
+        'certificate_path' => [
+            'nullable',
+            function ($attribute, $value, $fail) use ($playpal) {
+                if ($this->category === 'professional' && !$value && !$playpal?->certificate_path) {
+                    $fail('Professional certificate is required for professional category.');
+                } elseif ($value && !is_string($value) && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg', 'png','webp'])) {
+                    $fail('Professional certificate must be a PDF, JPG, or JPEG file.');
+                } elseif ($value && !is_string($value) && $value->getSize() > 2048 * 1024) {
+                    $fail('Professional certificate must not exceed 2MB.');
+                }
+            },
+        ],
+        'marriage_certificate_path' => [
+            'nullable',
+            function ($attribute, $value, $fail) use ($playpal) {
+                if (($this->category === 'newlywed' || $this->category === 'parent') && !$value && !$playpal?->marriage_certificate_path) {
+                    $fail('Marriage certificate is required for newlywed and parent categories.');
+                } elseif ($value && !is_string($value) && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg', 'png','webp'])) {
+                    $fail('Marriage certificate must be a PDF, JPG, or JPEG file.');
+                } elseif ($value && !is_string($value) && $value->getSize() > 2048 * 1024) {
+                    $fail('Marriage certificate must not exceed 2MB.');
+                }
+            },
+        ],
+        'birth_certificate_path' => [
+            'nullable',
+            function ($attribute, $value, $fail) use ($playpal) {
+                if ($this->category === 'senior' && !$value && !$playpal?->birth_certificate_path) {
+                    $fail('Birth certificate is required for senior category.');
+                } elseif ($value && !is_string($value) && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg', 'png','webp'])) {
+                    $fail('Birth certificate must be a PDF, JPG, or JPEG file.');
+                } elseif ($value && !is_string($value) && $value->getSize() > 2048 * 1024) {
+                    $fail('Birth certificate must not exceed 2MB.');
+                }
+            },
+        ],
+        'child_birth_certificate_path' => [
+            'nullable',
+            function ($attribute, $value, $fail) use ($playpal) {
+                if ($this->category === 'parent' && !$value && !$playpal?->child_birth_certificate_path) {
+                    $fail('Child birth certificate is required for parent category.');
+                } elseif ($value && !is_string($value) && !in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg', 'png','webp'])) {
+                    $fail('Child birth certificate must be a PDF, JPG, or JPEG file.');
+                } elseif ($value && !is_string($value) && $value->getSize() > 2048 * 1024) {
+                    $fail('Child birth certificate must not exceed 2MB.');
+                }
+            },
+        ],
+    ];
 
-        // Store and log profile photo
-        if ($this->profile_photo && !is_string($this->profile_photo)) {
-            \Log::info('Storing profile photo: ' . $this->profile_photo->getClientOriginalName());
-            $path = $this->profile_photo->store('profile_photos', 'public');
-            \Log::info('Stored profile photo at: ' . $path);
-            $data['profile_photo'] = $path;
-            $this->profile_photo = $path;
-        }
+    // Validate file inputs
+    $this->validate($validationRules);
 
-        // Store and log ID proof
-        if ($this->id_proof_path && !is_string($this->id_proof_path)) {
-            \Log::info('Storing ID proof: ' . $this->id_proof_path->getClientOriginalName());
-            $path = $this->id_proof_path->store('id_proofs', 'public');
-            \Log::info('Stored ID proof at: ' . $path);
-            $data['id_proof_path'] = $path;
-            $this->id_proof_path = $path;
-        }
+    $data = $this->only($this->fillableFields());
+    $data['user_id'] = Auth::id();
 
-        // Store and log selfie
-        if ($this->selfie_path && !is_string($this->selfie_path)) {
-            \Log::info('Storing selfie: ' . $this->selfie_path->getClientOriginalName());
-            $path = $this->selfie_path->store('selfies', 'public');
-            \Log::info('Stored selfie at: ' . $path);
-            $data['selfie_path'] = $path;
-            $this->selfie_path = $path;
-        }
-
-        // OPTIONAL: store certificates if uploaded
-        if ($this->certificate_path && !is_string($this->certificate_path)) {
-            \Log::info('Storing certificate: ' . $this->certificate_path->getClientOriginalName());
-            $path = $this->certificate_path->store('certificates', 'public');
-            \Log::info('Stored certificate at: ' . $path);
-            $data['certificate_path'] = $path;
-            $this->certificate_path = $path;
-        }
-
-        if ($this->marriage_certificate_path && !is_string($this->marriage_certificate_path)) {
-            \Log::info('Storing marriage certificate: ' . $this->marriage_certificate_path->getClientOriginalName());
-            $path = $this->marriage_certificate_path->store('certificates', 'public');
-            \Log::info('Stored marriage certificate at: ' . $path);
-            $data['marriage_certificate_path'] = $path;
-            $this->marriage_certificate_path = $path;
-        }
-
-        if ($this->birth_certificate_path && !is_string($this->birth_certificate_path)) {
-            \Log::info('Storing birth certificate: ' . $this->birth_certificate_path->getClientOriginalName());
-            $path = $this->birth_certificate_path->store('certificates', 'public');
-            \Log::info('Stored birth certificate at: ' . $path);
-            $data['birth_certificate_path'] = $path;
-            $this->birth_certificate_path = $path;
-        }
-
-        if ($this->child_birth_certificate_path && !is_string($this->child_birth_certificate_path)) {
-            \Log::info('Storing child birth certificate: ' . $this->child_birth_certificate_path->getClientOriginalName());
-            $path = $this->child_birth_certificate_path->store('certificates', 'public');
-            \Log::info('Stored child birth certificate at: ' . $path);
-            $data['child_birth_certificate_path'] = $path;
-            $this->child_birth_certificate_path = $path;
-        }
-
-        // Set empty strings to null for DB-required fields
-        foreach (['category', 'dob', 'phone', 'gender', 'id_proof_path', 'permanent_address', 'current_address', 'city', 'state', 'zip', 'service_radius', 'child_age_limit', 'selfie_path'] as $field) {
-            if (empty($data[$field])) {
-                $data[$field] = null;
-            }
-        }
-
-        // Ensure availability is always an array
-        if (!is_array($data['availability'])) {
-            $data['availability'] = $data['availability'] ? [$data['availability']] : [];
-        }
-
-        PlayPal::updateOrCreate(
-            ['user_id' => Auth::id()],
-            $data
-        );
-
-        session()->flash('message', 'Draft saved! You can resume later.');
-        $this->dispatch('draft-saved');
+    // Store and log profile photo
+    if ($this->profile_photo && !is_string($this->profile_photo)) {
+        \Log::info('Storing profile photo: ' . $this->profile_photo->getClientOriginalName());
+        $path = $this->profile_photo->store('profile_photos', 'public');
+        \Log::info('Stored profile photo at: ' . $path);
+        $data['profile_photo'] = $path;
+        $this->profile_photo = $path;
+    } elseif ($playpal?->profile_photo) {
+        $data['profile_photo'] = $playpal->profile_photo; // Retain existing path
     }
+
+    // Store and log ID proof
+    if ($this->id_proof_path && !is_string($this->id_proof_path)) {
+        \Log::info('Storing ID proof: ' . $this->id_proof_path->getClientOriginalName());
+        $path = $this->id_proof_path->store('id_proofs', 'public');
+        \Log::info('Stored ID proof at: ' . $path);
+        $data['id_proof_path'] = $path;
+        $this->id_proof_path = $path;
+    } elseif ($playpal?->id_proof_path) {
+        $data['id_proof_path'] = $playpal->id_proof_path; // Retain existing path
+    }
+
+    // Store and log selfie
+    if ($this->selfie_path && !is_string($this->selfie_path)) {
+        \Log::info('Storing selfie: ' . $this->selfie_path->getClientOriginalName());
+        $path = $this->selfie_path->store('selfies', 'public');
+        \Log::info('Stored selfie at: ' . $path);
+        $data['selfie_path'] = $path;
+        $this->selfie_path = $path;
+    } elseif ($playpal?->selfie_path) {
+        $data['selfie_path'] = $playpal->selfie_path; // Retain existing path
+    }
+
+    // Store certificates if uploaded
+    if ($this->certificate_path && !is_string($this->certificate_path)) {
+        \Log::info('Storing certificate: ' . $this->certificate_path->getClientOriginalName());
+        $path = $this->certificate_path->store('certificates', 'public');
+        \Log::info('Stored certificate at: ' . $path);
+        $data['certificate_path'] = $path;
+        $this->certificate_path = $path;
+    } elseif ($playpal?->certificate_path) {
+        $data['certificate_path'] = $playpal->certificate_path; // Retain existing path
+    }
+
+    if ($this->marriage_certificate_path && !is_string($this->marriage_certificate_path)) {
+        \Log::info('Storing marriage certificate: ' . $this->marriage_certificate_path->getClientOriginalName());
+        $path = $this->marriage_certificate_path->store('certificates', 'public');
+        \Log::info('Stored marriage certificate at: ' . $path);
+        $data['marriage_certificate_path'] = $path;
+        $this->marriage_certificate_path = $path;
+    } elseif ($playpal?->marriage_certificate_path) {
+        $data['marriage_certificate_path'] = $playpal->marriage_certificate_path; // Retain existing path
+    }
+
+    if ($this->birth_certificate_path && !is_string($this->birth_certificate_path)) {
+        \Log::info('Storing birth certificate: ' . $this->birth_certificate_path->getClientOriginalName());
+        $path = $this->birth_certificate_path->store('certificates', 'public');
+        \Log::info('Stored birth certificate at: ' . $path);
+        $data['birth_certificate_path'] = $path;
+        $this->birth_certificate_path = $path;
+    } elseif ($playpal?->birth_certificate_path) {
+        $data['birth_certificate_path'] = $playpal->birth_certificate_path; // Retain existing path
+    }
+
+    if ($this->child_birth_certificate_path && !is_string($this->child_birth_certificate_path)) {
+        \Log::info('Storing child birth certificate: ' . $this->child_birth_certificate_path->getClientOriginalName());
+        $path = $this->child_birth_certificate_path->store('certificates', 'public');
+        \Log::info('Stored child birth certificate at: ' . $path);
+        $data['child_birth_certificate_path'] = $path;
+        $this->child_birth_certificate_path = $path;
+    } elseif ($playpal?->child_birth_certificate_path) {
+        $data['child_birth_certificate_path'] = $playpal->child_birth_certificate_path; // Retain existing path
+    }
+
+    // Set empty strings to null for DB-required fields
+    foreach (['category', 'dob', 'phone', 'gender', 'permanent_address', 'current_address', 'city', 'state', 'zip', 'service_radius', 'child_age_limit'] as $field) {
+        if (empty($data[$field])) {
+            $data[$field] = null;
+        }
+    }
+
+    // Ensure availability is always an array
+    if (!is_array($data['availability'])) {
+        $data['availability'] = $data['availability'] ? [$data['availability']] : [];
+    }
+
+    PlayPal::updateOrCreate(
+        ['user_id' => Auth::id()],
+        $data
+    );
+
+    session()->flash('message', 'Draft saved! You can resume later.');
+    $this->dispatch('draft-saved');
+}
 
     public function submit()
     {
@@ -202,7 +299,7 @@ class RegisterForm extends Component
                         $fail('Profile photo is required.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg', 'png','webp'])) {
                         $fail('Profile photo must be a JPG or PNG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Profile photo must not exceed 2MB.');
@@ -241,7 +338,7 @@ class RegisterForm extends Component
                         $fail('Marriage certificate is required for newlywed and parent categories.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png','webp'])) {
                         $fail('Marriage certificate must be a PDF, JPG, or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Marriage certificate must not exceed 2MB.');
@@ -254,7 +351,7 @@ class RegisterForm extends Component
                         $fail('Professional certificate is required for professional category.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png','webp'])) {
                         $fail('Professional certificate must be a PDF, JPG, or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Professional certificate must not exceed 2MB.');
@@ -267,7 +364,7 @@ class RegisterForm extends Component
                         $fail('Birth certificate is required for senior category.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png','webp'])) {
                         $fail('Birth certificate must be a PDF, JPG, or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Birth certificate must not exceed 2MB.');
@@ -280,7 +377,7 @@ class RegisterForm extends Component
                         $fail('Child birth certificate is required for parent category.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png','webp'])) {
                         $fail('Child birth certificate must be a PDF, JPG, or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Child birth certificate must not exceed 2MB.');
