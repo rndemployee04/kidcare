@@ -87,12 +87,12 @@ class RegisterForm extends Component
         // Validate file inputs to ensure they meet requirements
         $this->validate([
             'profile_photo' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'id_proof_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
-            'selfie_path' => ['nullable', 'file', 'mimes:jpg,jpeg', 'max:2048'],
-            'certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
-            'marriage_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
-            'birth_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
-            'child_birth_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg', 'max:2048'],
+            'id_proof_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
+            'selfie_path' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
+            'marriage_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
+            'birth_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
+            'child_birth_certificate_path' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
         ]);
 
         $data = $this->only($this->fillableFields());
@@ -215,7 +215,7 @@ class RegisterForm extends Component
                         $fail('ID proof is required.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['pdf', 'jpg', 'jpeg','png','webp'])) {
                         $fail('ID proof must be a PDF, JPG, or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('ID proof must not exceed 2MB.');
@@ -228,7 +228,7 @@ class RegisterForm extends Component
                         $fail('Selfie is required.');
                     } elseif (is_string($value)) {
                         return;
-                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg'])) {
+                    } elseif (!in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg','png','webp'])) {
                         $fail('Selfie must be a JPG or JPEG file.');
                     } elseif ($value->getSize() > 2048 * 1024) {
                         $fail('Selfie must not exceed 2MB.');

@@ -83,7 +83,8 @@
                 <input type="file" wire:model="profile_photo" id="profile_photo" accept="image/*"
                     class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                 @if($profile_photo && is_string($profile_photo))
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: {{ basename($profile_photo) }}
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: 
+                        <a href="{{ asset('storage/' . $profile_photo) }}"> View </a>
                     </p>
                 @endif
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload a recent photo for your profile. Max
@@ -109,85 +110,22 @@
         </div>
 
         {{-- Category-dependent documents --}}
-        {{-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @if ($category === 'newlywed' || $category === 'parent')
-            <div>
-                <label for="marriage_certificate_path" class="block mb-1 text-sm font-medium">Marriage Certificate
-                    (PDF/JPG)</label>
-                <input type="file" wire:model="marriage_certificate_path" id="marriage_certificate_path"
-                    class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
-                @if($marriage_certificate_path && is_string($marriage_certificate_path))
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
-                    {{ basename($marriage_certificate_path) }}</p>
-                @endif
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your marriage certificate for
-                    verification. Max size: 2MB. JPG/PDF</p>
-                @error('marriage_certificate_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
-            </div>
-            @endif
-            @if ($category === 'professional')
-            <div>
-                <label for="certificate_path" class="block mb-1 text-sm font-medium">Professional Certificate
-                    (PDF/JPG)</label>
-                <input type="file" wire:model="certificate_path" id="certificate_path"
-                    class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
-                @if($certificate_path && is_string($certificate_path))
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
-                    {{ basename($certificate_path) }}</p>
-                @endif
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your professional certification. Max
-                    size: 2MB. JPG/PDF</p>
-                @error('certificate_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
-            </div>
-            @endif
-            @if ($category === 'parent')
-            <div>
-                <label for="child_birth_certificate_path" class="block mb-1 text-sm font-medium">Child's Birth
-                    Certificate (PDF/JPG)</label>
-                <input type="file" wire:model="child_birth_certificate_path" id="child_birth_certificate_path"
-                    class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
-                @if($child_birth_certificate_path && is_string($child_birth_certificate_path))
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
-                    {{ basename($child_birth_certificate_path) }}</p>
-                @endif
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your child's birth certificate. Max
-                    size: 2MB. JPG/PDF</p>
-                @error('child_birth_certificate_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
-            </div>
-            @endif
-            @if ($category === 'senior')
-            <div>
-                <label for="birth_certificate_path" class="block mb-1 text-sm font-medium">Birth Certificate
-                    (PDF/JPG)</label>
-                <input type="file" wire:model="birth_certificate_path" id="birth_certificate_path"
-                    class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
-                @if($birth_certificate_path && is_string($birth_certificate_path))
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
-                    {{ basename($birth_certificate_path) }}</p>
-                @endif
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your birth certificate for age
-                    verification. Max size: 2MB. JPG/PDF</p>
-                @error('birth_certificate_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
-            </div>
-            @endif
-        </div> --}}
-
-
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @if ($category === 'newlywed' || $category === 'parent')
                 <div>
                     <label for="marriage_certificate_path" class="block mb-1 text-sm font-medium">
-                        Marriage Certificate (PDF/JPG) <span class="text-red-500">*</span>
+                        Marriage Certificate (PDF/JPG/PNG) <span class="text-red-500">*</span>
                     </label>
                     <input type="file" wire:model="marriage_certificate_path" id="marriage_certificate_path"
                         class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     @if($marriage_certificate_path && is_string($marriage_certificate_path))
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
-                            {{ basename($marriage_certificate_path) }}</p>
+                             <a href="{{ asset('storage/' . $marriage_certificate_path) }}"> View </a>
+                        </p>
                     @endif
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your marriage certificate for
-                        verification. Max size: 2MB. JPG/PDF</p>
+                        verification. Max size: 2MB. JPG/PDF/PNG</p>
                     @error('marriage_certificate_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
                 </div>
             @endif
@@ -195,16 +133,19 @@
             @if ($category === 'professional')
                 <div>
                     <label for="certificate_path" class="block mb-1 text-sm font-medium">
-                        Professional Certificate (PDF/JPG) <span class="text-red-500">*</span>
+                        Professional Certificate (PDF/JPG/PNG) <span class="text-red-500">*</span>
                     </label>
                     <input type="file" wire:model="certificate_path" id="certificate_path"
                         class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     @if($certificate_path && is_string($certificate_path))
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
-                            {{ basename($certificate_path) }}</p>
+
+                            <a href="{{ asset('storage/' . $certificate_path) }}"> View </a>
+
+                        </p>
                     @endif
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your professional certification. Max
-                        size: 2MB. JPG/PDF</p>
+                        size: 2MB. JPG/PDF/PNG</p>
                     @error('certificate_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
                 </div>
             @endif
@@ -212,16 +153,18 @@
             @if ($category === 'parent')
                 <div>
                     <label for="child_birth_certificate_path" class="block mb-1 text-sm font-medium">
-                        Child's Birth Certificate (PDF/JPG) <span class="text-red-500">*</span>
+                        Child's Birth Certificate (PDF/JPG/PNG) <span class="text-red-500">*</span>
                     </label>
                     <input type="file" wire:model="child_birth_certificate_path" id="child_birth_certificate_path"
                         class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     @if($child_birth_certificate_path && is_string($child_birth_certificate_path))
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
-                            {{ basename($child_birth_certificate_path) }}</p>
+
+                            <a href="{{ asset('storage/' . $child_birth_certificate_path) }}"> View </a>
+                        </p>
                     @endif
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your child's birth certificate. Max
-                        size: 2MB. JPG/PDF</p>
+                        size: 2MB. JPG/PDF/PNG</p>
                     @error('child_birth_certificate_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
                 </div>
             @endif
@@ -229,16 +172,17 @@
             @if ($category === 'senior')
                 <div>
                     <label for="birth_certificate_path" class="block mb-1 text-sm font-medium">
-                        Birth Certificate (PDF/JPG) <span class="text-red-500">*</span>
+                        Birth Certificate (PDF/JPG/PNG) <span class="text-red-500">*</span>
                     </label>
                     <input type="file" wire:model="birth_certificate_path" id="birth_certificate_path"
                         class="w-full file:bg-orange-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                     @if($birth_certificate_path && is_string($birth_certificate_path))
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
-                            {{ basename($birth_certificate_path) }}</p>
+                            <a href="{{ asset('storage/' . $birth_certificate_path) }}"> View </a>
+                        </p>
                     @endif
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload your birth certificate for age
-                        verification. Max size: 2MB. JPG/PDF</p>
+                        verification. Max size: 2MB. JPG/PDF/PNG</p>
                     @error('birth_certificate_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
                 </div>
             @endif
@@ -249,20 +193,22 @@
         <div>
             <label for="id_proof_path" class="block mb-1 text-sm font-medium">ID Proof <span
                     class="text-red-500">*</span></label>
-            <input type="file" wire:model="id_proof_path" id="id_proof_path"
+            <input type="file" wire:model="id_proof_path" id="id_proof_path" accept=".pdf,image/jpeg,image/png"
                 class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
             @if($id_proof_path && is_string($id_proof_path))
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: {{ basename($id_proof_path) }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
+                    <a href="{{ asset('storage/' . $id_proof_path) }}"> View </a>
+                </p>
             @endif
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Government issued ID (Aadhaar, Passport, etc.)
-                Max size: 2MB. JPG/PDF</p>
+                Max size: 2MB. JPG/PDF/PNG</p>
             @error('id_proof_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             <div class="!mt-[1.5rem]">
                 <label for="selfie_path" class="block mb-1 text-sm font-medium">Selfie with ID <span
                         class="text-red-500">*</span></label>
                 <div class="flex flex-col gap-2">
                     <div class="flex gap-2">
-                        <input type="file" wire:model="selfie_path" id="selfie_path"
+                        <input type="file" wire:model="selfie_path" id="selfie_path" accept=".pdf,image/jpeg,image/png"
                             class="w-full file:bg-orange-400 file:text-white file:px-4 file:py-2 file:rounded-md file:border-0 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md">
                         <button type="button" onclick="openCamera()"
                             class="px-4 flex items-center justify-center py-2 bg-orange-400 text-white text-center rounded-md hover:bg-orange-500 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400">
@@ -277,11 +223,11 @@
                     </div>
                     @if($selfie_path && is_string($selfie_path))
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file:
-                            {{ basename($selfie_path) }}
+                            <a href="{{ asset('storage/' . $selfie_path) }}"> View </a>
                         </p>
                     @endif
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">A selfie holding your ID for
-                        verification. Max size: 2MB. JPG</p>
+                        verification. Max size: 2MB. JPG/PDF/PNG</p>
                     @error('selfie_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
                 </div>
             </div>
@@ -451,4 +397,13 @@
         }
         cameraModal.classList.add('hidden');
     }
+
+    window.addEventListener('draft-saved', function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Draft Saved',
+            text: 'Your progress has been saved! You can resume later.',
+            confirmButtonColor: '#16a34a'
+        });
+    });
 </script>

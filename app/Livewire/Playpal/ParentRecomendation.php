@@ -125,7 +125,7 @@ class ParentRecomendation extends Component
             // Match caregiver type (PlayPal category to parent's preferred caregiver)
             $query->where(function ($q) use ($playpal) {
                 $q->where('preferred_type_of_caregiver', 'like', "%{$playpal->category}%")
-                    ->orWhere('preferred_type_of_caregiver','like','any')
+                    ->orWhere('preferred_type_of_caregiver', 'like', 'any')
                     ->orWhereNull('preferred_type_of_caregiver');
             });
 
@@ -134,6 +134,10 @@ class ParentRecomendation extends Component
                 $q->whereNull('preferred_radius') // no preference
                     ->orWhere('preferred_radius', '<=', $playpal->service_radius);
             });
+
+            if ($playpal && is_array($playpal->availability) && count($playpal->availability)) {
+                $query->whereIn('preferred_drop_off_time', $playpal->availability);
+            }
         }
 
         // Exclude already booked parents
