@@ -25,7 +25,12 @@ class ParentController extends Controller
         $parent = Auth::user()->parentProfile;
 
         // Get statistics
-        $activeBookings = $parent->bookings()->where('status', 'confirmed')->orWhere('status', 'accepted')->count();
+        $activeBookings = $parent->bookings()
+            ->where(function ($query) {
+                $query->where('status', 'confirmed')
+                    ->orWhere('status', 'accepted');
+            })->count();
+
         $completedBookings = $parent->bookings()->where('status', 'completed')->count();
 
         $bookings = Booking::with('parent.user')
@@ -71,7 +76,7 @@ class ParentController extends Controller
         $payouts = Payout::where('user_id', $parent->user_id)->get();
         $minimumAmountForPayout = 1000;
         $transferred = $bookings->isEmpty();
-        
+
         return view('parent.payout', compact('totalEarnings', 'platformFee', 'transferable', 'transferred', 'bank_detail', 'payouts', 'minimumAmountForPayout'));
     }
 
@@ -101,7 +106,7 @@ class ParentController extends Controller
             ->get();
 
         Booking::whereIn('id', $bookings->pluck('id'))->update(['paid_out' => true]);
-        
+
         $payout->save();
 
         return redirect()->route('parent.payout')->with('success', 'Payout transferred to your bank account!');
