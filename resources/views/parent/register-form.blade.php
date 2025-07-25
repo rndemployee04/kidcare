@@ -332,7 +332,7 @@
                                                 d="M13 16h-1v-4h-1m1-4h.01M12 20.5a8.38 8.38 0 100-16.76 8.38 8.38 0 000 16.76z" />
                                         </svg>
                                         <div>
-                                            <strong>Confused about CareBuddy Category?</strong><br>
+                                            <strong>Confused about Playpal Category?</strong><br>
                                             <span>
                                                 <b>Newlywed:</b> Young couples, energetic and nurturing.<br>
                                                 <b>Professional:</b> Certified nannies, therapists.<br>
@@ -357,7 +357,7 @@
                         @if ($field === 'preferred_drop_off_time')
                             When do you prefer to drop off your child(ren)?
                         @elseif ($field === 'preferred_type_of_caregiver')
-                            Choose the type of CareBuddy you prefer.
+                            Choose the type of Playpal you prefer.
                         @elseif ($field === 'preferred_radius')
                             How far are you willing to travel for care? (in km)
                         @endif
@@ -384,7 +384,7 @@
             <label for="reason_for_service" class="block mb-1 text-sm font-medium">Reason for Seeking Service</label>
             <textarea wire:model.defer="reason_for_service" id="reason_for_service" rows="3"
                 class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"></textarea>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Share why you are seeking a CareBuddy (optional,
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Share why you are seeking a Playpal (optional,
                 but helps us match you better).</p>
             @error('reason_for_service')
                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
