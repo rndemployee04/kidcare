@@ -13,7 +13,7 @@ class BankDetailsManager extends Component
     public $showModal = false;
     public $mode = 'add'; // or 'edit'
     public $account_holder, $account_number, $ifsc, $bank_name, $is_default = false, $editing_id = null;
-    
+
     protected $listeners = ['showBankDetailsModal' => 'openModal'];
 
     public function mount()
@@ -98,6 +98,7 @@ class BankDetailsManager extends Component
         $this->showModal = false;
         $this->resetForm();
         $this->loadAccounts();
+        $this->dispatch('bank-details-saved');
     }
 
     public function delete($id)

@@ -35,3 +35,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('bank-details-saved', () => {
+        window.location.reload();
+    });
+</script>
