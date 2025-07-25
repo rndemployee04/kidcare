@@ -1,5 +1,5 @@
 <div>
-    <h2 class="text-2xl font-bold mb-4">Manage Children</h2>
+    <h2 class="text-2xl font-bold mb-4">Your Kids</h2>
 
     @if (session()->has('success'))
         <div class="bg-green-100 text-green-700 p-2 rounded mb-4">{{ session('success') }}</div>
