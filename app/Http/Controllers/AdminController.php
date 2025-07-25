@@ -17,13 +17,13 @@ class AdminController extends Controller
         if (!Auth::user() || !Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized');
         }
-        
+
         $pendingUsers = User::where('verification_status', 'pending')
-            ->where('registration_complete', 1)
+            ->where('registration_complete', 1)->orderBy('created_at', 'desc')
             ->paginate(10, ['*'], 'pending_page');
-        $approvedUsers = User::where('verification_status', 'approved')
+        $approvedUsers = User::where('verification_status', 'approved')->orderBy('created_at', 'desc')
             ->paginate(10, ['*'], 'approved_page');
-        $rejectedUsers = User::where('verification_status', 'rejected')
+        $rejectedUsers = User::where('verification_status', 'rejected')->orderBy('created_at', 'desc')
             ->paginate(10, ['*'], 'rejected_page');
 
         return view('admin.dashboard', [
@@ -32,18 +32,18 @@ class AdminController extends Controller
             'rejectedUsers' => $rejectedUsers
         ]);
     }
-    
+
     public function approveUser($id)
     {
         // Ensure only admin users can access
         if (!Auth::user() || !Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized');
         }
-        
+
         $user = User::findOrFail($id);
         $user->verification_status = 'approved';
         $user->save();
-        
+
         return redirect()->route('admin.dashboard')->with('success', 'User approved successfully.');
     }
 
@@ -52,7 +52,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->verification_status = 'rejected';
         $user->save();
-        
+
         return redirect()->route('admin.dashboard')->with('error', 'User rejected.');
     }
 
