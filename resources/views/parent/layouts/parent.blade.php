@@ -73,10 +73,10 @@
                         </svg>
                         My Profile
                     </a>
-                    <a href="{{ route('parent.children.index') }}"
+                    {{-- <a href="{{ route('parent.children.index') }}"
                         class="flex items-center p-2 mb-2 text-gray-800 hover:bg-indigo-50 rounded-lg {{ request()->routeIs('parent.children.*') ? 'bg-indigo-100' : '' }}">
                         <i class="fa-solid fa-children me-2"></i> Children
-                    </a>
+                    </a> --}}
                     <a href="{{ route('parent.payout') }}"
                         class="flex items-center p-2 mb-2 text-gray-800 hover:bg-indigo-50 rounded-lg {{ request()->routeIs('parent.payout') ? 'bg-indigo-100' : '' }}">
                         <i class="fa-solid fa-money-bill me-2"></i> Payout
@@ -112,14 +112,26 @@
                         </svg>
                     </button>
                     <div class="ml-auto flex items-center">
-                        <div class="relative">
-                            <button class="flex items-center text-gray-700 focus:outline-none">
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center text-gray-700 focus:outline-none">
                                 <span class="mr-2">{{ Auth::user()->name }}</span>
                                 <img src="{{ Auth::user()->parentProfile && Auth::user()->parentProfile->profile_photo ? url('/storage/' . Auth::user()->parentProfile->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=7F9CF5&background=EBF4FF' }}"
                                     alt="User Avatar" class="h-8 w-8 rounded-full object-cover"
                                     onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF'">
                             </button>
+
+                            <div x-show="open" @click.away="open = false"
+                                class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                                <a href="{{ route('parent.profile.show') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Profile</a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
+                                </form>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 

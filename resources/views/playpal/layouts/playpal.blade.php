@@ -102,14 +102,26 @@
                         </svg>
                     </button>
                     <div class="ml-auto flex items-center">
-                        <div class="relative">
-                            <button class="flex items-center text-gray-700 focus:outline-none">
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center text-gray-700 focus:outline-none">
                                 <span class="mr-2">{{ Auth::user()->name }}</span>
                                 <img src="{{ Auth::user()->playPal && Auth::user()->playPal->profile_photo ? url('/storage/' . Auth::user()->playPal->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=F59E42&background=FFF8E1' }}"
                                     alt="User Avatar" class="h-8 w-8 rounded-full object-cover"
                                     onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=F59E42&background=FFF8E1'">
                             </button>
+
+                            <div x-show="open" @click.away="open = false"
+                                class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                                <a href="{{ route('playpal.profile.show') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Profile</a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
+                                </form>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 

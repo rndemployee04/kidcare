@@ -53,17 +53,24 @@
                         </svg>
                     </button>
                 </div>
-            @elseif(!$transferred && $transferable >= $minimumAmountForPayout)
-                <form method="POST" action="{{ route('parent.payout.transfer') }}">
-                    @csrf
-                    <input type="hidden" name="bank_details" value="{{ $bank_detail }}">
-                    <input type="hidden" name="amount" value="{{ $transferable }}">
-                    <button type="submit"
-                        class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded mt-4">
-                        Transfer to Bank
-                    </button>
-                </form>
-            @elseif($transferable > 0 && $transferable < $minimumAmountForPayout)
+            @elseif(!$transferred)
+                @if(!$bank_detail)
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4">
+                        <strong class="font-bold">Bank Details Missing!</strong>
+                        <span class="block sm:inline"> Please add your bank details to proceed with payout.</span>
+                    </div>
+                @else
+                    <form method="POST" action="{{ route('parent.payout.transfer') }}">
+                        @csrf
+                        <input type="hidden" name="bank_details" value="{{ $bank_detail }}">
+                        <input type="hidden" name="amount" value="{{ $transferable }}">
+                        <button type="submit"
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded mt-4">
+                            Transfer to Bank
+                        </button>
+                    </form>
+                @endif
+            @elseif($transferable > 0)
                 <div class="bg-gray-100 border border-gray-300 text-gray-600 px-4 py-3 rounded relative mt-4">
                     <span class="block sm:inline">
                         ${{ number_format($minimumAmountForPayout - $transferable, 2) }} more needed to initiate payout.
