@@ -65,7 +65,7 @@ class ParentController extends Controller
         $parent = Auth::user()->parentProfile;
         $bookings = Booking::where('parent_id', $parent->id)
             ->whereNotNull('paid_at')
-            ->where('status', 'accepted')
+            ->where('status', 'completed')
             ->where('paid_out', false)
             ->get();
 
