@@ -12,7 +12,23 @@ class PlayPalController extends Controller
     {
         $user = Auth::user();
         $playpal = $user->playPal;
-        $booking = Booking::where('parent_id', Auth::user()->playPal->id)->latest()->first();
+        \Log::info('DASHBOARD DEBUG', [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'playpal_id' => $playpal ? $playpal->id : null,
+            'playpal_user_id' => $playpal ? $playpal->user_id : null,
+        ]);
+        $booking = Booking::where('playpal_id', $playpal->id)->latest()->first();
+        if ($booking) {
+            \Log::info('DASHBOARD BOOKING', [
+                'booking_id' => $booking->id,
+                'booking_playpal_id' => $booking->playpal_id,
+                'booking_status' => $booking->status,
+                'booking_parent_id' => $booking->parent_id,
+            ]);
+        } else {
+            \Log::info('DASHBOARD BOOKING', ['booking' => null]);
+        }
 
         if (!Auth::user() || !Auth::user()->isPlayPal()) {
             abort(403, 'Unauthorized');
@@ -27,22 +43,22 @@ class PlayPalController extends Controller
                 $type = 'success';
                 $parentName = optional($booking->parent->user)->name ?? 'Parent';
                 $message = "Your booking #{$booking->id} has been accepted by {$parentName}.";
-                session()->flash('booking', $message);
-                session()->flash('alertType', $type);
+                session()->flash('booking_' . $playpal->id, $message);
+                session()->flash('alertType_' . $playpal->id, $type);
             } elseif ($booking->status === 'rejected') {
                 $type = 'error';
                 $parentName = optional($booking->parent->user)->name ?? 'Parent';
                 $message = "Your booking #{$booking->id} was cancelled by {$parentName}. Your payment will be refunded shortly.";
-                session()->flash('booking', $message);
-                session()->flash('alertType', $type);
+                session()->flash('booking_' . $playpal->id, $message);
+                session()->flash('alertType_' . $playpal->id, $type);
             }
         }
 
         $cancelKey = 'playpal_' . $playpal->id . '_booking_cancelled';
         if (Session::has($cancelKey)) {
             $cancelData = Session::get($cancelKey);
-            session()->flash('booking', $cancelData['message']);
-            session()->flash('alertType', $cancelData['type'] ?? 'error');
+            session()->flash('booking_' . $playpal->id, $cancelData['message']);
+            session()->flash('alertType_' . $playpal->id, $cancelData['type'] ?? 'error');
             Session::forget($cancelKey);
         }
 

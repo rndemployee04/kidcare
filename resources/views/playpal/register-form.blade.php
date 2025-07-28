@@ -227,7 +227,7 @@
                         </p>
                     @endif
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">A selfie holding your ID for
-                        verification. Max size: 2MB. JPG/PDF/PNG</p>
+                        verification. Max size: 2MB. JPG/PNG</p>
                     @error('selfie_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
                 </div>
             </div>

@@ -8,9 +8,9 @@
         <div class="px-4 py-5 sm:p-6">
             <h4 class="text-xl font-semibold mb-6">Your Profile</h4>
             
-            @if (session('booking'))
+            @if (session('booking_' . $playpal->id))
                 @php
-                    $alertType = session('alertType') ?? ($alertType ?? 'success');
+                    $alertType = session('alertType_' . $playpal->id) ?? ($alertType ?? 'success');
                     $styles = [
                         'success' => [
                             'bg' => 'bg-green-50',
@@ -39,7 +39,7 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm font-medium {{ $style['text'] }}">{{ session('booking') }}</p>
+                            <p class="text-sm font-medium {{ $style['text'] }}">{{ session('booking_' . $playpal->id) }}</p>
                         </div>
                         <button @click="
                                         fetch('{{ route('dismiss.alert') }}', {
