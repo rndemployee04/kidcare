@@ -200,7 +200,7 @@
                     <a href="{{ asset('storage/' . $id_proof_path) }}"> View </a>
                 </p>
             @endif
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Government issued ID (Aadhaar, Passport, etc.)
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Government issued ID (Driving License, Passport, etc.)
                 Max size: 2MB. JPG/PDF/PNG</p>
             @error('id_proof_path')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             <div class="!mt-[1.5rem]">

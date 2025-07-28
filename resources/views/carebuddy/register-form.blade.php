@@ -218,7 +218,7 @@
             @if($id_proof_path && is_string($id_proof_path))
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Current file: {{ basename($id_proof_path) }}</p>
             @endif
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Government issued ID (Aadhaar, Passport,
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Government issued ID (Passport, Driving License
                 etc.) Max size: 2MB. JPG/PDF</p>
             @error('id_proof_path')
                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
