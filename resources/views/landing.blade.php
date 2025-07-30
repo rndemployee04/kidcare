@@ -21,14 +21,13 @@
 
 <body class="min-h-screen bg-white dark:bg-zinc-800 overflow-x-clip">
     <flux:header container
-        class="dark:bg-zinc-900  dark:border-zinc-700 max-w-[1140px] mx-auto flex items-center header-phone">
+        class="  dark:border-zinc-700 max-w-[1140px] mx-auto flex items-center header-phone">
         <flux:sidebar.toggle class="lg:hidden bg-amber-500" icon="bars-3" inset="left" />
 
-        <flux:brand href="#" class="max-lg:hidden dark:hidden">
+        <flux:brand href="#">
             <h1 class="text-[24px] font-bold text-[#ff8904]">KidCare</h1>
         </flux:brand>
-        <flux:brand href="#" logo="https://fluxui.dev/img/demo/dark-mode-logo.png" name="Acme Inc."
-            class="max-lg:hidden! hidden dark:flex" />
+
 
         <flux:navbar class="-mb-px max-lg:hidden justify-end w-full ">
             <flux:navbar.item href="#" current>Home</flux:navbar.item>
@@ -666,6 +665,11 @@
                 document.documentElement.classList.remove('dark');
             }
         });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            window.Flux.dark = false;
+        })
     </script>
 
 </body>
