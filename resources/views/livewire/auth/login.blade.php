@@ -21,7 +21,7 @@
             </div>
 
             <!-- Right Form -->
-            <div class="p-10 flex flex-col justify-center">
+            <div class="p-10 flex flex-col justify-center min-h-[570px]">
 
                 <!-- Session Status -->
                 <x-auth-session-status class="text-center mb-4 text-green-600" :status="session('status')" />
