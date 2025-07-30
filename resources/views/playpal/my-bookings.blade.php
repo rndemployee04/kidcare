@@ -63,15 +63,32 @@
                             <td class="py-2">{{ $booking->paid_at ? $booking->paid_at->format('d M Y H:i') : '-' }}
                             </td>
                             <td class="py-2">
-                                <a href="{{ route('playpal.booking.show', $booking->id) }}"
-                                    class="inline-flex items-center gap-1 text-blue-600 no-underline hover:text-blue-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    View Details
-                                </a>
+                                @if ($booking->status === 'completed' || $booking->status === 'accepted')
+                                    <a href="{{ route('playpal.booking.show', $booking->id) }}"
+                                        class="inline-flex items-center gap-1 text-blue-600 no-underline hover:text-blue-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        View Details
+                                    </a>
+                                @elseif ($booking->status === 'rejected')
+                                    <span class="text-red-600 font-semibold">Rejected by parent</span>
+                                @else
+                                    <span class="relative group">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="inline h-4 w-4 text-yellow-500"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="ml-1 text-yellow-500 align-middle">Pending</span>
+                                        <span
+                                            class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10">
+                                            Awaiting parent acceptance
+                                        </span>
+                                    </span>
+                                @endif
                             </td>
 
                         </tr>
