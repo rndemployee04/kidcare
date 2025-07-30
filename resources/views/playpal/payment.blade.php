@@ -23,7 +23,8 @@
                         class="font-semibold">{{ $parent_name ?? 'N/A' }}</span></div>
             </div>
 
-            <form action="{{ route('playpal.book.store', $parent_id) }}" method="POST" class="w-full">
+            <form action="{{ route('playpal.book.store', $parent_id) }}" method="POST" class="w-full"
+                x-data="{ loading: false }" @submit.prevent="loading = true; $el.submit();">
                 @csrf
                 <div class="w-full mb-6 divide-y divide-gray-200">
                     <div class="flex items-center justify-between py-2">
@@ -61,7 +62,8 @@
 
                     @if (!$isAvailable)
                         <div class="text-red-600 text-sm mt-2 font-medium">
-                            You are not available at the parent's preferred time. Please update your availability or choose
+                            You are not available at the parent's preferred time. Please update your availability or
+                            choose
                             a different parent.
                         </div>
                     @endif
@@ -69,9 +71,23 @@
                 </div>
 
                 <input type="hidden" name="amount" value="{{ $amount ?? '500' }}">
-                <button type="submit"
-                    class="w-full bg-orange-400 hover:bg-[#00bbae] text-white font-semibold py-3 rounded-lg transition flex items-center justify-center gap-2 text-lg mt-2">
-                    <i class="fa-solid fa-lock"></i> Complete Payment
+
+                <button type="submit" x-bind:disabled="loading"
+                    class="w-full bg-orange-400 hover:bg-[#00bbae] text-white font-semibold py-3 rounded-lg transition flex items-center justify-center gap-2 text-lg mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                    <template x-if="!loading">
+                        <span><i class="fa-solid fa-lock"></i> Complete Payment</span>
+                    </template>
+                    <template x-if="loading">
+                        <span class="flex items-center gap-2">
+                            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            Processing...
+                        </span>
+                    </template>
                 </button>
             </form>
         </div>

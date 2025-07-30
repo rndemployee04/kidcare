@@ -65,4 +65,19 @@ class AdminController extends Controller
         $user = User::with(['careBuddy', 'parentProfile', 'playPal'])->findOrFail($id);
         return view('admin.view-application', compact('user'));
     }
+    public function users()
+    {
+        $parents = User::whereHas('parentProfile')->latest()->get();
+        $playpals = User::whereHas('playPal')->latest()->get();
+
+        return view('admin.users', compact('parents', 'playpals'));
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
+    }
 }

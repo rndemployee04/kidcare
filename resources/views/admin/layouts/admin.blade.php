@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,11 +10,12 @@
 
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
-    
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
+
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-50">
         <div class="flex h-screen overflow-hidden">
@@ -26,18 +28,39 @@
                         </div>
                         <div class="mt-5 flex-grow flex flex-col">
                             <nav class="flex-1 px-2 space-y-1">
-                                <a href="{{ route('admin.dashboard') }}" class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-                                    <svg class="mr-3 flex-shrink-0 h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                <a href="{{ route('admin.dashboard') }}"
+                                    class="{{ request()->routeIs('admin.dashboard') ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                                    <svg class="mr-3 flex-shrink-0 h-6 w-6 {{ request()->routeIs('admin.dashboard') ? 'text-gray-700' : 'text-gray-500' }}"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                     </svg>
                                     Dashboard
                                 </a>
-                                <a href="{{ route('home') }}" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-                                    <svg class="mr-3 flex-shrink-0 h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+
+                                <a href="{{ route('home') }}"
+                                    class="{{ request()->routeIs('home') ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                                    <svg class="mr-3 flex-shrink-0 h-6 w-6 {{ request()->routeIs('home') ? 'text-gray-700' : 'text-gray-500' }}"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                     </svg>
                                     Home
                                 </a>
+
+                                <a href="{{ route('admin.users') }}"
+                                    class="{{ request()->routeIs('admin.users') ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                                    <svg class="mr-3 flex-shrink-0 h-6 w-6 {{ request()->routeIs('admin.users') ? 'text-gray-700' : 'text-gray-500' }}"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5.121 17.804A9.003 9.003 0 0112 15c2.14 0 4.09.75 5.879 2.004M15 11a3 3 0 11-6 0 3 3 0 016 0zM12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                    </svg>
+                                    Users
+                                </a>
+
                             </nav>
                         </div>
                     </div>
@@ -45,10 +68,13 @@
                         <div class="flex-shrink-0 w-full group block">
                             <div class="flex items-center">
                                 <div class="ml-3">
-                                    <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">{{ auth()->user()->name }}</p>
+                                    <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                                        {{ auth()->user()->name }}
+                                    </p>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-                                        <button type="submit" class="text-xs font-medium text-gray-500 group-hover:text-gray-700">Logout</button>
+                                        <button type="submit"
+                                            class="text-xs font-medium text-gray-500 group-hover:text-gray-700">Logout</button>
                                     </form>
                                 </div>
                             </div>
@@ -56,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Main content -->
             <div class="flex flex-col w-0 flex-1 overflow-auto">
                 <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none">
@@ -69,7 +95,8 @@
             </div>
         </div>
     </div>
-    
+
     @livewireScripts
 </body>
+
 </html>

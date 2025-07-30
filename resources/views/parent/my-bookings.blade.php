@@ -31,7 +31,7 @@
                                     <span class="text-orange-500 font-semibold">Pending</span>
                                 @endif
                             </td>
-                             <td class="py-2">
+                            <td class="py-2">
                                 @php $duration = json_decode($booking->duration, true); @endphp
 
                                 @if ($duration && isset($duration['type']) && $duration['type'] === 'auto')
@@ -82,15 +82,21 @@
                                         </form>
                                     </div>
                                 @else
-                                    <a href="{{ route('parent.booking.show', $booking->id) }}"
-                                        class="inline-flex items-center gap-1 text-blue-600 no-underline hover:text-blue-800">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        View Details
-                                    </a>
+                                    @if ($booking->status === 'completed' || $booking->status === 'accepted')
+                                        <a href="{{ route('parent.booking.show', $booking->id) }}"
+                                            class="inline-flex items-center gap-1 text-blue-600 no-underline hover:text-blue-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            View Details
+                                        </a>
+                                    @elseif ($booking->status === 'rejected')
+                                        <span class="text-red-600 font-semibold">Booking Rejected</span>
+                                    @else
+                                        <span class="text-gray-500 italic">Acceptance Pending</span>
+                                    @endif
                                 @endif
                             </td>
                         </tr>

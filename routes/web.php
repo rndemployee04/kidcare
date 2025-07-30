@@ -54,7 +54,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', 'App\Http\Controllers\AdminController@dashboard')->name('admin.dashboard');
     Route::get('/approve/{id}', 'App\Http\Controllers\AdminController@approveUser')->name('admin.approve');
     Route::get('/reject/{id}', 'App\Http\Controllers\AdminController@rejectUser')->name('admin.reject');
+    Route::delete('/delete/{id}', 'App\Http\Controllers\AdminController@deleteUser')->name('admin.delete');
     Route::get('/user/{id}/view', 'App\Http\Controllers\AdminController@viewApplication')->name('admin.viewApplication');
+    Route::get('/users', 'App\Http\Controllers\AdminController@users')->name('admin.users');
     // Add other admin-specific routes here    
 });
 

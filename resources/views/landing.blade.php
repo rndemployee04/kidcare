@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" x-data="{ dark: false }" x-bind:class="{ 'dark': dark }">
 
 <head>
     <meta charset="UTF-8">
@@ -655,6 +655,19 @@
             },
         });
     </script>
+
+
+    <script>
+        // Force remove dark mode and override preferences
+        document.documentElement.classList.remove('dark'); // Remove dark mode class
+        localStorage.setItem('theme', 'light');            // Force theme to light
+        matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (e.matches) {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
 </body>
 
 </html>
